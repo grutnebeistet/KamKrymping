@@ -1,0 +1,320 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="net.sourceforge.opencamera"
+4    android:installLocation="auto"
+5    android:versionCode="78"
+6    android:versionName="1.48.2" >
+7
+8    <uses-sdk
+9        android:minSdkVersion="26"
+9-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+10        android:targetSdkVersion="28" />
+10-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+11    <!-- ignore GoogleAppIndexingWarning as we don't want to implement that -->
+12
+13    <supports-screens
+13-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:5-164
+14        android:anyDensity="true"
+14-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:137-162
+15        android:largeScreens="true"
+15-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:52-79
+16        android:normalScreens="true"
+16-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:80-108
+17        android:smallScreens="true"
+17-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:109-136
+18        android:xlargeScreens="true" />
+18-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:23-51
+19
+20    <uses-permission android:name="android.permission.BLUETOOTH" />
+20-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:13:5-68
+20-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:13:22-65
+21    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+21-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:14:5-74
+21-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:14:22-71
+22    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+22-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:15:5-81
+22-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:15:22-78
+23    <uses-permission android:name="android.permission.CAMERA" />
+23-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:16:5-65
+23-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:16:22-62
+24    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+24-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:17:5-71
+24-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:17:22-68
+25    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+25-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:18:5-79
+25-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:18:22-76
+26
+27    <uses-feature android:name="android.hardware.camera" />
+27-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:20:5-60
+27-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:20:19-57
+28    <uses-feature android:name="android.hardware.microphone" />
+28-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:21:5-64
+28-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:21:19-61
+29    <uses-feature
+29-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:22:5-90
+30        android:name="android.hardware.bluetooth_le"
+30-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:22:19-63
+31        android:required="false" />
+31-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:22:64-88
+32
+33    <application
+33-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:24:5-152:19
+34        android:name="net.sourceforge.opencamera.OpenCameraApplication"
+34-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:28:9-46
+35        android:allowBackup="true"
+35-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:25:9-35
+36        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+36-->[androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:22:18-86
+37        android:debuggable="true"
+38        android:extractNativeLibs="false"
+39        android:icon="@mipmap/ic_launcher"
+39-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:26:9-43
+40        android:label="@string/app_name"
+40-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:27:9-41
+41        android:largeHeap="true"
+41-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:30:9-33
+42        android:testOnly="true"
+43        android:theme="@style/AppTheme" >
+43-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:29:9-40
+44
+45        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+46        <activity
+46-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:33:9-71:20
+47            android:name="net.sourceforge.opencamera.MainActivity"
+47-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:34:13-67
+48            android:clearTaskOnLaunch="true"
+48-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:38:13-45
+49            android:configChanges="orientation|screenSize|keyboardHidden"
+49-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:37:13-74
+50            android:label="@string/app_name"
+50-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:35:13-45
+51            android:screenOrientation="landscape" >
+51-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:36:13-50
+52
+53            <!-- clearTaskOnLaunch set to true, so if user goes to gallery then returns to home, we return to the camera rather than remaining in gallery if user relaunches Open Camera -->
+54            <intent-filter>
+54-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:41:13-45:29
+55                <action android:name="android.intent.action.MAIN" />
+55-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:42:17-69
+55-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:42:25-66
+56
+57                <category android:name="android.intent.category.LAUNCHER" />
+57-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:43:17-77
+57-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:43:27-74
+58                <category android:name="android.intent.category.DEFAULT" />
+58-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+58-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+59            </intent-filter>
+60            <intent-filter>
+60-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:46:13-49:29
+61                <action android:name="android.media.action.IMAGE_CAPTURE" />
+61-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:47:17-77
+61-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:47:25-74
+62
+63                <category android:name="android.intent.category.DEFAULT" />
+63-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+63-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+64            </intent-filter>
+65            <intent-filter>
+65-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:50:13-53:29
+66                <action android:name="android.media.action.IMAGE_CAPTURE_SECURE" />
+66-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:51:17-84
+66-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:51:25-81
+67
+68                <category android:name="android.intent.category.DEFAULT" />
+68-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+68-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+69            </intent-filter>
+70            <intent-filter>
+70-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:54:13-57:29
+71                <action android:name="android.media.action.STILL_IMAGE_CAMERA" />
+71-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:55:17-82
+71-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:55:25-79
+72
+73                <category android:name="android.intent.category.DEFAULT" />
+73-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+73-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+74            </intent-filter>
+75            <intent-filter>
+75-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:58:13-61:29
+76                <action android:name="android.media.action.STILL_IMAGE_CAMERA_SECURE" />
+76-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:59:17-89
+76-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:59:25-86
+77
+78                <category android:name="android.intent.category.DEFAULT" />
+78-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+78-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+79            </intent-filter>
+80            <intent-filter>
+80-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:62:13-65:29
+81                <action android:name="android.media.action.VIDEO_CAMERA" />
+81-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:63:17-76
+81-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:63:25-73
+82
+83                <category android:name="android.intent.category.DEFAULT" />
+83-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+83-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+84            </intent-filter>
+85            <intent-filter>
+85-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:66:13-69:29
+86                <action android:name="android.media.action.VIDEO_CAPTURE" />
+86-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:67:17-77
+86-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:67:25-74
+87
+88                <category android:name="android.intent.category.DEFAULT" />
+88-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+88-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+89            </intent-filter>
+90
+91            <meta-data
+91-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:70:13-97
+92                android:name="android.app.shortcuts"
+92-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:70:24-60
+93                android:resource="@xml/shortcuts" />
+93-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:70:61-94
+94        </activity>
+95        <activity
+95-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:72:9-77:20
+96            android:name="net.sourceforge.opencamera.remotecontrol.DeviceScanner"
+96-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:73:13-82
+97            android:exported="false"
+97-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:75:13-37
+98            android:label="@string/scan_ble" >
+98-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:74:13-45
+99        </activity>
+100
+101        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+102        <activity
+102-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:80:9-90:20
+103            android:name="net.sourceforge.opencamera.TakePhoto"
+103-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:81:13-37
+104            android:configChanges="orientation|screenSize|keyboardHidden"
+104-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:85:13-74
+105            android:excludeFromRecents="true"
+105-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:87:13-46
+106            android:exported="false"
+106-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:88:13-37
+107            android:icon="@drawable/ic_launcher_take_photo"
+107-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:83:13-60
+108            android:label="@string/take_photo"
+108-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:82:13-47
+109            android:screenOrientation="landscape"
+109-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:84:13-50
+110            android:taskAffinity="" >
+110-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:86:13-36
+111        </activity>
+112        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+113        <receiver
+113-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:92:9-105:20
+114            android:name="net.sourceforge.opencamera.MyWidgetProvider"
+114-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:95:13-44
+115            android:icon="@mipmap/ic_launcher"
+115-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:93:13-47
+116            android:label="@string/app_name" >
+116-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:94:13-45
+117            <intent-filter>
+117-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:96:13-98:29
+118                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+118-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:97:18-85
+118-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:97:26-82
+119            </intent-filter>
+120            <!--
+121            <intent-filter> 
+122                <action android:name="net.sourceforge.opencamera.LAUNCH_OPEN_CAMERA"/> 
+123            </intent-filter>
+124            -->
+125            <meta-data
+125-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:102:13-104:54
+126                android:name="android.appwidget.provider"
+126-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:103:16-57
+127                android:resource="@xml/widget_info" />
+127-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:104:16-51
+128        </receiver>
+129        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+130        <receiver
+130-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:107:9-117:20
+131            android:name="net.sourceforge.opencamera.MyWidgetProviderTakePhoto"
+131-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:110:13-53
+132            android:icon="@drawable/ic_launcher_take_photo"
+132-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:108:13-60
+133            android:label="@string/take_photo" >
+133-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:109:13-47
+134            <intent-filter>
+134-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:96:13-98:29
+135                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+135-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:97:18-85
+135-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:97:26-82
+136            </intent-filter>
+137
+138            <meta-data
+138-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:102:13-104:54
+139                android:name="android.appwidget.provider"
+139-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:103:16-57
+140                android:resource="@xml/widget_info_take_photo" />
+140-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:104:16-51
+141        </receiver>
+142        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+143        <service
+143-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:119:9-127:19
+144            android:name="net.sourceforge.opencamera.MyTileService"
+144-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:120:13-68
+145            android:icon="@drawable/ic_photo_camera_white_48dp"
+145-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:121:13-64
+146            android:label="@string/camera"
+146-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:122:13-43
+147            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+147-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:123:13-77
+148            <intent-filter>
+148-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:124:13-126:29
+149                <action android:name="android.service.quicksettings.action.QS_TILE" />
+149-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:17-87
+149-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:25-84
+150            </intent-filter>
+151        </service>
+152        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+153        <service
+153-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:129:9-137:19
+154            android:name="net.sourceforge.opencamera.MyTileServiceVideo"
+154-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:130:13-73
+155            android:icon="@drawable/ic_videocam_white_48dp"
+155-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:131:13-60
+156            android:label="@string/record_video"
+156-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:132:13-49
+157            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+157-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:133:13-77
+158            <intent-filter>
+158-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:124:13-126:29
+159                <action android:name="android.service.quicksettings.action.QS_TILE" />
+159-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:17-87
+159-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:25-84
+160            </intent-filter>
+161        </service>
+162        <!-- should not change the android:name, including moving to a subpackage - see http://android-developers.blogspot.co.uk/2011/06/things-that-cannot-change.html -->
+163        <service
+163-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:139:9-147:19
+164            android:name="net.sourceforge.opencamera.MyTileServiceFrontCamera"
+164-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:140:13-79
+165            android:icon="@drawable/ic_face_white_48dp"
+165-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:141:13-56
+166            android:label="@string/selfie"
+166-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:142:13-43
+167            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+167-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:143:13-77
+168            <intent-filter>
+168-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:124:13-126:29
+169                <action android:name="android.service.quicksettings.action.QS_TILE" />
+169-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:17-87
+169-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:25-84
+170            </intent-filter>
+171        </service>
+172        <service
+172-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:148:9-151:15
+173            android:name="net.sourceforge.opencamera.remotecontrol.BluetoothLeService"
+173-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:148:18-92
+174            android:enabled="true"
+174-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:149:13-35
+175            android:exported="false" />
+175-->/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:150:13-37
+176    </application>
+177
+178</manifest>

@@ -1,0 +1,357 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/7e27c7d396810af644fcc2d5ec8384aa/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.exifinterface:exifinterface:1.2.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/4eb3f0ee3e740f802a39d1a3a8b48b3f/exifinterface-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.media:media:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/92a82d0e6836fc2764f8a4c5ae17cc0a/media-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.fragment:fragment:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/560559a1d2f072346120a8facd149d09/fragment-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/e40a377249758d23414d21222f000040/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/3dd2a90cf4903229672e8d620934c6ca/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/d1290085211f6ca31e4b44ad501b0e7c/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/b685d122498cf50e728d648d063a2ff6/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/0d46da4f5ac771dd79c1a2c9880b8580/coordinatorlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/369c371dbc36cd3420e0891af4dc30b8/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/97f01785cab2549e8be5ef5c8b1dbcb3/slidingpanelayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/3584c755b13ff246a30ea06b73bd9d78/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/fee859eac2601f0c53561481b8362e20/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/2d0e89544ecc30a9184b81b65acf458e/asynclayoutinflater-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a3551ab13be12ed63d05f9b0aaa8242a/versionedparcelable-1.0.0/AndroidManifest.xml:17:1-25:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/706aa5d8c8a43873cd63a96842e3a9e8/lifecycle-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/4b326e320f7fb8e89e2bb3879ac950d2/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/ba74e7a1df14494ca70ea72adf4fc3bf/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/5d6ed104b1267309eec087762b08ed9e/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/30612fa1f33fcbb3e456c3a5f852366f/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a87a91cfc12796be4a5399f6708c1bed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/000772770b31839da1ff8a942bf73abb/lifecycle-viewmodel-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/9c0d2720907bb8bd5d5976efee735314/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/d00c90699ae27cc1e1ce5e4b3e530617/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/13ac386f95e101744ae5f7d486caaa8c/core-runtime-2.0.0/AndroidManifest.xml:17:1-22:12
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:1-153:12
+	package
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:4:5-41
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:6:5-33
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:3:5-51
+	xmlns:android
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:2:11-69
+	tools:ignore
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:8:5-44
+	android:versionCode
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:5:5-29
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+	android:installLocation
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:7:5-35
+supports-screens
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:5-164
+	android:largeScreens
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:52-79
+	android:smallScreens
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:109-136
+	android:normalScreens
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:80-108
+	android:xlargeScreens
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:23-51
+	android:anyDensity
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:11:137-162
+uses-permission#android.permission.BLUETOOTH
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:13:5-68
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:13:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:14:5-74
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:14:22-71
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:15:5-81
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:15:22-78
+uses-permission#android.permission.CAMERA
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:16:5-65
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:16:22-62
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:17:5-71
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:17:22-68
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:18:5-79
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:18:22-76
+uses-feature#android.hardware.camera
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:20:5-60
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:20:19-57
+uses-feature#android.hardware.microphone
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:21:5-64
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:21:19-61
+uses-feature#android.hardware.bluetooth_le
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:22:5-90
+	android:required
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:22:64-88
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:22:19-63
+application
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:24:5-152:19
+MERGED from [androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:22:5-89
+MERGED from [androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:22:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a3551ab13be12ed63d05f9b0aaa8242a/versionedparcelable-1.0.0/AndroidManifest.xml:22:5-23:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a3551ab13be12ed63d05f9b0aaa8242a/versionedparcelable-1.0.0/AndroidManifest.xml:22:5-23:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:22:18-86
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:27:9-41
+	android:largeHeap
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:30:9-33
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:26:9-43
+	android:allowBackup
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:25:9-35
+	android:theme
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:29:9-40
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:28:9-46
+activity#net.sourceforge.opencamera.MainActivity
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:33:9-71:20
+	android:screenOrientation
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:36:13-50
+	android:clearTaskOnLaunch
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:38:13-45
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:35:13-45
+	android:configChanges
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:37:13-74
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:34:13-67
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.LAUNCHER
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:41:13-45:29
+action#android.intent.action.MAIN
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:42:17-69
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:42:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:43:17-77
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:43:27-74
+category#android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:17-76
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:44:27-73
+intent-filter#action:name:android.media.action.IMAGE_CAPTURE+category:name:android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:46:13-49:29
+action#android.media.action.IMAGE_CAPTURE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:47:17-77
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:47:25-74
+intent-filter#action:name:android.media.action.IMAGE_CAPTURE_SECURE+category:name:android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:50:13-53:29
+action#android.media.action.IMAGE_CAPTURE_SECURE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:51:17-84
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:51:25-81
+intent-filter#action:name:android.media.action.STILL_IMAGE_CAMERA+category:name:android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:54:13-57:29
+action#android.media.action.STILL_IMAGE_CAMERA
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:55:17-82
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:55:25-79
+intent-filter#action:name:android.media.action.STILL_IMAGE_CAMERA_SECURE+category:name:android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:58:13-61:29
+action#android.media.action.STILL_IMAGE_CAMERA_SECURE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:59:17-89
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:59:25-86
+intent-filter#action:name:android.media.action.VIDEO_CAMERA+category:name:android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:62:13-65:29
+action#android.media.action.VIDEO_CAMERA
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:63:17-76
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:63:25-73
+intent-filter#action:name:android.media.action.VIDEO_CAPTURE+category:name:android.intent.category.DEFAULT
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:66:13-69:29
+action#android.media.action.VIDEO_CAPTURE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:67:17-77
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:67:25-74
+meta-data#android.app.shortcuts
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:70:13-97
+	android:resource
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:70:61-94
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:70:24-60
+activity#net.sourceforge.opencamera.remotecontrol.DeviceScanner
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:72:9-77:20
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:74:13-45
+	android:exported
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:75:13-37
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:73:13-82
+activity#net.sourceforge.opencamera.TakePhoto
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:80:9-90:20
+	android:screenOrientation
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:84:13-50
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:82:13-47
+	android:excludeFromRecents
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:87:13-46
+	android:exported
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:88:13-37
+	android:configChanges
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:85:13-74
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:83:13-60
+	android:taskAffinity
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:86:13-36
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:81:13-37
+receiver#net.sourceforge.opencamera.MyWidgetProvider
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:92:9-105:20
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:94:13-45
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:93:13-47
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:95:13-44
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:96:13-98:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:97:18-85
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:97:26-82
+meta-data#android.appwidget.provider
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:102:13-104:54
+	android:resource
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:104:16-51
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:103:16-57
+receiver#net.sourceforge.opencamera.MyWidgetProviderTakePhoto
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:107:9-117:20
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:109:13-47
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:108:13-60
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:110:13-53
+service#net.sourceforge.opencamera.MyTileService
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:119:9-127:19
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:122:13-43
+	android:permission
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:123:13-77
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:121:13-64
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:120:13-68
+intent-filter#action:name:android.service.quicksettings.action.QS_TILE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:124:13-126:29
+action#android.service.quicksettings.action.QS_TILE
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:17-87
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:125:25-84
+service#net.sourceforge.opencamera.MyTileServiceVideo
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:129:9-137:19
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:132:13-49
+	android:permission
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:133:13-77
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:131:13-60
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:130:13-73
+service#net.sourceforge.opencamera.MyTileServiceFrontCamera
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:139:9-147:19
+	android:label
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:142:13-43
+	android:permission
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:143:13-77
+	android:icon
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:141:13-56
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:140:13-79
+service#net.sourceforge.opencamera.remotecontrol.BluetoothLeService
+ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:148:9-151:15
+	android:enabled
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:149:13-35
+	android:exported
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:150:13-37
+	android:name
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml:148:18-92
+uses-sdk
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/7e27c7d396810af644fcc2d5ec8384aa/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/7e27c7d396810af644fcc2d5ec8384aa/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.2.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/4eb3f0ee3e740f802a39d1a3a8b48b3f/exifinterface-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.2.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/4eb3f0ee3e740f802a39d1a3a8b48b3f/exifinterface-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/92a82d0e6836fc2764f8a4c5ae17cc0a/media-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media:media:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/92a82d0e6836fc2764f8a4c5ae17cc0a/media-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/560559a1d2f072346120a8facd149d09/fragment-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.fragment:fragment:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/560559a1d2f072346120a8facd149d09/fragment-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/e40a377249758d23414d21222f000040/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/e40a377249758d23414d21222f000040/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/3dd2a90cf4903229672e8d620934c6ca/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/3dd2a90cf4903229672e8d620934c6ca/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/d1290085211f6ca31e4b44ad501b0e7c/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/d1290085211f6ca31e4b44ad501b0e7c/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/b685d122498cf50e728d648d063a2ff6/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/b685d122498cf50e728d648d063a2ff6/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/0d46da4f5ac771dd79c1a2c9880b8580/coordinatorlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/0d46da4f5ac771dd79c1a2c9880b8580/coordinatorlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/369c371dbc36cd3420e0891af4dc30b8/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/369c371dbc36cd3420e0891af4dc30b8/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/97f01785cab2549e8be5ef5c8b1dbcb3/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/97f01785cab2549e8be5ef5c8b1dbcb3/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/3584c755b13ff246a30ea06b73bd9d78/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/3584c755b13ff246a30ea06b73bd9d78/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/fee859eac2601f0c53561481b8362e20/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/fee859eac2601f0c53561481b8362e20/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/2d0e89544ecc30a9184b81b65acf458e/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/2d0e89544ecc30a9184b81b65acf458e/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/799659d157cba173c3391744d4f4133c/core-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a3551ab13be12ed63d05f9b0aaa8242a/versionedparcelable-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a3551ab13be12ed63d05f9b0aaa8242a/versionedparcelable-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/706aa5d8c8a43873cd63a96842e3a9e8/lifecycle-runtime-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/706aa5d8c8a43873cd63a96842e3a9e8/lifecycle-runtime-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/4b326e320f7fb8e89e2bb3879ac950d2/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/4b326e320f7fb8e89e2bb3879ac950d2/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/ba74e7a1df14494ca70ea72adf4fc3bf/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/ba74e7a1df14494ca70ea72adf4fc3bf/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/5d6ed104b1267309eec087762b08ed9e/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/5d6ed104b1267309eec087762b08ed9e/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/30612fa1f33fcbb3e456c3a5f852366f/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/30612fa1f33fcbb3e456c3a5f852366f/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a87a91cfc12796be4a5399f6708c1bed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/a87a91cfc12796be4a5399f6708c1bed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/000772770b31839da1ff8a942bf73abb/lifecycle-viewmodel-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/000772770b31839da1ff8a942bf73abb/lifecycle-viewmodel-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/9c0d2720907bb8bd5d5976efee735314/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/9c0d2720907bb8bd5d5976efee735314/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/d00c90699ae27cc1e1ce5e4b3e530617/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/d00c90699ae27cc1e1ce5e4b3e530617/lifecycle-livedata-core-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/13ac386f95e101744ae5f7d486caaa8c/core-runtime-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/ar/.gradle/caches/transforms-2/files-2.1/13ac386f95e101744ae5f7d486caaa8c/core-runtime-2.0.0/AndroidManifest.xml:20:5-44
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		ADDED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/AndroidManifest.xml

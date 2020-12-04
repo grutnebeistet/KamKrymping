@@ -1,0 +1,1398 @@
+[
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_raw_only_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/raw_only_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_face_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_face_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_colorize_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_colorize_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_mic_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_mic_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_video_pressed.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_video_pressed.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_photo_size_select_large_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_photo_size_select_large_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_flash_on.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/flash_on.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_iso_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/iso_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_launcher_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_launcher_take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_more_horiz_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_more_horiz_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_hdr_on_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_hdr_on_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_add_a_photo_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_add_a_photo_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_switch_camera.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/switch_camera.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_photo_camera_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_photo_camera_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_photo_library_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_photo_library_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_photo_camera_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_photo_camera_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_shutter_speed_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_shutter_speed_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_check_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_check_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_focus_bracket_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/focus_bracket_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_exposure_locked.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/exposure_locked.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_gps_fixed_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_gps_fixed_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_photo_pref.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_photo_pref.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_more_horiz_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_more_horiz_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_timer_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_timer_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_exposure_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_exposure_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_mic_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_mic_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_flash_auto.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/flash_auto.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_exposure_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_exposure_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_shutter_speed_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_shutter_speed_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_raw_off_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/raw_off_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_gps_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_gps_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_popup_flash_auto.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/popup_flash_auto.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_infinity.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_infinity.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_burst_mode_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_burst_mode_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_fixed.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_fixed.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/xml-v25_shortcuts.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/xml-v25/shortcuts.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_panorama_horizontal_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_panorama_horizontal_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_bracket_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_bracket_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_settings.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/settings.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_rotate_left_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_rotate_left_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_hdr_on_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_hdr_on_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_nr_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/nr_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_pause_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_pause_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/layout_widget_layout_take_photo.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/layout/widget_layout_take_photo.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_help_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_help_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_videocam_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_videocam_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_photo_camera_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_photo_camera_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_switch_camera.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/switch_camera.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_close_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_close_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_text_format_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_text_format_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_highlight_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_highlight_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_rotate_left_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_rotate_left_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_face_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_face_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_fast_forward_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_fast_forward_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_touch_app_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_touch_app_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_highlight_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_highlight_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_photo_when_video_recording.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_photo_when_video_recording.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_take_photo_selector.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/take_photo_selector.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_face_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_face_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_expo_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/expo_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_help_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_help_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_touch_app_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_touch_app_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_photo_camera_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_photo_camera_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_add_a_photo_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_add_a_photo_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_trash.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/trash.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher_background.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xxxhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_exposure_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_exposure_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_close_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_close_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_video_recording.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_video_recording.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_mic_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_mic_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_circle_background.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/circle_background.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_photo_pressed.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_photo_pressed.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_trash.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/trash.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_slow_motion_video_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_slow_motion_video_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_background.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-hdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_fast_forward_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_fast_forward_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_share.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/share.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_pause_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_pause_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_switch_camera.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/switch_camera.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_colorize_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_colorize_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_filter_vintage_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_filter_vintage_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_filter_vintage_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_filter_vintage_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher_background.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-mdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_launcher_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_launcher_take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_white_balance_locked.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/white_balance_locked.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_photo_library_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_photo_library_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_slow_motion_video_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_slow_motion_video_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_gps_fixed_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_gps_fixed_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_photo_camera_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_photo_camera_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_play_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_play_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_burst_mode_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_burst_mode_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_gps_fixed_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_gps_fixed_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_folder_open_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_folder_open_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_face_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_face_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_folder_open_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_folder_open_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_gps_fixed_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_gps_fixed_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_gps_fixed_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_gps_fixed_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_folder_open_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_folder_open_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_touch_app_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_touch_app_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_bluetooth_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_bluetooth_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_more_horiz_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_more_horiz_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_exposure_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_exposure_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_check_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_check_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_rotate_right_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_rotate_right_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_hdr_on_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_hdr_on_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_gps_fixed_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_gps_fixed_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_pause_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_pause_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_gps_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_gps_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_highlight_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_highlight_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_mic_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_mic_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_remove_red_eye_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_remove_red_eye_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_text_fields_red_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_text_fields_red_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_mic_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_mic_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/menu_main.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/menu/main.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_slow_motion_video_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_slow_motion_video_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_save_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_save_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_burst_mode_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_burst_mode_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_text_format_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_text_format_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/xml_widget_info.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/xml/widget_info.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_exposure_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_exposure_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_power_settings_new_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_power_settings_new_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_face_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_face_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_trash.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/trash.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_mic_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_mic_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_timelapse_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_timelapse_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_text_format_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_text_format_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/xml_widget_info_take_photo.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/xml/widget_info_take_photo.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_colorize_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_colorize_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_face_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_face_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_face_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_face_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_info_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_info_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_flash_on.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/flash_on.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_play_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_play_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_video_pressed.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_video_pressed.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_play_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_play_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_mic_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_mic_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_text_fields_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_text_fields_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_settings.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/settings.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_popup.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/popup.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_flash_on.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/flash_on.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_timer_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_timer_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_popup_flash_red_eye.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/popup_flash_red_eye.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_manual.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_manual.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_check_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_check_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_white_balance_unlocked.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/white_balance_unlocked.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_share.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/share.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_face_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_face_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_mic_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_mic_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_touch_app_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_touch_app_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_settings.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/settings.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_video.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_video.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_highlight_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_highlight_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/layout_arrayseekbarpreference.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/layout/arrayseekbarpreference.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_more_horiz_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_more_horiz_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_popup_flash_on.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/popup_flash_on.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_colorize_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_colorize_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_continuous_video.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_continuous_video.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_close_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_close_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_video_recording.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_video_recording.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_colorize_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_colorize_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_face_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_face_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_text_format_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_text_format_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/layout_widget_layout.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/layout/widget_layout.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_text_format_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_text_format_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_remove_red_eye_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_remove_red_eye_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_edof.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_edof.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_switch_camera.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/switch_camera.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_auto.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_auto.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_dro_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/dro_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_shortcut_gallery.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/shortcut_gallery.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_gps_fixed_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_gps_fixed_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_trash.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/trash.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_highlight_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_highlight_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_raw_off_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/raw_off_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_close_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_close_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_share.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/share.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_folder_open_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_folder_open_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_save_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_save_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_locked.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_locked.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_text_fields_red_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_text_fields_red_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/xml_preferences.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/xml/preferences.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_auto_stabilise_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/auto_stabilise_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_burst_mode_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_burst_mode_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_bluetooth_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_bluetooth_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_hdr_on_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_hdr_on_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_shortcut_settings.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/shortcut_settings.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_exposure_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_exposure_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_play_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_play_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_gps_fixed_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_gps_fixed_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_flash_auto.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/flash_auto.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_fast_forward_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_fast_forward_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_exposure_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_exposure_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_mic_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_mic_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_power_settings_new_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_power_settings_new_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_videocam_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_videocam_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_help_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_help_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_text_fields_red_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_text_fields_red_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_shortcut_ic_videocam_white_48dp.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/shortcut_ic_videocam_white_48dp.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_text_fields_red_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_text_fields_red_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_photo_size_select_large_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_photo_size_select_large_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_remove_red_eye_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_remove_red_eye_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_gps_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_gps_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_auto_stabilise_icon_red.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/auto_stabilise_icon_red.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_remove_red_eye_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_remove_red_eye_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_panorama_horizontal_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_panorama_horizontal_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_text_format_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_text_format_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_exposure_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_exposure_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_background.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xxhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_popup_flash_off.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/popup_flash_off.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_videocam_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_videocam_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_text_format_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_text_format_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_exposure_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_exposure_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_folder_open_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_folder_open_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_launcher_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_launcher_take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_bluetooth_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_bluetooth_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_bluetooth_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_bluetooth_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_mic_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_mic_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_flash_off.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/flash_off.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_panorama_horizontal_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_panorama_horizontal_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_photo_when_video_recording.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_photo_when_video_recording.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_power_settings_new_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_power_settings_new_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_panorama_horizontal_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_panorama_horizontal_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_filter_vintage_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_filter_vintage_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_raw_only_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/raw_only_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_rotate_right_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_rotate_right_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_info_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_info_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_shortcut_ic_face_white_48dp.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/shortcut_ic_face_white_48dp.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_info_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_info_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_flash_auto.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/flash_auto.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_flash_auto.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/flash_auto.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_launcher_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_launcher_take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_stat_notify_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_stat_notify_take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_fast_forward_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_fast_forward_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_fast_forward_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_fast_forward_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_text_format_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_text_format_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_add_a_photo_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_add_a_photo_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_bluetooth_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_bluetooth_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xhdpi_ic_launcher_background.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_gps_fixed_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_gps_fixed_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_text_fields_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_text_fields_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_timer_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_timer_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_popup_flash_torch.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/popup_flash_torch.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_video.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_video.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_video_pref.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_video_pref.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_panorama_horizontal_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_panorama_horizontal_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_settings.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/settings.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/raw_mybeep.ogg.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/raw/mybeep.ogg"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_shutter_speed_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_shutter_speed_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_timer_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_timer_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_baseline_photo_library_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/baseline_photo_library_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_mic_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_mic_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_timelapse_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_timelapse_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_text_fields_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_text_fields_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_timelapse_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_timelapse_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_share.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/share.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_photo_pref.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_photo_pref.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_info_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_info_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_save_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_save_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/layout_activity_main.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_mic_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_mic_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_close_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_close_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_check_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_check_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_focus_mode_continuous_picture.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/focus_mode_continuous_picture.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_flash_off.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/flash_off.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_play_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_play_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_auto_stabilise_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/auto_stabilise_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_expo_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/expo_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_shortcut_ic_photo_camera_white_48dp.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/shortcut_ic_photo_camera_white_48dp.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_power_settings_new_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_power_settings_new_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_check_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_check_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_dro_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/dro_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_take_photo_pressed.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/take_photo_pressed.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_text_format_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_text_format_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_save_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_save_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_info_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_info_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_mic_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_mic_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_exposure_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_exposure_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_hdr_on_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_hdr_on_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_settings.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/settings.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_help_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_help_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_stat_notify_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_stat_notify_take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_rotate_right_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_rotate_right_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_face_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_face_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_gps_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_gps_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_rotate_left_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_rotate_left_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_help_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_help_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_timelapse_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_timelapse_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_gps_off_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_gps_off_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_rotate_left_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_rotate_left_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_text_fields_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_text_fields_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_power_settings_new_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_power_settings_new_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_photo_library_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_photo_library_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_iso_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/iso_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable_take_video_selector.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable/take_video_selector.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_pause_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_pause_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_auto_stabilise_icon_red.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/auto_stabilise_icon_red.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_photo_size_select_large_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_photo_size_select_large_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_videocam_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_videocam_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_filter_vintage_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_filter_vintage_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_remove_red_eye_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_remove_red_eye_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_raw_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/raw_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_videocam_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_videocam_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_photo_size_select_large_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_photo_size_select_large_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_text_fields_red_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_text_fields_red_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_exposure_unlocked.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/exposure_unlocked.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_shutter_speed_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_shutter_speed_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_photo_size_select_large_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_photo_size_select_large_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_photo_library_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_photo_library_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_ic_slow_motion_video_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/ic_slow_motion_video_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_touch_app_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_touch_app_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_filter_vintage_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_filter_vintage_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_more_horiz_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_more_horiz_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_nr_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/nr_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/layout_activity_device_select.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/layout/activity_device_select.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_take_photo.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/take_photo.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_flash_off.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/flash_off.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_ic_save_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/ic_save_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_flash_off.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/flash_off.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/raw_mybeep_hi.ogg.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/raw/mybeep_hi.ogg"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_rotate_right_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_rotate_right_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/layout_listitem_device.xml.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/layout/listitem_device.xml"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_burst_mode_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_burst_mode_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_baseline_text_fields_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/baseline_text_fields_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_gps_fixed_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_gps_fixed_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_rotate_right_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_rotate_right_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_text_format_red_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_text_format_red_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_raw_icon.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/raw_icon.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xhdpi_baseline_rotate_left_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xhdpi/baseline_rotate_left_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxxhdpi_ic_timer_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxxhdpi/ic_timer_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_pause_circle_outline_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_pause_circle_outline_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_shutter_speed_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_shutter_speed_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_baseline_add_a_photo_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/baseline_add_a_photo_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_flash_on.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/flash_on.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-xxhdpi_baseline_add_a_photo_white_48.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-xxhdpi/baseline_add_a_photo_white_48.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-mdpi_ic_slow_motion_video_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-mdpi/ic_slow_motion_video_white_48dp.png"
+    },
+    {
+        "merged": "/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/res/merged/debug/drawable-hdpi_ic_timelapse_white_48dp.png.flat",
+        "source": "/Users/ar/Documents/OpenCamera/opencamera-code/app/src/main/res/drawable-hdpi/ic_timelapse_white_48dp.png"
+    }
+]
