@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 
 import net.sourceforge.opencamera.MyDebug;
 import net.sourceforge.opencamera.cameracontroller.CameraController;
-import net.sourceforge.opencamera.cameracontroller.RawImage;
 
 /** Provides communication between the Preview and the rest of the application
  *  - so in theory one can drop the Preview/ (and CameraController/) classes
@@ -41,7 +40,7 @@ public interface ApplicationInterface {
     Location getLocation(); // get current location - null if not available (or you don't care about geotagging)
     int createOutputVideoMethod(); // return a VIDEOMETHOD_* value to specify how to create a video file
     File createOutputVideoFile(String extension) throws IOException; // will be called if createOutputVideoUsingSAF() returns VIDEOMETHOD_FILE; extension is the recommended filename extension for the chosen video type
-    Uri createOutputVideoSAF(String extension) throws IOException; // will be called if createOutputVideoUsingSAF() returns VIDEOMETHOD_SAF; extension is the recommended filename extension for the chosen video type
+
     Uri createOutputVideoUri(); // will be called if createOutputVideoUsingSAF() returns VIDEOMETHOD_URI
     // for all of the get*Pref() methods, you can use Preview methods to get the supported values (e.g., getSupportedSceneModes())
     // if you just want a default or don't really care, see the comments for each method for a default or possible options
@@ -217,11 +216,7 @@ public interface ApplicationInterface {
     void setCameraResolutionPref(int width, int height);
     void setVideoQualityPref(String video_quality);
     void setZoomPref(int zoom);
-    void requestCameraPermission(); // for Android 6+: called when trying to open camera, but CAMERA permission not available
-    @SuppressWarnings("SameReturnValue")
-    boolean needsStoragePermission(); // return true if the preview should call requestStoragePermission() if WRITE_EXTERNAL_STORAGE not available (i.e., if the application needs storage permission, e.g., to save photos)
-    void requestStoragePermission(); // for Android 6+: called when trying to open camera, but WRITE_EXTERNAL_STORAGE permission not available
-    void requestRecordAudioPermission(); // for Android 6+: called when switching to (or starting up in) video mode, but RECORD_AUDIO permission not available
+
     // Camera2 only modes:
     void setExposureTimePref(long exposure_time);
     void clearExposureTimePref();
@@ -230,9 +225,6 @@ public interface ApplicationInterface {
     // callbacks
     void onDrawPreview(Canvas canvas);
     boolean onPictureTaken(byte [] data, Date current_date);
-    boolean onBurstPictureTaken(List<byte []> images, Date current_date);
-    boolean onRawPictureTaken(RawImage raw_image, Date current_date);
-    boolean onRawBurstPictureTaken(List<RawImage> raw_images, Date current_date);
     void onCaptureStarted(); // called immediately before we start capturing the picture
     void onPictureCompleted(); // called after all picture callbacks have been called and returned
     void onContinuousFocusMove(boolean start); // called when focusing starts/stop in continuous picture mode (in photo mode only)

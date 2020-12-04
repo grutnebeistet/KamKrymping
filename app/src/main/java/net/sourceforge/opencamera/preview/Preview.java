@@ -1,7 +1,5 @@
 package net.sourceforge.opencamera.preview;
 
-import net.sourceforge.opencamera.cameracontroller.RawImage;
-//import net.sourceforge.opencamera.MainActivity;
 import net.sourceforge.opencamera.MyDebug;
 import net.sourceforge.opencamera.R;
 import net.sourceforge.opencamera.ScriptC_histogram_compute;
@@ -1373,29 +1371,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             return;
         }
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
-            // we restrict the checks to Android 6 or later just in case, see note in LocationSupplier.setupLocationListener()
-            if( MyDebug.LOG )
-                Log.d(TAG, "check for permissions");
-            if( ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "camera permission not available");
-                has_permissions = false;
-                applicationInterface.requestCameraPermission();
-                // return for now - the application should try to reopen the camera if permission is granted
-                return;
-            }
-            if( applicationInterface.needsStoragePermission() && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "storage permission not available");
-                has_permissions = false;
-                applicationInterface.requestStoragePermission();
-                // return for now - the application should try to reopen the camera if permission is granted
-                return;
-            }
-            if( MyDebug.LOG )
-                Log.d(TAG, "permissions available");
-        }
+
         // set in case this was previously set to false
         has_permissions = true;
 
@@ -4307,7 +4283,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                     if( ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED ) {
                         if( MyDebug.LOG )
                             Log.d(TAG, "record audio permission not available");
-                        applicationInterface.requestRecordAudioPermission();
                         // we can now carry on - if the user starts recording video, we'll check then if the permission was granted
                     }
                 }
@@ -5187,10 +5162,8 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             }
             else {
                 Uri uri;
-                if( method == ApplicationInterface.VIDEOMETHOD_SAF ) {
-                    uri = applicationInterface.createOutputVideoSAF(extension);
-                }
-                else {
+
+                 {
                     uri = applicationInterface.createOutputVideoUri();
                 }
                 if( MyDebug.LOG )
@@ -5892,40 +5865,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 }
                 else {
                     success = true;
-                }
-            }
-
-            public void onRawPictureTaken(RawImage raw_image) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "onRawPictureTaken");
-                initDate();
-                if( !applicationInterface.onRawPictureTaken(raw_image, current_date) ) {
-                    if( MyDebug.LOG )
-                        Log.e(TAG, "applicationInterface.onRawPictureTaken failed");
-                }
-            }
-
-            public void onBurstPictureTaken(List<byte[]> images) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "onBurstPictureTaken");
-                initDate();
-
-                success = true;
-                if( !applicationInterface.onBurstPictureTaken(images, current_date) ) {
-                    if( MyDebug.LOG )
-                        Log.e(TAG, "applicationInterface.onBurstPictureTaken failed");
-                    success = false;
-                }
-            }
-
-            public void onRawBurstPictureTaken(List<RawImage> raw_images) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "onRawBurstPictureTaken");
-                initDate();
-
-                if( !applicationInterface.onRawBurstPictureTaken(raw_images, current_date) ) {
-                    if( MyDebug.LOG )
-                        Log.e(TAG, "applicationInterface.onRawBurstPictureTaken failed");
                 }
             }
 

@@ -3,7 +3,6 @@ package net.sourceforge.opencamera;
 import net.sourceforge.opencamera.cameracontroller.CameraController;
 import net.sourceforge.opencamera.preview.Preview;
 import net.sourceforge.opencamera.ui.ArraySeekBarPreference;
-import net.sourceforge.opencamera.ui.FolderChooserDialog;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -947,26 +946,6 @@ public class MyPreferenceFragment extends PreferenceFragment implements OnShared
         }*/
         {
             Preference pref = findPreference("preference_save_location");
-            pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference arg0) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "clicked save location");
-                    MainActivity main_activity = (MainActivity)MyPreferenceFragment.this.getActivity();
-                    if( main_activity.getStorageUtils().isUsingSAF() ) {
-                        main_activity.openFolderChooserDialogSAF(true);
-                        return true;
-                    }
-                    else {
-                        File start_folder = main_activity.getStorageUtils().getImageFolder();
-
-                        FolderChooserDialog fragment = new SaveFolderChooserDialog();
-                        fragment.setStartFolder(start_folder);
-                        fragment.show(getFragmentManager(), "FOLDER_FRAGMENT");
-                        return true;
-                    }
-                }
-            });
         }
 
         if( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ) {
@@ -976,32 +955,6 @@ public class MyPreferenceFragment extends PreferenceFragment implements OnShared
         }
         else {
             final Preference pref = findPreference("preference_using_saf");
-            pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference arg0) {
-                    if( pref.getKey().equals("preference_using_saf") ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "user clicked saf");
-                        if( sharedPreferences.getBoolean(PreferenceKeys.UsingSAFPreferenceKey, false) ) {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "saf is now enabled");
-                            // seems better to alway re-show the dialog when the user selects, to make it clear where files will be saved (as the SAF location in general will be different to the non-SAF one)
-                            //String uri = sharedPreferences.getString(PreferenceKeys.getSaveLocationSAFPreferenceKey(), "");
-                            //if( uri.length() == 0 )
-                            {
-                                MainActivity main_activity = (MainActivity)MyPreferenceFragment.this.getActivity();
-                                Toast.makeText(main_activity, R.string.saf_select_save_location, Toast.LENGTH_SHORT).show();
-                                main_activity.openFolderChooserDialogSAF(true);
-                            }
-                        }
-                        else {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "saf is now disabled");
-                        }
-                    }
-                    return false;
-                }
-            });
         }
 
         {
@@ -1462,71 +1415,7 @@ public class MyPreferenceFragment extends PreferenceFragment implements OnShared
         }
         {
             final Preference pref = findPreference("preference_save_settings");
-            pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference arg0) {
-                    if( pref.getKey().equals("preference_save_settings") ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "user clicked save settings");
 
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MyPreferenceFragment.this.getActivity());
-                        alertDialog.setTitle(R.string.preference_save_settings_filename);
-
-                        final EditText editText = new EditText(getActivity());
-                        alertDialog.setView(editText);
-
-                        final MainActivity main_activity = (MainActivity)MyPreferenceFragment.this.getActivity();
-                        try {
-                            // find a default name - although we're only interested in the name rather than full path, this still
-                            // requires checking the folder, so that we don't reuse an existing filename
-                            String mediaFilename = main_activity.getStorageUtils().createOutputMediaFile(
-                                    main_activity.getStorageUtils().getSettingsFolder(),
-                                    StorageUtils.MEDIA_TYPE_PREFS, "", "xml", new Date()
-                            ).getName();
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "mediaFilename: " + mediaFilename);
-                            int index = mediaFilename.lastIndexOf('.');
-                            if( index != -1 ) {
-                                // remove extension
-                                mediaFilename = mediaFilename.substring(0, index);
-                            }
-                            editText.setText(mediaFilename);
-                            editText.setSelection(mediaFilename.length());
-                        }
-                        catch(IOException e) {
-                            Log.e(TAG, "failed to obtain a filename");
-                            e.printStackTrace();
-                        }
-
-                        alertDialog.setPositiveButton(android.R.string.ok, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                if( MyDebug.LOG )
-                                    Log.d(TAG, "save settings clicked okay");
-
-                                String filename = editText.getText().toString() + ".xml";
-                                main_activity.getSettingsManager().saveSettings(filename);
-                            }
-                        });
-                        alertDialog.setNegativeButton(android.R.string.cancel, null);
-                        final AlertDialog alert = alertDialog.create();
-                        // AlertDialog.Builder.setOnDismissListener() requires API level 17, so do it this way instead
-                        alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface arg0) {
-                                if( MyDebug.LOG )
-                                    Log.d(TAG, "save settings dialog dismissed");
-                                dialogs.remove(alert);
-                            }
-                        });
-                        alert.show();
-                        dialogs.add(alert);
-                        //MainActivity main_activity = (MainActivity)MyPreferenceFragment.this.getActivity();
-                        //main_activity.getSettingsManager().saveSettings();
-                    }
-                    return false;
-                }
-            });
         }
         {
             final Preference pref = findPreference("preference_reset");
@@ -1731,42 +1620,6 @@ public class MyPreferenceFragment extends PreferenceFragment implements OnShared
         }
     }
 
-    public static class SaveFolderChooserDialog extends FolderChooserDialog {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "FolderChooserDialog dismissed");
-            // n.b., fragments have to be static (as they might be inserted into a new Activity - see http://stackoverflow.com/questions/15571010/fragment-inner-class-should-be-static),
-            // so we access the MainActivity via the fragment's getActivity().
-            MainActivity main_activity = (MainActivity)this.getActivity();
-            if( main_activity != null ) { // main_activity may be null if this is being closed via MainActivity.onNewIntent()
-                String new_save_location = this.getChosenFolder();
-                main_activity.updateSaveFolder(new_save_location);
-            }
-            super.onDismiss(dialog);
-        }
-    }
-
-    public static class LoadSettingsFileChooserDialog extends FolderChooserDialog {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "FolderChooserDialog dismissed");
-            // n.b., fragments have to be static (as they might be inserted into a new Activity - see http://stackoverflow.com/questions/15571010/fragment-inner-class-should-be-static),
-            // so we access the MainActivity via the fragment's getActivity().
-            MainActivity main_activity = (MainActivity)this.getActivity();
-            if( main_activity != null ) { // main_activity may be null if this is being closed via MainActivity.onNewIntent()
-                String settings_file = this.getChosenFile();
-                if( MyDebug.LOG )
-                    Log.d(TAG, "settings_file: " + settings_file);
-                if( settings_file != null ) {
-                    main_activity.getSettingsManager().loadSettings(settings_file);
-                }
-            }
-            super.onDismiss(dialog);
-        }
-    }
-
     private void readFromBundle(String [] values, String [] entries, String preference_key, String default_value, String preference_category_key) {
         if( MyDebug.LOG ) {
             Log.d(TAG, "readFromBundle");
@@ -1929,15 +1782,7 @@ public class MyPreferenceFragment extends PreferenceFragment implements OnShared
 				/*if( main_activity.getStorageUtils().isUsingSAF() ) {
 					main_activity.openLoadSettingsChooserDialogSAF(true);
 				}
-				else*/ {
-                    FolderChooserDialog fragment = new LoadSettingsFileChooserDialog();
-                    fragment.setShowDCIMShortcut(false);
-                    fragment.setShowNewFolderButton(false);
-                    fragment.setModeFolder(false);
-                    fragment.setExtension(".xml");
-                    fragment.setStartFolder(main_activity.getStorageUtils().getSettingsFolder());
-                    fragment.show(getFragmentManager(), "FOLDER_FRAGMENT");
-                }
+				else*/
             }
         });
         alertDialog.setNegativeButton(android.R.string.no, null);

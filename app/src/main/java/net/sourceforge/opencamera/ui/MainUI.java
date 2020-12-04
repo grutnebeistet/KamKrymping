@@ -827,15 +827,8 @@ public class MainUI {
                 content_description = main_activity.getPreview().isVideoRecording() ? R.string.stop_video : R.string.start_video;
                 switch_video_content_description = R.string.switch_to_photo;
             }
-            else if( main_activity.getApplicationInterface().getPhotoMode() == MyApplicationInterface.PhotoMode.Panorama &&
-                    main_activity.getApplicationInterface().getGyroSensor().isRecording() ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "set icon to recording panorama");
-                resource = R.drawable.baseline_check_white_48;
-                content_description = R.string.finish_panorama;
-                switch_video_content_description = R.string.switch_to_video;
-            }
-            else {
+
+             {
                 if( MyDebug.LOG )
                     Log.d(TAG, "set icon to photo");
                 resource = R.drawable.take_photo_selector;
@@ -1109,10 +1102,6 @@ public class MainUI {
                         View takePhotoVideoButton = main_activity.findViewById(R.id.take_photo_when_video_recording);
                         takePhotoVideoButton.setVisibility(visibility);
                     }
-                    if( main_activity.getApplicationInterface().getGyroSensor().isRecording() ) {
-                        View cancelPanoramaButton = main_activity.findViewById(R.id.cancel_panorama);
-                        cancelPanoramaButton.setVisibility(visibility);
-                    }
                 }
                 if( !immersive_mode ) {
                     // make sure the GUI is set up as expected
@@ -1152,7 +1141,7 @@ public class MainUI {
         }
         main_activity.runOnUiThread(new Runnable() {
             public void run() {
-                final boolean is_panorama_recording = main_activity.getApplicationInterface().getGyroSensor().isRecording();
+                final boolean is_panorama_recording = false;
                 final int visibility = is_panorama_recording ? View.GONE : (show_gui_photo && show_gui_video) ? View.VISIBLE : View.GONE; // for UI that is hidden while taking photo or video
                 final int visibility_video = is_panorama_recording ? View.GONE : show_gui_photo ? View.VISIBLE : View.GONE; // for UI that is only hidden while taking photo
                 View switchCameraButton = main_activity.findViewById(R.id.switch_camera);
@@ -2253,7 +2242,6 @@ public class MainUI {
 
         closeExposureUI();
         main_activity.getPreview().cancelTimer(); // best to cancel any timer, in case we take a photo while settings window is open, or when changing settings
-        main_activity.stopAudioListeners();
 
         final long time_s = System.currentTimeMillis();
 

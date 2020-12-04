@@ -196,10 +196,9 @@ public class CameraController2 extends CameraController {
     private int n_burst_raw; // number of expected (remaining) burst RAW images in this capture
     private boolean burst_single_request; // if true then the burst images are returned in a single call to onBurstPictureTaken(), if false, then multiple calls to onPictureTaken() are made as soon as the image is available
     private final List<byte []> pending_burst_images = new ArrayList<>(); // burst images that have been captured so far, but not yet sent to the application
-    private final List<RawImage> pending_burst_images_raw = new ArrayList<>();
+
     private List<CaptureRequest> slow_burst_capture_requests; // the set of burst capture requests - used when not using captureBurst() (e.g., when use_expo_fast_burst==false, or for focus bracketing)
     private long slow_burst_start_ms = 0; // time when burst started (used for measuring performance of captures when not using captureBurst())
-    private RawImage pending_raw_image; // used to ensure that when taking JPEG+RAW, the JPEG picture callback is called first (only used for non-burst cases)
     private ErrorCallback take_picture_error_cb;
     private boolean want_video_high_speed;
     private boolean is_video_high_speed; // whether we're actually recording in high speed
@@ -1304,10 +1303,8 @@ public class CameraController2 extends CameraController {
             }
 
             // need to call without a lock
-            if( single_burst_complete_images != null ) {
-                picture_cb.onBurstPictureTaken(single_burst_complete_images);
-            }
-            else if( !burst_single_request ) {
+
+             if( !burst_single_request ) {
                 picture_cb.onPictureTaken(bytes);
             }
 
@@ -1555,7 +1552,6 @@ public class CameraController2 extends CameraController {
             if( MyDebug.LOG )
                 Log.d(TAG, "processImage()");
 
-            List<RawImage> single_burst_complete_images = null;
             boolean call_takePhotoCompleted = false;
             DngCreator dngCreator;
             CaptureResult capture_result;
@@ -1591,77 +1587,11 @@ public class CameraController2 extends CameraController {
                     // This isn't required, but can give an appearance of better performance to the user, as the thumbnail
                     // animation for a photo having been taken comes from the JPEG.
                     // We don't do this for burst mode, as it would get too complicated trying to enforce an ordering...
-                    pending_raw_image = new RawImage(dngCreator, image);
                 }
-                else if( burst_single_request ) {
-                    pending_burst_images_raw.add(new RawImage(dngCreator, image));
-                    if( MyDebug.LOG ) {
-                        Log.d(TAG, "pending_burst_images_raw size is now: " + pending_burst_images_raw.size());
-                    }
-                    if( pending_burst_images_raw.size() >= n_burst_raw ) { // shouldn't ever be greater, but just in case
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "all raw burst images available");
-                        if( pending_burst_images_raw.size() > n_burst_raw ) {
-                            Log.e(TAG, "pending_burst_images_raw size " + pending_burst_images_raw.size() + " is greater than n_burst_raw " + n_burst_raw);
-                        }
-                        // take a copy, so that we can clear pending_burst_images_raw
-                        single_burst_complete_images = new ArrayList<>(pending_burst_images_raw);
-                        // continued below after lock...
-                    }
-                    else {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "number of raw burst images is now: " + pending_burst_images_raw.size());
-                    }
-                }
+
                 // case for burst_single_request==false handled below
             }
 
-            if( pending_raw_image != null ) {
-                //takePendingRaw(); // test not waiting for JPEG callback
-
-                checkImagesCompleted();
-            }
-            else {
-                // burst-only code
-                // need to call without a lock
-                if( single_burst_complete_images != null ) {
-                    picture_cb.onRawBurstPictureTaken(single_burst_complete_images);
-                }
-                else if( !burst_single_request ) {
-                    picture_cb.onRawPictureTaken(new RawImage(dngCreator, image));
-                }
-
-                synchronized( background_camera_lock ) {
-                    if( single_burst_complete_images != null ) {
-                        pending_burst_images_raw.clear();
-
-                        call_takePhotoCompleted = true;
-                    }
-                    else if( !burst_single_request ) {
-                        n_burst_raw--;
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "n_burst_raw is now " + n_burst_raw);
-                        if( burst_type == BurstType.BURSTTYPE_CONTINUOUS && !continuous_burst_requested_last_capture ) {
-                            // even if n_burst_raw is 0, we don't want to give up if we're still in continuous burst mode
-                            // also note if we do have continuous_burst_requested_last_capture==true, we still check for
-                            // n_burst_raw==0 below (as there may have been more than one image still to be received)
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "continuous burst mode still in progress");
-                        }
-                        else if( n_burst_raw == 0 ) {
-                            call_takePhotoCompleted = true;
-                        }
-                    }
-                }
-
-                // need to call outside of lock (because they can lead to calls to external callbacks)
-                if( call_takePhotoCompleted ) {
-                    synchronized( background_camera_lock ) {
-                        raw_todo = false;
-                    }
-                    checkImagesCompleted();
-                }
-            }
 
             if( MyDebug.LOG )
                 Log.d(TAG, "done processImage");
@@ -3952,9 +3882,7 @@ public class CameraController2 extends CameraController {
     private void clearPending() {
         if( MyDebug.LOG )
             Log.d(TAG, "clearPending");
-        pending_burst_images.clear();
-        pending_burst_images_raw.clear();
-        pending_raw_image = null;
+
         if( onRawImageAvailableListener != null ) {
             onRawImageAvailableListener.clear();
         }
@@ -3966,25 +3894,7 @@ public class CameraController2 extends CameraController {
         burst_single_request = false;
         slow_burst_start_ms = 0;
     }
-    
-    private void takePendingRaw() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "takePendingRaw");
-        // takePendingRaw() always called on UI thread, and pending_raw_image only used on UI thread, so shouldn't need to
-        // synchronize for that
-        if( pending_raw_image != null ) {
-            synchronized( background_camera_lock ) {
-                raw_todo = false;
-            }
-            // don't call callback with lock
-            picture_cb.onRawPictureTaken(pending_raw_image);
-            // pending_raw_image should be closed by the application (we don't do it here, so that applications can keep hold of the data, e.g., in a queue for background processing)
-            pending_raw_image = null;
-            if( onRawImageAvailableListener != null ) {
-                onRawImageAvailableListener.clear();
-            }
-        }
-    }
+
 
     private void checkImagesCompleted() {
         if( MyDebug.LOG )
@@ -4006,12 +3916,7 @@ public class CameraController2 extends CameraController {
                     Log.d(TAG, "all image callbacks now completed");
                 completed = true;
             }
-            else if( !jpeg_todo && pending_raw_image != null ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "jpeg callback already done, can now call pending raw callback");
-                take_pending_raw = true;
-                completed = true;
-            }
+
             else {
                 if( MyDebug.LOG )
                     Log.d(TAG, "need to wait for jpeg and/or raw callback");
@@ -4019,11 +3924,7 @@ public class CameraController2 extends CameraController {
         }
 
         // need to call callbacks without a lock
-        if( take_pending_raw ) {
-            takePendingRaw();
-            if( MyDebug.LOG )
-                Log.d(TAG, "all image callbacks now completed");
-        }
+
         if( completed ) {
             // need to set picture_cb to null before calling onCompleted, as that may reenter CameraController to take another photo (if in auto-repeat burst mode) - see testTakePhotoRepeat()
             PictureCallback cb = picture_cb;

@@ -152,10 +152,7 @@ public class PopupView extends LinearLayout {
             // make a copy of getSupportedFocusValues() so we can modify it
             List<String> supported_focus_values = preview.getSupportedFocusValues();
             MyApplicationInterface.PhotoMode photo_mode = main_activity.getApplicationInterface().getPhotoMode();
-            if( !preview.isVideo() && photo_mode == MyApplicationInterface.PhotoMode.FocusBracketing ) {
-                // don't show focus modes in focus bracketing mode (as we'll always run in manual focus mode)
-                supported_focus_values = null;
-            }
+
             if( supported_focus_values != null ) {
                 supported_focus_values = new ArrayList<>(supported_focus_values);
                 // only show appropriate continuous focus mode
@@ -186,34 +183,7 @@ public class PopupView extends LinearLayout {
             final List<MyApplicationInterface.PhotoMode> photo_mode_values = new ArrayList<>();
             photo_modes.add( getResources().getString(use_expanded_menu ? R.string.photo_mode_standard_full : R.string.photo_mode_standard) );
             photo_mode_values.add( MyApplicationInterface.PhotoMode.Standard );
-            if( main_activity.supportsNoiseReduction() ) {
-                photo_modes.add(getResources().getString(use_expanded_menu ? R.string.photo_mode_noise_reduction_full : R.string.photo_mode_noise_reduction));
-                photo_mode_values.add(MyApplicationInterface.PhotoMode.NoiseReduction);
-            }
-            if( main_activity.supportsDRO() ) {
-                photo_modes.add( getResources().getString(R.string.photo_mode_dro) );
-                photo_mode_values.add( MyApplicationInterface.PhotoMode.DRO );
-            }
-            if( main_activity.supportsHDR() ) {
-                photo_modes.add( getResources().getString(R.string.photo_mode_hdr) );
-                photo_mode_values.add( MyApplicationInterface.PhotoMode.HDR );
-            }
-            if( main_activity.supportsPanorama() ) {
-                photo_modes.add(getResources().getString(use_expanded_menu ? R.string.photo_mode_panorama_full : R.string.photo_mode_panorama));
-                photo_mode_values.add(MyApplicationInterface.PhotoMode.Panorama);
-            }
-            if( main_activity.supportsFastBurst() ) {
-                photo_modes.add(getResources().getString(use_expanded_menu ? R.string.photo_mode_fast_burst_full : R.string.photo_mode_fast_burst));
-                photo_mode_values.add(MyApplicationInterface.PhotoMode.FastBurst);
-            }
-            if( main_activity.supportsExpoBracketing() ) {
-                photo_modes.add( getResources().getString(use_expanded_menu ? R.string.photo_mode_expo_bracketing_full : R.string.photo_mode_expo_bracketing) );
-                photo_mode_values.add( MyApplicationInterface.PhotoMode.ExpoBracketing );
-            }
-            if( main_activity.supportsFocusBracketing() ) {
-                photo_modes.add( getResources().getString(use_expanded_menu ? R.string.photo_mode_focus_bracketing_full : R.string.photo_mode_focus_bracketing) );
-                photo_mode_values.add( MyApplicationInterface.PhotoMode.FocusBracketing );
-            }
+
             if( preview.isVideo() ) {
                 // only show photo modes when in photo mode, not video mode!
                 // (photo modes not supported for photo snapshot whilst recording video)
@@ -262,60 +232,6 @@ public class PopupView extends LinearLayout {
             if( MyDebug.LOG )
                 Log.d(TAG, "PopupView time 7: " + (System.nanoTime() - debug_time));
 
-            if( !preview.isVideo() && photo_mode == MyApplicationInterface.PhotoMode.NoiseReduction ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "add noise reduction options");
-
-                final String [] nr_mode_values = getResources().getStringArray(R.array.preference_nr_mode_values);
-                String [] nr_mode_entries = getResources().getStringArray(R.array.preference_nr_mode_entries);
-
-                if( nr_mode_values.length != nr_mode_entries.length ) {
-                    Log.e(TAG, "preference_nr_mode_values and preference_nr_mode_entries are different lengths");
-                    throw new RuntimeException();
-                }
-
-                //String nr_mode_value = sharedPreferences.getString(PreferenceKeys.NRModePreferenceKey, "preference_nr_mode_normal");
-                String nr_mode_value = main_activity.getApplicationInterface().getNRMode();
-                nr_mode_index = Arrays.asList(nr_mode_values).indexOf(nr_mode_value);
-                if( nr_mode_index == -1 ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "can't find nr_mode_value " + nr_mode_value + " in nr_mode_values!");
-                    nr_mode_index = 0;
-                }
-                addArrayOptionsToPopup(Arrays.asList(nr_mode_entries), getResources().getString(R.string.preference_nr_mode), true, true, nr_mode_index, false, "NR_MODE", new ArrayOptionsPopupListener() {
-                    private void update() {
-                        if( nr_mode_index == -1 )
-                            return;
-                        String new_nr_mode_value = nr_mode_values[nr_mode_index];
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        //editor.putString(PreferenceKeys.NRModePreferenceKey, new_nr_mode_value);
-                        main_activity.getApplicationInterface().setNRMode(new_nr_mode_value);
-                        editor.apply();
-                        if( preview.getCameraController() != null ) {
-                            preview.setupBurstMode();
-                        }
-                    }
-                    @Override
-                    public int onClickPrev() {
-                        if( nr_mode_index != -1 && nr_mode_index > 0 ) {
-                            nr_mode_index--;
-                            update();
-                            return nr_mode_index;
-                        }
-                        return -1;
-                    }
-                    @Override
-                    public int onClickNext() {
-                        if( nr_mode_index != -1 && nr_mode_index < nr_mode_values.length-1 ) {
-                            nr_mode_index++;
-                            update();
-                            return nr_mode_index;
-                        }
-                        return -1;
-                    }
-                });
-            }
 
             if( main_activity.supportsAutoStabilise() && !main_activity.getMainUI().showAutoLevelIcon() ) {
                 // don't show auto-stabilise checkbox on popup if there's an on-screen icon
@@ -349,7 +265,7 @@ public class PopupView extends LinearLayout {
             if( MyDebug.LOG )
                 Log.d(TAG, "PopupView time 8: " + (System.nanoTime() - debug_time));
 
-            if( !preview.isVideo() && photo_mode != MyApplicationInterface.PhotoMode.Panorama ) {
+            if( !preview.isVideo()  ) {
                 // Only show photo resolutions in photo mode - even if photo snapshots whilst recording video is supported, the
                 // resolutions for that won't match what the user has requested for photo mode resolutions.
                 // And Panorama mode chooses its own resolution.
@@ -561,177 +477,6 @@ public class PopupView extends LinearLayout {
                 });
             }
 
-            if( !preview.isVideo() && photo_mode == MyApplicationInterface.PhotoMode.FastBurst ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "add fast burst options");
-
-                final String [] all_burst_mode_values = getResources().getStringArray(R.array.preference_fast_burst_n_images_values);
-                String [] all_burst_mode_entries = getResources().getStringArray(R.array.preference_fast_burst_n_images_entries);
-
-                //String [] burst_mode_values = new String[all_burst_mode_values.length];
-                //String [] burst_mode_entries = new String[all_burst_mode_entries.length];
-                if( all_burst_mode_values.length != all_burst_mode_entries.length ) {
-                    Log.e(TAG, "preference_fast_burst_n_images_values and preference_fast_burst_n_images_entries are different lengths");
-                    throw new RuntimeException();
-                }
-
-                int max_burst_images = main_activity.getApplicationInterface().getImageSaver().getQueueSize()+1;
-                max_burst_images = Math.max(2, max_burst_images); // make sure we at least allow the minimum of 2 burst images!
-                if( MyDebug.LOG )
-                    Log.d(TAG, "max_burst_images: " + max_burst_images);
-
-                // filter number of burst images - don't allow more than max_burst_images
-                List<String> burst_mode_values_l = new ArrayList<>();
-                List<String> burst_mode_entries_l = new ArrayList<>();
-                for(int i=0;i<all_burst_mode_values.length;i++) {
-                    int n_images;
-                    try {
-                        n_images = Integer.parseInt(all_burst_mode_values[i]);
-                    }
-                    catch(NumberFormatException e) {
-                        Log.e(TAG, "failed to parse " + i + "th preference_fast_burst_n_images_values value: " + all_burst_mode_values[i]);
-                        e.printStackTrace();
-                        continue;
-                    }
-                    if( n_images > max_burst_images ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "n_images " + n_images + " is more than max_burst_images: " + max_burst_images);
-                        continue;
-                    }
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "n_images " + n_images);
-                    burst_mode_values_l.add( all_burst_mode_values[i] );
-                    burst_mode_entries_l.add( all_burst_mode_entries[i] );
-                }
-                final String [] burst_mode_values = burst_mode_values_l.toArray(new String[0]);
-                final String [] burst_mode_entries = burst_mode_entries_l.toArray(new String[0]);
-
-                String burst_mode_value = sharedPreferences.getString(PreferenceKeys.FastBurstNImagesPreferenceKey, "5");
-                burst_n_images_index = Arrays.asList(burst_mode_values).indexOf(burst_mode_value);
-                if( burst_n_images_index == -1 ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "can't find burst_mode_value " + burst_mode_value + " in burst_mode_values!");
-                    burst_n_images_index = 0;
-                }
-                addArrayOptionsToPopup(Arrays.asList(burst_mode_entries), getResources().getString(R.string.preference_fast_burst_n_images), true, false, burst_n_images_index, false, "FAST_BURST_N_IMAGES", new ArrayOptionsPopupListener() {
-                    private void update() {
-                        if( burst_n_images_index == -1 )
-                            return;
-                        String new_burst_mode_value = burst_mode_values[burst_n_images_index];
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(PreferenceKeys.FastBurstNImagesPreferenceKey, new_burst_mode_value);
-                        editor.apply();
-                        if( preview.getCameraController() != null ) {
-                            preview.getCameraController().setBurstNImages(main_activity.getApplicationInterface().getBurstNImages());
-                        }
-                    }
-                    @Override
-                    public int onClickPrev() {
-                        if( burst_n_images_index != -1 && burst_n_images_index > 0 ) {
-                            burst_n_images_index--;
-                            update();
-                            return burst_n_images_index;
-                        }
-                        return -1;
-                    }
-                    @Override
-                    public int onClickNext() {
-                        if( burst_n_images_index != -1 && burst_n_images_index < burst_mode_values.length-1 ) {
-                            burst_n_images_index++;
-                            update();
-                            return burst_n_images_index;
-                        }
-                        return -1;
-                    }
-                });
-            }
-            else if( !preview.isVideo() && photo_mode == MyApplicationInterface.PhotoMode.FocusBracketing ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "add focus bracketing options");
-
-                final String [] burst_mode_values = getResources().getStringArray(R.array.preference_focus_bracketing_n_images_values);
-                String [] burst_mode_entries = getResources().getStringArray(R.array.preference_focus_bracketing_n_images_entries);
-
-                if( burst_mode_values.length != burst_mode_entries.length ) {
-                    Log.e(TAG, "preference_focus_bracketing_n_images_values and preference_focus_bracketing_n_images_entries are different lengths");
-                    throw new RuntimeException();
-                }
-
-                String burst_mode_value = sharedPreferences.getString(PreferenceKeys.FocusBracketingNImagesPreferenceKey, "3");
-                burst_n_images_index = Arrays.asList(burst_mode_values).indexOf(burst_mode_value);
-                if( burst_n_images_index == -1 ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "can't find burst_mode_value " + burst_mode_value + " in burst_mode_values!");
-                    burst_n_images_index = 0;
-                }
-                addArrayOptionsToPopup(Arrays.asList(burst_mode_entries), getResources().getString(R.string.preference_focus_bracketing_n_images), true, false, burst_n_images_index, false, "FOCUS_BRACKETING_N_IMAGES", new ArrayOptionsPopupListener() {
-                    private void update() {
-                        if( burst_n_images_index == -1 )
-                            return;
-                        String new_burst_mode_value = burst_mode_values[burst_n_images_index];
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(PreferenceKeys.FocusBracketingNImagesPreferenceKey, new_burst_mode_value);
-                        editor.apply();
-                        if( preview.getCameraController() != null ) {
-                            preview.getCameraController().setFocusBracketingNImages(main_activity.getApplicationInterface().getFocusBracketingNImagesPref());
-                        }
-                    }
-                    @Override
-                    public int onClickPrev() {
-                        if( burst_n_images_index != -1 && burst_n_images_index > 0 ) {
-                            burst_n_images_index--;
-                            update();
-                            return burst_n_images_index;
-                        }
-                        return -1;
-                    }
-                    @Override
-                    public int onClickNext() {
-                        if( burst_n_images_index != -1 && burst_n_images_index < burst_mode_values.length-1 ) {
-                            burst_n_images_index++;
-                            update();
-                            return burst_n_images_index;
-                        }
-                        return -1;
-                    }
-                });
-
-                //CheckBox checkBox = new CheckBox(main_activity);
-                Switch checkBox = new Switch(main_activity);
-                checkBox.setText(getResources().getString(R.string.focus_bracketing_add_infinity));
-                {
-                    // align the checkbox a bit better
-                    checkBox.setGravity(Gravity.RIGHT);
-                    LayoutParams params = new LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT
-                    );
-                    final int right_padding = (int) (20 * scale + 0.5f); // convert dps to pixels
-                    params.setMargins(0, 0, right_padding, 0);
-                    checkBox.setLayoutParams(params);
-                }
-
-                boolean add_infinity = sharedPreferences.getBoolean(PreferenceKeys.FocusBracketingAddInfinityPreferenceKey, false);
-                if( add_infinity )
-                    checkBox.setChecked(add_infinity);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton buttonView,
-                                                 boolean isChecked) {
-                        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(PreferenceKeys.FocusBracketingAddInfinityPreferenceKey, isChecked);
-                        editor.apply();
-                        if( preview.getCameraController() != null ) {
-                            preview.getCameraController().setFocusBracketingAddInfinity(main_activity.getApplicationInterface().getFocusBracketingAddInfinityPref());
-                        }
-                    }
-                });
-
-                this.addView(checkBox);
-            }
-
             if( preview.isVideo() ) {
                 final List<Float> capture_rate_values = main_activity.getApplicationInterface().getSupportedVideoCaptureRates();
                 if( capture_rate_values.size() > 1 ) {
@@ -842,7 +587,7 @@ public class PopupView extends LinearLayout {
                 }
             }
 
-            if( photo_mode != MyApplicationInterface.PhotoMode.Panorama ) {
+            {
                 // timer not supported with panorama
 
                 final String [] timer_values = getResources().getStringArray(R.array.preference_timer_values);
@@ -888,7 +633,7 @@ public class PopupView extends LinearLayout {
             if( MyDebug.LOG )
                 Log.d(TAG, "PopupView time 11: " + (System.nanoTime() - debug_time));
 
-            if( photo_mode != MyApplicationInterface.PhotoMode.Panorama ) {
+            {
                 // auto-repeat not supported with panorama
 
                 final String [] repeat_mode_values = getResources().getStringArray(R.array.preference_burst_mode_values);
@@ -1082,48 +827,12 @@ public class PopupView extends LinearLayout {
                 case Standard:
                     toast_message = getResources().getString(R.string.photo_mode_standard_full);
                     break;
-                case ExpoBracketing:
-                    toast_message = getResources().getString(R.string.photo_mode_expo_bracketing_full);
-                    break;
-                case FocusBracketing:
-                    toast_message = getResources().getString(R.string.photo_mode_focus_bracketing_full);
-                    break;
-                case FastBurst:
-                    toast_message = getResources().getString(R.string.photo_mode_fast_burst_full);
-                    break;
-                case NoiseReduction:
-                    toast_message = getResources().getString(R.string.photo_mode_noise_reduction_full);
-                    break;
-                case Panorama:
-                    toast_message = getResources().getString(R.string.photo_mode_panorama_full);
-                    break;
             }
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             switch (new_photo_mode) {
                 case Standard:
                     editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_std");
-                    break;
-                case DRO:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_dro");
-                    break;
-                case HDR:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_hdr");
-                    break;
-                case ExpoBracketing:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_expo_bracketing");
-                    break;
-                case FocusBracketing:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_focus_bracketing");
-                    break;
-                case FastBurst:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_fast_burst");
-                    break;
-                case NoiseReduction:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_noise_reduction");
-                    break;
-                case Panorama:
-                    editor.putString(PreferenceKeys.PhotoModePreferenceKey, "preference_photo_mode_panorama");
                     break;
                 default:
                     if (MyDebug.LOG)
@@ -1133,20 +842,6 @@ public class PopupView extends LinearLayout {
             editor.apply();
 
             boolean done_dialog = false;
-            if( new_photo_mode == MyApplicationInterface.PhotoMode.HDR ) {
-                boolean done_hdr_info = sharedPreferences.contains(PreferenceKeys.HDRInfoPreferenceKey);
-                if( !done_hdr_info ) {
-                    main_activity.getMainUI().showInfoDialog(R.string.photo_mode_hdr, R.string.hdr_info, PreferenceKeys.HDRInfoPreferenceKey);
-                    done_dialog = true;
-                }
-            }
-            else if( new_photo_mode == MyApplicationInterface.PhotoMode.Panorama ) {
-                boolean done_panorama_info = sharedPreferences.contains(PreferenceKeys.PanoramaInfoPreferenceKey);
-                if( !done_panorama_info ) {
-                    main_activity.getMainUI().showInfoDialog(R.string.photo_mode_panorama_full, R.string.panorama_info, PreferenceKeys.PanoramaInfoPreferenceKey);
-                    done_dialog = true;
-                }
-            }
 
             if( done_dialog ) {
                 // no need to show toast

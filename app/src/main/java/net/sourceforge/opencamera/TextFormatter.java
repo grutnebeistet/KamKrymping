@@ -89,8 +89,7 @@ public class TextFormatter {
                 if( MyDebug.LOG )
                     Log.d(TAG, "location: " + location);
                 if( preference_stamp_gpsformat.equals("preference_stamp_gpsformat_dms") )
-                    gps_stamp += LocationSupplier.locationToDMS(location.getLatitude()) + ", " + LocationSupplier.locationToDMS(location.getLongitude());
-                else
+
                     gps_stamp += Location.convert(location.getLatitude(), Location.FORMAT_DEGREES) + ", " + Location.convert(location.getLongitude(), Location.FORMAT_DEGREES);
                 if( location.hasAltitude() ) {
                     gps_stamp += ", " + getDistanceString(location.getAltitude(), preference_units_distance);
