@@ -270,11 +270,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
     private int min_exposure;
     private int max_exposure;
     private float exposure_step;
-    private boolean supports_expo_bracketing;
-    private int max_expo_bracketing_n_images;
-    private boolean supports_focus_bracketing;
-    private boolean supports_burst;
-    private boolean supports_raw;
+
     private float view_angle_x;
     private float view_angle_y;
 
@@ -1332,11 +1328,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         min_exposure = 0;
         max_exposure = 0;
         exposure_step = 0.0f;
-        supports_expo_bracketing = false;
-        max_expo_bracketing_n_images = 0;
-        supports_focus_bracketing = false;
-        supports_burst = false;
-        supports_raw = false;
         view_angle_x = 55.0f; // set a sensible default
         view_angle_y = 43.0f; // set a sensible default
         photo_sizes = null;
@@ -1748,59 +1739,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 Log.d(TAG, "set_flash_value_after_autofocus is now: " + set_flash_value_after_autofocus);
         }
 
-        if( this.supports_raw && applicationInterface.getRawPref() != ApplicationInterface.RawPref.RAWPREF_JPEG_ONLY ) {
-            camera_controller.setRaw(true, applicationInterface.getMaxRawImages());
-        }
-        else {
-            camera_controller.setRaw(false, 0);
-        }
-
-        setupBurstMode();
-
-        if( camera_controller.isBurstOrExpo() ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "check photo resolution supports burst");
-            CameraController.Size current_size = getCurrentPictureSize();
-            if( MyDebug.LOG && current_size != null ) {
-                Log.d(TAG, "current_size: " + current_size.width + " x " + current_size.height + " supports_burst? " + current_size.supports_burst);
-            }
-            if( current_size != null && !current_size.supports_burst ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "burst mode: current picture size doesn't support burst");
-                // set to next largest that supports burst
-                CameraController.Size new_size = null;
-                for(int i=0;i<photo_sizes.size();i++) {
-                    CameraController.Size size = photo_sizes.get(i);
-                    if( size.supports_burst && size.width*size.height <= current_size.width*current_size.height ) {
-                        if( new_size == null || size.width*size.height > new_size.width*new_size.height ) {
-                            current_size_index = i;
-                            new_size = size;
-                        }
-                    }
-                }
-                if( new_size == null ) {
-                    Log.e(TAG, "can't find burst-supporting picture size smaller than the current picture size");
-                    // just find largest that supports burst
-                    for(int i=0;i<photo_sizes.size();i++) {
-                        CameraController.Size size = photo_sizes.get(i);
-                        if( size.supports_burst ) {
-                            if( new_size == null || size.width*size.height > new_size.width*new_size.height ) {
-                                current_size_index = i;
-                                new_size = size;
-                            }
-                        }
-                    }
-                    if( new_size == null ) {
-                        Log.e(TAG, "can't find burst-supporting picture size");
-                    }
-                }
-                // if we set a new size, we don't save this to applicationinterface (so that if user switches to a burst mode and back
-                // when the original resolution doesn't support burst we revert to the original resolution)
-            }
-        }
-
-        camera_controller.setOptimiseAEForDRO( applicationInterface.getOptimiseAEForDROPref() );
-
         // Must set preview size before starting camera preview
         // and must do it after setting photo vs video mode
         setPreviewSize(); // need to call this when we switch cameras, not just when we run for the first time
@@ -1828,14 +1766,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             // resetting the zoom (in case the application called setupCamera() rather than reopening the camera).
             camera_controller.setZoom(0);
         }
-
-	    /*if( take_photo ) {
-			if( this.is_video ) {
-				if( MyDebug.LOG )
-					Log.d(TAG, "switch to video for take_photo widget");
-				this.switchVideo(false); // set during_startup to false, as we now need to reset the preview
-			}
-		}*/
 
         applicationInterface.cameraSetup(); // must call this after the above take_photo code for calling switchVideo
         if( MyDebug.LOG ) {
@@ -1877,42 +1807,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         }
     }
 
-    public void setupBurstMode() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setupBurstMode()");
-        if( this.supports_expo_bracketing && applicationInterface.isExpoBracketingPref() ) {
-            camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_EXPO);
-            camera_controller.setExpoBracketingNImages( applicationInterface.getExpoBracketingNImagesPref() );
-            camera_controller.setExpoBracketingStops( applicationInterface.getExpoBracketingStopsPref() );
-            // setUseExpoFastBurst called when taking a photo
-        }
-        else if( this.supports_focus_bracketing && applicationInterface.isFocusBracketingPref() ) {
-            camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_FOCUS);
-            camera_controller.setFocusBracketingNImages( applicationInterface.getFocusBracketingNImagesPref() );
-            camera_controller.setFocusBracketingAddInfinity( applicationInterface.getFocusBracketingAddInfinityPref() );
-        }
-        else if( this.supports_burst && applicationInterface.isCameraBurstPref() ) {
-            if( applicationInterface.getBurstForNoiseReduction() ) {
-                if( this.supports_exposure_time ) { // noise reduction mode also needs manual exposure
-                    ApplicationInterface.NRModePref nr_mode = applicationInterface.getNRModePref();
-                    camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_NORMAL);
-                    camera_controller.setBurstForNoiseReduction(true, nr_mode==ApplicationInterface.NRModePref.NRMODE_LOW_LIGHT);
-                }
-                else {
-                    camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_NONE);
-                }
-            }
-            else {
-                camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_NORMAL);
-                camera_controller.setBurstForNoiseReduction(false, false);
-                camera_controller.setBurstNImages(applicationInterface.getBurstNImages());
-            }
-        }
-        else {
-            camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_NONE);
-        }
-    }
-
     private void initCameraParameters() throws CameraControllerException {
         if( MyDebug.LOG )
             Log.d(TAG, "initCameraParameters()");
@@ -1944,8 +1838,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                         current_size = size;
                     }
                 }
-                if( current_size != null )
-                    current_size.supports_burst = false;
             }
             supported_flash_values = camera_features.supported_flash_values;
             supported_focus_values = camera_features.supported_focus_values;
@@ -1970,11 +1862,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             this.min_exposure = camera_features.min_exposure;
             this.max_exposure = camera_features.max_exposure;
             this.exposure_step = camera_features.exposure_step;
-            this.supports_expo_bracketing = camera_features.supports_expo_bracketing;
-            this.max_expo_bracketing_n_images = camera_features.max_expo_bracketing_n_images;
-            this.supports_focus_bracketing = camera_features.supports_focus_bracketing;
-            this.supports_burst = camera_features.supports_burst;
-            this.supports_raw = camera_features.supports_raw;
             this.view_angle_x = camera_features.view_angle_x;
             this.view_angle_y = camera_features.view_angle_y;
             this.supports_video_high_speed = camera_features.video_sizes_high_speed != null && camera_features.video_sizes_high_speed.size() > 0;
@@ -2749,8 +2636,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 focus_distance_value = 0.0f;
             else if( focus_distance_value > minimum_focus_distance )
                 focus_distance_value = minimum_focus_distance;
-            camera_controller.setFocusDistance(focus_distance_value);
-            camera_controller.setFocusBracketingSourceDistance(focus_distance_value);
             // now save
             applicationInterface.setFocusDistancePref(focus_distance_value, false);
         }
@@ -2762,7 +2647,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 focus_distance_value = 0.0f;
             else if( focus_distance_value > minimum_focus_distance )
                 focus_distance_value = minimum_focus_distance;
-            camera_controller.setFocusBracketingTargetDistance(focus_distance_value);
             // now save
             applicationInterface.setFocusDistancePref(focus_distance_value, true);
         }
@@ -3765,61 +3649,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         }
     }
 
-    public void setFocusDistance(float new_focus_distance, boolean is_target_distance) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "setFocusDistance: " + new_focus_distance);
-            Log.d(TAG, "is_target_distance: " + is_target_distance);
-        }
-        if( camera_controller != null ) {
-            if( new_focus_distance < 0.0f )
-                new_focus_distance = 0.0f;
-            else if( new_focus_distance > minimum_focus_distance )
-                new_focus_distance = minimum_focus_distance;
-            boolean focus_changed = false;
-            if( is_target_distance ) {
-                focus_changed = true;
-                camera_controller.setFocusBracketingTargetDistance(new_focus_distance);
-                // also set the focus distance, so the user can see what the target distance looks like
-                camera_controller.setFocusDistance(new_focus_distance);
-            }
-            else if( camera_controller.setFocusDistance(new_focus_distance) ) {
-                focus_changed = true;
-                camera_controller.setFocusBracketingSourceDistance(new_focus_distance);
-            }
-
-            if( focus_changed ) {
-                // now save
-                applicationInterface.setFocusDistancePref(new_focus_distance, is_target_distance);
-                {
-                    String focus_distance_s;
-                    if( new_focus_distance > 0.0f ) {
-                        float real_focus_distance = 1.0f / new_focus_distance;
-                        focus_distance_s = decimal_format_2dp_force0.format(real_focus_distance) + getResources().getString(R.string.metres_abbreviation);
-                    }
-                    else {
-                        focus_distance_s = getResources().getString(R.string.infinite);
-                    }
-                    int id = R.string.focus_distance;
-                    if( this.supports_focus_bracketing && applicationInterface.isFocusBracketingPref() )
-                        id = is_target_distance ? R.string.focus_bracketing_target_distance : R.string.focus_bracketing_source_distance;
-                    showToast(getResources().getString(id) + " " + focus_distance_s, true);
-                }
-            }
-        }
-    }
-
-    public void stoppedSettingFocusDistance(boolean is_target_distance) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "stoppedSettingFocusDistance");
-            Log.d(TAG, "is_target_distance: " + is_target_distance);
-        }
-        if( is_target_distance && camera_controller != null ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "set manual focus distance back to start");
-            camera_controller.setFocusDistance( camera_controller.getFocusBracketingSourceDistance() );
-        }
-    }
-
     public void setExposure(int new_exposure) {
         if( MyDebug.LOG )
             Log.d(TAG, "setExposure(): " + new_exposure);
@@ -4729,10 +4558,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             if( remaining_repeat_photos != 0 ) {
                 cancelRepeat();
                 showToast(take_photo_toast, R.string.cancelled_repeat_mode);
-            }
-            else if( !is_video && camera_controller.getBurstType() == CameraController.BurstType.BURSTTYPE_FOCUS && camera_controller.isCapturingBurst() ) {
-                camera_controller.stopFocusBracketingBurst();
-                showToast(take_photo_toast, R.string.cancelled_focus_bracketing);
             }
             return;
         }
@@ -5705,11 +5530,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 if( MyDebug.LOG )
                     Log.d(TAG, "onStarted");
                 applicationInterface.onCaptureStarted();
-                if( applicationInterface.getBurstForNoiseReduction() && applicationInterface.getNRModePref() == ApplicationInterface.NRModePref.NRMODE_LOW_LIGHT ) {
-                    if( camera_controller.getBurstTotal() >= CameraController.N_IMAGES_NR_DARK_LOW_LIGHT ) {
-                        showToast(null, R.string.preference_nr_mode_low_light_message);
-                    }
-                }
             }
 
             public void onCompleted() {
@@ -5763,12 +5583,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                     if( MyDebug.LOG )
                         Log.d(TAG, "cancelAutoFocus to restart continuous focusing");
                     camera_controller.cancelAutoFocus(); // needed to restart continuous focusing
-                }
-
-                if( camera_controller != null && camera_controller.getBurstType() == CameraController.BurstType.BURSTTYPE_CONTINUOUS ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "continuous burst mode ended, so revert to standard mode");
-                    setupBurstMode();
                 }
 
                 if( MyDebug.LOG )
@@ -5841,13 +5655,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             camera_controller.enableShutterSound(enable_sound);
 
                 boolean use_camera2_fast_burst = applicationInterface.useCamera2FastBurst();
-                if( MyDebug.LOG )
-                    Log.d(TAG, "use_camera2_fast_burst? " + use_camera2_fast_burst);
-                camera_controller.setUseExpoFastBurst( use_camera2_fast_burst );
-
-            if( continuous_fast_burst ) {
-                camera_controller.setBurstType(CameraController.BurstType.BURSTTYPE_CONTINUOUS);
-            }
 
             if( MyDebug.LOG )
                 Log.d(TAG, "about to call takePicture");
@@ -6559,15 +6366,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         if( MyDebug.LOG )
             Log.d(TAG, "getMaximumExposureTime: " + max_exposure_time);
         long max = max_exposure_time;
-        if( applicationInterface.isExpoBracketingPref() || applicationInterface.isFocusBracketingPref() || applicationInterface.isCameraBurstPref() ) {
-            // doesn't make sense to allow long exposure times in these modes
-            if( applicationInterface.getBurstForNoiseReduction() )
-                max = Math.min(max_exposure_time, 1000000000L*2); // limit to 2s
-            else
-                max = Math.min(max_exposure_time, 1000000000L/2); // limit to 0.5s
-        }
-        if( MyDebug.LOG )
-            Log.d(TAG, "max: " + max);
         return max;
     }
 
@@ -6600,35 +6398,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         return camera_controller.getExposureCompensation();
     }
 
-    /*List<String> getSupportedExposures() {
-		if( MyDebug.LOG )
-			Log.d(TAG, "getSupportedExposures");
-    	return this.exposures;
-    }*/
 
-    public boolean supportsExpoBracketing() {
-		/*if( MyDebug.LOG )
-			Log.d(TAG, "supportsExpoBracketing");*/
-        return this.supports_expo_bracketing;
-    }
-
-    public int maxExpoBracketingNImages() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "maxExpoBracketingNImages");
-        return this.max_expo_bracketing_n_images;
-    }
-
-    public boolean supportsFocusBracketing() {
-        return this.supports_focus_bracketing;
-    }
-
-    public boolean supportsBurst() {
-        return this.supports_burst;
-    }
-
-    public boolean supportsRaw() {
-        return this.supports_raw;
-    }
 
     /** Returns the horizontal angle of view in degrees (when unzoomed).
      */
@@ -6733,17 +6503,14 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
     public List<CameraController.Size> getSupportedPictureSizes(boolean check_supported) {
         if( MyDebug.LOG )
             Log.d(TAG, "getSupportedPictureSizes");
-        boolean is_burst = ( camera_controller != null && camera_controller.isBurstOrExpo() );
+
         boolean has_constraints = photo_size_constraints != null && photo_size_constraints.hasConstraints();
-        if( check_supported && ( is_burst || has_constraints ) ) {
+        if( check_supported && (has_constraints ) ) {
             if( MyDebug.LOG )
                 Log.d(TAG, "need to filter picture sizes for burst mode and/or constraints");
             List<CameraController.Size> filtered_sizes = new ArrayList<>();
             for(CameraController.Size size : photo_sizes) {
-                if( is_burst && !size.supports_burst ) {
-                    // burst mode not supported
-                }
-                else if( !photo_size_constraints.satisfies(size) ) {
+          if( !photo_size_constraints.satisfies(size) ) {
                     // doesn't satisfy imposed constraints
                 }
                 else {

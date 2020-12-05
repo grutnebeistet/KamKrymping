@@ -965,8 +965,6 @@ public class MainUI {
     }
 
     public boolean showCycleRawIcon() {
-        if( !main_activity.getPreview().supportsRaw() )
-            return false;
         if( !main_activity.getApplicationInterface().isRawAllowed(main_activity.getApplicationInterface().getPhotoMode()) )
             return false;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
@@ -1084,10 +1082,6 @@ public class MainUI {
                 if( main_activity.getPreview().supportsZoom() && sharedPreferences.getBoolean(PreferenceKeys.ShowZoomSliderControlsPreferenceKey, true) ) {
                     zoomSeekBar.setVisibility(visibility);
                 }
-                if( main_activity.showManualFocusSeekbar(false) )
-                    focusSeekBar.setVisibility(visibility);
-                if( main_activity.showManualFocusSeekbar(true) )
-                    focusBracketingTargetSeekBar.setVisibility(visibility);
                 String pref_immersive_mode = sharedPreferences.getString(PreferenceKeys.ImmersiveModePreferenceKey, "immersive_mode_low_profile");
                 if( pref_immersive_mode.equals("immersive_mode_everything") ) {
                     if( sharedPreferences.getBoolean(PreferenceKeys.ShowTakePhotoPreferenceKey, true) ) {
@@ -1219,18 +1213,7 @@ public class MainUI {
     public void updateCycleRawIcon() {
         ApplicationInterface.RawPref raw_pref = main_activity.getApplicationInterface().getRawPref();
         ImageButton view = main_activity.findViewById(R.id.cycle_raw);
-        if( raw_pref == ApplicationInterface.RawPref.RAWPREF_JPEG_DNG ) {
-            if( main_activity.getApplicationInterface().isRawOnly() ) {
-                // actually RAW only
-                view.setImageResource(R.drawable.raw_only_icon);
-            }
-            else {
-                view.setImageResource(R.drawable.raw_icon);
-            }
-        }
-        else {
             view.setImageResource(R.drawable.raw_off_icon);
-        }
     }
 
     public void updateStoreLocationIcon() {

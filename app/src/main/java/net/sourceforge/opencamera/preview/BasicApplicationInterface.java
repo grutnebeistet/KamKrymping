@@ -294,46 +294,6 @@ public abstract class BasicApplicationInterface implements ApplicationInterface 
     }
 
     @Override
-    public boolean isExpoBracketingPref() {
-        return false;
-    }
-
-    @Override
-    public int getExpoBracketingNImagesPref() {
-        return 3;
-    }
-
-    @Override
-    public double getExpoBracketingStopsPref() {
-        return 2.0;
-    }
-
-    @Override
-    public int getFocusBracketingNImagesPref() {
-        return 3;
-    }
-
-    @Override
-    public boolean getFocusBracketingAddInfinityPref() {
-        return false;
-    }
-
-    @Override
-    public boolean isFocusBracketingPref() {
-        return false;
-    }
-
-    @Override
-    public boolean isCameraBurstPref() {
-        return false;
-    }
-
-    @Override
-    public int getBurstNImages() {
-        return 5;
-    }
-
-    @Override
     public boolean getBurstForNoiseReduction() {
         return false;
     }

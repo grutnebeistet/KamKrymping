@@ -1023,50 +1023,11 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         if( MyDebug.LOG )
             Log.d(TAG, "canTakeNewPhoto");
 
-        int n_raw, n_jpegs;
-        if( main_activity.getPreview().isVideo() ) {
-            // video snapshot mode
-            n_raw = 0;
-            n_jpegs = 1;
-        }
-        else {
-            n_jpegs = 1; // default
+        int  n_jpegs;
+        // default
+        n_jpegs = 1;
 
-            if( main_activity.getPreview().supportsExpoBracketing() && this.isExpoBracketingPref() ) {
-                n_jpegs = this.getExpoBracketingNImagesPref();
-            }
-            else if( main_activity.getPreview().supportsFocusBracketing() && this.isFocusBracketingPref() ) {
-                // focus bracketing mode always avoids blocking the image queue, no matter how many images are being taken
-                // so all that matters is that we can take at least 1 photo (for the first shot)
-                //n_jpegs = this.getFocusBracketingNImagesPref();
-                n_jpegs = 1;
-            }
-            else if( main_activity.getPreview().supportsBurst() && this.isCameraBurstPref() ) {
-                if( this.getBurstForNoiseReduction() ) {
-                    if( this.getNRModePref() == ApplicationInterface.NRModePref.NRMODE_LOW_LIGHT ) {
-                        n_jpegs = CameraController.N_IMAGES_NR_DARK_LOW_LIGHT;
-                    }
-                    else {
-                        n_jpegs = CameraController.N_IMAGES_NR_DARK;
-                    }
-                }
-                else {
-                    n_jpegs = this.getBurstNImages();
-                }
-            }
-
-            if( main_activity.getPreview().supportsRaw() && this.getRawPref() == RawPref.RAWPREF_JPEG_DNG ) {
-                // note, even in RAW only mode, the CameraController will still take JPEG+RAW (we still need to JPEG to
-                // generate a bitmap from for thumbnail and pause preview option), so this still generates a request in
-                // the ImageSaver
-                n_raw = n_jpegs;
-            }
-            else {
-                n_raw = 0;
-            }
-        }
-
-        int photo_cost = imageSaver.computePhotoCost(n_raw, n_jpegs);
+        int photo_cost = imageSaver.computePhotoCost(0, n_jpegs);
         if( imageSaver.queueWouldBlock(photo_cost) ) {
             if( MyDebug.LOG )
                 Log.d(TAG, "canTakeNewPhoto: no, as queue would block");
@@ -1087,11 +1048,7 @@ public class MyApplicationInterface extends BasicApplicationInterface {
 
         // otherwise, still have a max limit of 5 photos
         if( n_images_to_save >= 5*photo_cost ) {
-            if( main_activity.supportsNoiseReduction() && n_images_to_save <= 8 ) {
-                // if we take a photo in NR mode, then switch to std mode, it doesn't make sense to suddenly block!
-                // so need to at least allow a new photo, if the number of photos is less than 1 NR photo
-            }
-            else {
+            {
                 if( MyDebug.LOG )
                     Log.d(TAG, "canTakeNewPhoto: no, as too many for regular");
                 return false;
@@ -1150,34 +1107,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         return aperture;
     }
 
-    @Override
-    public int getExpoBracketingNImagesPref() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "getExpoBracketingNImagesPref");
-        int n_images;
-        PhotoMode photo_mode = getPhotoMode();
-
-         {
-            String n_images_s = sharedPreferences.getString(PreferenceKeys.ExpoBracketingNImagesPreferenceKey, "3");
-            try {
-                n_images = Integer.parseInt(n_images_s);
-            }
-            catch(NumberFormatException exception) {
-                if( MyDebug.LOG )
-                    Log.e(TAG, "n_images_s invalid format: " + n_images_s);
-                n_images = 3;
-            }
-        }
-        if( MyDebug.LOG )
-            Log.d(TAG, "n_images = " + n_images);
-        return n_images;
-    }
-
-
-    @Override
-    public boolean getFocusBracketingAddInfinityPref() {
-        return sharedPreferences.getBoolean(PreferenceKeys.FocusBracketingAddInfinityPreferenceKey, false);
-    }
 
     /** Returns the current photo mode.
      *  Note, this always should return the true photo mode - if we're in video mode and taking a photo snapshot while
@@ -1215,14 +1144,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
      */
     @Override
     public RawPref getRawPref() {
-        PhotoMode photo_mode = getPhotoMode();
-        if( isRawAllowed(photo_mode) ) {
-            switch( sharedPreferences.getString(PreferenceKeys.RawPreferenceKey, "preference_raw_no") ) {
-                case "preference_raw_yes":
-                case "preference_raw_only":
-                    return RawPref.RAWPREF_JPEG_DNG;
-            }
-        }
         return RawPref.RAWPREF_JPEG_ONLY;
     }
 
@@ -1854,8 +1775,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(PreferenceKeys.getFocusPreferenceKey(cameraId, is_video), focus_value);
         editor.apply();
-        // focus may be updated by preview (e.g., when switching to/from video mode)
-        main_activity.setManualFocusSeekBarVisibility(false);
     }
 
     @Override

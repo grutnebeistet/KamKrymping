@@ -1,4 +1,4 @@
-#Sat Dec 05 19:45:09 CET 2020
+#Sat Dec 05 20:33:42 CET 2020
 base.0=/Users/ar/Documents/OpenCamera/opencamera-code/app/build/intermediates/dex/debug/mergeExtDexDebug/out/classes.dex
 path.1=classes.dex
 renamed.1=classes2.dex

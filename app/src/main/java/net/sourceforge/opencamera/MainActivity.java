@@ -392,39 +392,6 @@ public class MainActivity extends Activity {
                 MainActivity.this.mainUI.onOrientationChanged(orientation);
             }
         };
-        if( MyDebug.LOG )
-            Log.d(TAG, "onCreate: time after setting orientation event listener: " + (System.currentTimeMillis() - debug_time));
-
-        // set up take photo long click
-        takePhotoButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if( !allowLongPress() ) {
-                    // return false, so a regular click will still be triggered when the user releases the touch
-                    return false;
-                }
-                return longClickedTakePhoto();
-            }
-        });
-        // set up on touch listener so we can detect if we've released from a long click
-        takePhotoButton.setOnTouchListener(new View.OnTouchListener() {
-            // the suppressed warning ClickableViewAccessibility suggests calling view.performClick for ACTION_UP, but this
-            // results in an additional call to clickedTakePhoto() - that is, if there is no long press, we get two calls to
-            // clickedTakePhoto instead one one; and if there is a long press, we get one call to clickedTakePhoto where
-            // there should be none.
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if( motionEvent.getAction() == MotionEvent.ACTION_UP ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "takePhotoButton ACTION_UP");
-                    takePhotoButtonLongClickCancelled();
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "takePhotoButton ACTION_UP done");
-                }
-                return false;
-            }
-        });
 
         // set up gallery button long click
         View galleryButton = findViewById(R.id.gallery);
@@ -1302,41 +1269,6 @@ public class MainActivity extends Activity {
         applicationInterface.getImageSaver().waitUntilDone();
     }
 
-    private boolean longClickedTakePhoto() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "longClickedTakePhoto");
-        // need to check whether fast burst is supported (including for the current resolution),
-        // in case we're in Standard photo mode
-        if( supportsFastBurst() ) {
-            CameraController.Size current_size = preview.getCurrentPictureSize();
-            if( current_size != null && current_size.supports_burst ) {
-                MyApplicationInterface.PhotoMode photo_mode = applicationInterface.getPhotoMode();
-                if( photo_mode == MyApplicationInterface.PhotoMode.Standard &&
-                        applicationInterface.isRawOnly(photo_mode) ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "fast burst not supported in RAW-only mode");
-                    // in JPEG+RAW mode, a continuous fast burst will only produce JPEGs which is fine; but in RAW only mode,
-                    // no images at all would be saved! (Or we could switch to produce JPEGs anyway, but this seems misleading
-                    // in RAW only mode.)
-                }
-                else if( photo_mode == MyApplicationInterface.PhotoMode.Standard  ) {
-                    this.takePicturePressed(false, true);
-                    return true;
-                }
-            }
-            else {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "fast burst not supported for this resolution");
-            }
-        }
-        else {
-            if( MyDebug.LOG )
-                Log.d(TAG, "fast burst not supported");
-        }
-        // return false, so a regular click will still be triggered when the user releases the touch
-        return false;
-    }
-
     public void clickedTakePhoto(View view) {
         if( MyDebug.LOG )
             Log.d(TAG, "clickedTakePhoto");
@@ -2032,15 +1964,7 @@ public class MainActivity extends Activity {
         bundle.putBoolean("supports_force_video_4k", this.supports_force_video_4k);
         bundle.putBoolean("supports_camera2", this.supports_camera2);
         bundle.putBoolean("supports_face_detection", this.preview.supportsFaceDetection());
-        bundle.putBoolean("supports_raw", this.preview.supportsRaw());
-        bundle.putBoolean("supports_burst_raw", this.supportsBurstRaw());
-        bundle.putBoolean("supports_hdr", this.supportsHDR());
-        bundle.putBoolean("supports_nr", this.supportsNoiseReduction());
-        bundle.putBoolean("supports_panorama", this.supportsPanorama());
-
-        bundle.putBoolean("supports_expo_bracketing", this.supportsExpoBracketing());
         bundle.putBoolean("supports_preview_bitmaps", this.supportsPreviewBitmaps());
-        bundle.putInt("max_expo_bracketing_n_images", this.maxExpoBracketingNImages());
         bundle.putBoolean("supports_exposure_compensation", this.preview.supportsExposures());
         bundle.putInt("exposure_compensation_min", this.preview.getMinimumExposure());
         bundle.putInt("exposure_compensation_max", this.preview.getMaximumExposure());
@@ -2131,17 +2055,14 @@ public class MainActivity extends Activity {
         if( sizes != null ) {
             int [] widths = new int[sizes.size()];
             int [] heights = new int[sizes.size()];
-            boolean [] supports_burst = new boolean[sizes.size()];
             int i=0;
             for(CameraController.Size size: sizes) {
                 widths[i] = size.width;
                 heights[i] = size.height;
-                supports_burst[i] = size.supports_burst;
                 i++;
             }
             bundle.putIntArray("resolution_widths", widths);
             bundle.putIntArray("resolution_heights", heights);
-            bundle.putBooleanArray("resolution_supports_burst", supports_burst);
         }
         if( preview.getCurrentPictureSize() != null ) {
             bundle.putInt("resolution_width", preview.getCurrentPictureSize().width);
@@ -3366,10 +3287,6 @@ public class MainActivity extends Activity {
             }
         }
         {
-            if( MyDebug.LOG )
-                Log.d(TAG, "set up manual focus");
-            setManualFocusSeekbar(false);
-            setManualFocusSeekbar(true);
         }
         if( MyDebug.LOG )
             Log.d(TAG, "cameraSetup: time after setting up manual focus: " + (System.currentTimeMillis() - debug_time));
@@ -3523,138 +3440,15 @@ public class MainActivity extends Activity {
             Log.d(TAG, "cameraSetup: total time for cameraSetup: " + (System.currentTimeMillis() - debug_time));
     }
 
-    private void setManualFocusSeekbar(final boolean is_target_distance) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setManualFocusSeekbar");
-        final SeekBar focusSeekBar = findViewById(is_target_distance ? R.id.focus_bracketing_target_seekbar : R.id.focus_seekbar);
-        focusSeekBar.setOnSeekBarChangeListener(null); // clear an existing listener - don't want to call the listener when setting up the progress bar to match the existing state
-        ManualSeekbars.setProgressSeekbarScaled(focusSeekBar, 0.0, preview.getMinimumFocusDistance(), is_target_distance ? preview.getCameraController().getFocusBracketingTargetDistance() : preview.getCameraController().getFocusDistance());
-        focusSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-            private boolean has_saved_zoom;
-            private int saved_zoom_factor;
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                double frac = progress/(double)focusSeekBar.getMax();
-                double scaling = ManualSeekbars.seekbarScaling(frac);
-                float focus_distance = (float)(scaling * preview.getMinimumFocusDistance());
-                preview.setFocusDistance(focus_distance, is_target_distance);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "manual focus seekbar: onStartTrackingTouch");
-                has_saved_zoom = false;
-                if( preview.supportsZoom() ) {
-                    int focus_assist = applicationInterface.getFocusAssistPref();
-                    if( focus_assist > 0 && preview.getCameraController() != null ) {
-                        has_saved_zoom = true;
-                        saved_zoom_factor = preview.getCameraController().getZoom();
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "zoom by " + focus_assist + " for focus assist, zoom factor was: " + saved_zoom_factor);
-                        int new_zoom_factor = preview.getScaledZoomFactor(focus_assist);
-                        preview.getCameraController().setZoom(new_zoom_factor);
-                    }
-                }
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "manual focus seekbar: onStopTrackingTouch");
-                if( has_saved_zoom && preview.getCameraController() != null ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "unzoom for focus assist, zoom factor was: " + saved_zoom_factor);
-                    preview.getCameraController().setZoom(saved_zoom_factor);
-                }
-                preview.stoppedSettingFocusDistance(is_target_distance);
-            }
-        });
-        setManualFocusSeekBarVisibility(is_target_distance);
-    }
-
-    public boolean showManualFocusSeekbar(final boolean is_target_distance) { return false;
-//        boolean is_visible = preview.getCurrentFocusValue() != null && this.getPreview().getCurrentFocusValue().equals("focus_mode_manual2");
-//        if( is_target_distance ) {
-//            is_visible = is_visible && (applicationInterface.getPhotoMode() == MyApplicationInterface.PhotoMode.FocusBracketing) && !preview.isVideo();
-//        }
-//        return is_visible;
-    }
-
-    void setManualFocusSeekBarVisibility(final boolean is_target_distance) {
-        boolean is_visible = showManualFocusSeekbar(is_target_distance);
-        SeekBar focusSeekBar = findViewById(is_target_distance ? R.id.focus_bracketing_target_seekbar : R.id.focus_seekbar);
-        final int visibility = is_visible ? View.VISIBLE : View.GONE;
-        focusSeekBar.setVisibility(visibility);
-    }
-
     public boolean supportsAutoStabilise() {
         return this.supports_auto_stabilise;
     }
 
-    public boolean supportsDRO() {
-        // require at least Android 5, for the Renderscript support in HDRProcessor
-        return( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP );
-    }
-
-    public boolean supportsHDR() {
-        // we also require the device have sufficient memory to do the processing
-        // also require at least Android 5, for the Renderscript support in HDRProcessor
-        return( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && large_heap_memory >= 128 && preview.supportsExpoBracketing() );
-    }
-
-    public boolean supportsExpoBracketing() {
-        if( applicationInterface.isImageCaptureIntent() )
-            return false; // don't support expo bracketing mode if called from image capture intent
-        return preview.supportsExpoBracketing();
-    }
-
-    public boolean supportsFocusBracketing() {
-        if( applicationInterface.isImageCaptureIntent() )
-            return false; // don't support focus bracketing mode if called from image capture intent
-        return preview.supportsFocusBracketing();
-    }
-
-    public boolean supportsPanorama() {
-        return false;
-        // don't support panorama mode if called from image capture intent
-        // in theory this works, but problem that currently we'd end up doing the processing on the UI thread, so risk ANR
-//        if( applicationInterface.isImageCaptureIntent() )
-//            return false;
-//        // require 256MB just to be safe, due to the large number of images that may be created
-//        // also require at least Android 5, for Renderscript
-//        // remember to update the FAQ "Why isn't Panorama supported on my device?" if this changes
-//        return( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && large_heap_memory >= 256 && applicationInterface.getGyroSensor().hasSensors() );
-        //return false; // currently blocked for release
-    }
-
-    public boolean supportsFastBurst() {
-        if( applicationInterface.isImageCaptureIntent() )
-            return false; // don't support burst mode if called from image capture intent
-        // require 512MB just to be safe, due to the large number of images that may be created
-        return(large_heap_memory >= 512 && preview.supportsBurst() );
-    }
-
-    public boolean supportsNoiseReduction() {
-        return( large_heap_memory >= 512 && preview.supportsBurst() && preview.supportsExposureTime() );
-    }
-
-    /** Whether RAW mode would be supported for various burst modes (expo bracketing etc).
-     *  Note that caller should still separately check preview.supportsRaw() if required.
-     */
-    public boolean supportsBurstRaw() {
-        return( large_heap_memory >= 512 );
-    }
 
     public boolean supportsPreviewBitmaps() {
         // In practice we only use TextureView on Android 5+ (with Camera2 API enabled) anyway, but have put an explicit check here -
         // even if in future we allow TextureView pre-Android 5, we still need Android 5+ for Renderscript.
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && preview.getView() instanceof TextureView && large_heap_memory >= 128;
-    }
-
-    private int maxExpoBracketingNImages() {
-        return preview.maxExpoBracketingNImages();
     }
 
     public boolean supportsForceVideo4K() {
@@ -4007,14 +3801,6 @@ public class MainActivity extends Activity {
         Intent intent = this.getBaseContext().getPackageManager().getLaunchIntentForPackage( this.getBaseContext().getPackageName() );
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.startActivity(intent);
-    }
-
-    public void takePhotoButtonLongClickCancelled() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "takePhotoButtonLongClickCancelled");
-        if( preview.getCameraController() != null && preview.getCameraController().isContinuousBurstInProgress() ) {
-            preview.getCameraController().stopContinuousBurst();
-        }
     }
 
     ToastBoxer getAudioControlToast() {

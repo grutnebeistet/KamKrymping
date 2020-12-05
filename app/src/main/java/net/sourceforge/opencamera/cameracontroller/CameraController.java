@@ -90,11 +90,7 @@ public abstract class CameraController {
         public boolean can_disable_shutter_sound;
         public int tonemap_max_curve_points;
         public boolean supports_tonemap_curve;
-        public boolean supports_expo_bracketing; // whether setBurstTye(BURSTTYPE_EXPO) can be used
-        public int max_expo_bracketing_n_images;
-        public boolean supports_focus_bracketing; // whether setBurstTye(BURSTTYPE_FOCUS) can be used
-        public boolean supports_burst; // whether setBurstTye(BURSTTYPE_NORMAL) can be used
-        public boolean supports_raw;
+
         public float view_angle_x; // horizontal angle of view in degrees (when unzoomed)
         public float view_angle_y; // vertical angle of view in degrees (when unzoomed)
 
@@ -160,14 +156,12 @@ public abstract class CameraController {
     public static class Size {
         public final int width;
         public final int height;
-        public boolean supports_burst; // for photo
         final List<int[]> fps_ranges; // for video
         public final boolean high_speed; // for video
 
         Size(int width, int height, List<int[]> fps_ranges, boolean high_speed) {
             this.width = width;
             this.height = height;
-            this.supports_burst = true;
             this.fps_ranges = fps_ranges;
             this.high_speed = high_speed;
             Collections.sort(this.fps_ranges, new RangeSorter());
@@ -235,13 +229,6 @@ public abstract class CameraController {
         void onStarted(); // called immediately before we start capturing the picture
         void onCompleted(); // called after all relevant on*PictureTaken() callbacks have been called and returned
         void onPictureTaken(byte[] data);
-        /* This is called for flash_frontscreen_auto or flash_frontscreen_on mode to indicate the caller should light up the screen
-         * (for flash_frontscreen_auto it will only be called if the scene is considered dark enough to require the screen flash).
-         * The screen flash can be removed when or after onCompleted() is called.
-         */
-        /* This is called for when burst mode is BURSTTYPE_FOCUS or BURSTTYPE_CONTINUOUS, to ask whether it's safe to take
-         * n_raw extra RAW images and n_jpegs extra JPEG images, or whether to wait.
-         */
         boolean imageQueueWouldBlock(int n_raw, int n_jpegs);
         void onFrontScreenTurnOn();
     }
@@ -348,61 +335,8 @@ public abstract class CameraController {
 
     // whether to take a burst of images, and if so, what type
     public enum BurstType {
-        BURSTTYPE_NONE, // no burst
-        BURSTTYPE_EXPO, // enable expo bracketing mode
-        BURSTTYPE_FOCUS, // enable focus bracketing mode;
-        BURSTTYPE_NORMAL, // take a regular burst
-        BURSTTYPE_CONTINUOUS // as BURSTTYPE_NORMAL, but bursts will fire continually until stopContinuousBurst() is called.
+        BURSTTYPE_NONE // no burst TODO trengs denne?? (fjernet andre typer)
     }
-    public abstract void setBurstType(BurstType new_burst_type);
-    public abstract BurstType getBurstType();
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_NORMAL. Sets the number of
-     *  images to take in the burst.
-     */
-    public abstract void setBurstNImages(int burst_requested_n_images);
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_NORMAL. If this method is
-     *  called with burst_for_noise_reduction, then the number of burst images, and other settings,
-     *  will be set for noise reduction mode (and setBurstNImages() is ignored).
-     */
-    public abstract void setBurstForNoiseReduction(boolean burst_for_noise_reduction, boolean noise_reduction_low_light);
-    public abstract boolean isContinuousBurstInProgress();
-    public abstract void stopContinuousBurst();
-    public abstract void stopFocusBracketingBurst();
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_EXPO. Sets the number of
-     *  images to take in the expo burst.
-     * @param n_images Must be an odd number greater than 1.
-     */
-    public abstract void setExpoBracketingNImages(int n_images);
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_EXPO.
-     */
-    public abstract void setExpoBracketingStops(double stops);
-    public abstract void setUseExpoFastBurst(boolean use_expo_fast_burst);
-    public abstract boolean isBurstOrExpo();
-    /** If true, then the camera controller is currently capturing a burst of images.
-     */
-    public abstract boolean isCapturingBurst();
-    /** If isCapturingBurst() is true, then this returns the number of images in the current burst
-     *  captured so far.
-     */
-    public abstract int getNBurstTaken();
-    /** If isCapturingBurst() is true, then this returns the total number of images in the current
-     *  burst if known. If not known (e.g., for continuous burst mode), returns 0.
-     */
-    public abstract int getBurstTotal();
-    /** If optimise_ae_for_dro is true, then this is a hint that if in auto-exposure mode and flash/torch
-     *  is not on, the CameraController should try to optimise for a DRO (dynamic range optimisation) mode.
-     */
-    public abstract void setOptimiseAEForDRO(boolean optimise_ae_for_dro);
-
-    /**
-     * @param want_raw       Whether to enable taking photos in RAW (DNG) format.
-     * @param max_raw_images The maximum number of unclosed DNG images that may be held in memory at any one
-     *                       time. Trying to take a photo, when the number of unclosed DNG images is already
-     *                       equal to this number, will result in an exception (java.lang.IllegalStateException
-     *                       - note, the exception will come from a CameraController2 callback, so can't be
-     *                       caught by the callera).
-     */
-    public abstract void setRaw(boolean want_raw, int max_raw_images);
 
     /** Request a capture session compatible with high speed frame rates.
      *  This should be called only when the preview is paused or not yet started.
@@ -463,23 +397,7 @@ public abstract class CameraController {
 
     public abstract void setFocusValue(String focus_value);
     public abstract String getFocusValue();
-    public abstract float getFocusDistance();
-    public abstract boolean setFocusDistance(float focus_distance);
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_FOCUS. Sets the number of
-     *  images to take in the focus burst.
-     */
-    public abstract void setFocusBracketingNImages(int n_images);
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_FOCUS. If set to true, an
-     *  additional image will be included at infinite distance.
-     */
-    public abstract void setFocusBracketingAddInfinity(boolean focus_bracketing_add_infinity);
-    /** Only relevant if setBurstType() is also called with BURSTTYPE_FOCUS. Sets the target focus
-     *  distance for focus bracketing.
-     */
-    public abstract void setFocusBracketingSourceDistance(float focus_bracketing_source_distance);
-    public abstract float getFocusBracketingSourceDistance();
-    public abstract void setFocusBracketingTargetDistance(float focus_bracketing_target_distance);
-    public abstract float getFocusBracketingTargetDistance();
+
     public abstract void setFlashValue(String flash_value);
     public abstract String getFlashValue();
     public abstract void setRecordingHint(boolean hint);

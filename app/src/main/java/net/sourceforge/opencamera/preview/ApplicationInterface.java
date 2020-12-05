@@ -138,14 +138,6 @@ public interface ApplicationInterface {
     // Camera2 only modes:
     long getExposureTimePref(); // only called if getISOPref() is not "default"
     float getFocusDistancePref(boolean is_target_distance);
-    boolean isExpoBracketingPref(); // whether to enable burst photos with expo bracketing
-    int getExpoBracketingNImagesPref(); // how many images to take for exposure bracketing
-    double getExpoBracketingStopsPref(); // stops per image for exposure bracketing
-    int getFocusBracketingNImagesPref(); // how many images to take for focus bracketing
-    boolean getFocusBracketingAddInfinityPref(); // whether to include an additional image at infinite focus distance, for focus bracketing
-    boolean isFocusBracketingPref(); // whether to enable burst photos with focus bracketing
-    boolean isCameraBurstPref(); // whether to shoot the camera in burst mode (n.b., not the same as the "auto-repeat" mode)
-    int getBurstNImages(); // only relevant if isCameraBurstPref() returns true; see CameraController doc for setBurstNImages().
     boolean getBurstForNoiseReduction(); // only relevant if isCameraBurstPref() returns true; see CameraController doc for setBurstForNoiseReduction().
     enum NRModePref {
         NRMODE_NORMAL,
@@ -155,8 +147,7 @@ public interface ApplicationInterface {
     float getAperturePref(); // get desired aperture (called if Preview.getSupportedApertures() returns non-null); return -1.0f for no preference
     boolean getOptimiseAEForDROPref(); // see CameraController doc for setOptimiseAEForDRO().
     enum RawPref {
-        RAWPREF_JPEG_ONLY, // JPEG only
-        RAWPREF_JPEG_DNG // JPEG and RAW (DNG)
+        RAWPREF_JPEG_ONLY // JPEG only
     }
     RawPref getRawPref(); // whether to enable RAW photos
     int getMaxRawImages(); // see documentation of CameraController.setRaw(), corresponds to max_raw_images
