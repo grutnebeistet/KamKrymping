@@ -75,7 +75,7 @@ public abstract class CameraController {
         public boolean is_optical_stabilization_supported;
         public boolean is_video_stabilization_supported;
         public boolean is_photo_video_recording_supported;
-        public boolean supports_white_balance_temperature;
+
         public int min_temperature;
         public int max_temperature;
         public boolean supports_iso_range;
@@ -309,10 +309,6 @@ public abstract class CameraController {
 
     public abstract SupportedValues setColorEffect(String value);
     public abstract String getColorEffect();
-    public abstract SupportedValues setWhiteBalance(String value);
-    public abstract String getWhiteBalance();
-    public abstract boolean setWhiteBalanceTemperature(int temperature);
-    public abstract int getWhiteBalanceTemperature();
     public abstract SupportedValues setAntiBanding(String value);
     public abstract String getAntiBanding();
     public abstract SupportedValues setEdgeMode(String value);

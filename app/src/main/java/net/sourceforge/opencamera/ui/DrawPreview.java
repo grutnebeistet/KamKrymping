@@ -87,7 +87,6 @@ public class DrawPreview {
     private boolean is_high_speed;
     private float capture_rate_factor;
     private boolean auto_stabilise_pref;
-    private String preference_grid_pref;
     private String ghost_image_pref;
     private String ghost_selected_image_pref = "";
     private Bitmap ghost_selected_image_bitmap;
@@ -558,7 +557,6 @@ public class DrawPreview {
 
         auto_stabilise_pref = applicationInterface.getAutoStabilisePref();
 
-        preference_grid_pref = sharedPreferences.getString(PreferenceKeys.ShowGridPreferenceKey, "preference_grid_none");
 
         ghost_image_pref = sharedPreferences.getString(PreferenceKeys.GhostImagePreferenceKey, "preference_ghost_image_off");
         if( ghost_image_pref.equals("preference_ghost_image_selected") ) {
@@ -813,185 +811,6 @@ public class DrawPreview {
         long hours = time;
         return hours + ":" + String.format(Locale.getDefault(), "%02d", mins) + ":" + String.format(Locale.getDefault(), "%02d", secs);
     }
-
-    private void drawGrids(Canvas canvas) {
-        Preview preview = main_activity.getPreview();
-        CameraController camera_controller = preview.getCameraController();
-        if( camera_controller == null ) {
-            return;
-        }
-
-        p.setStrokeWidth(stroke_width);
-
-        switch( preference_grid_pref ) {
-            case "preference_grid_3x3":
-                p.setColor(Color.WHITE);
-                canvas.drawLine(canvas.getWidth() / 3.0f, 0.0f, canvas.getWidth() / 3.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(2.0f * canvas.getWidth() / 3.0f, 0.0f, 2.0f * canvas.getWidth() / 3.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(0.0f, canvas.getHeight() / 3.0f, canvas.getWidth() - 1.0f, canvas.getHeight() / 3.0f, p);
-                canvas.drawLine(0.0f, 2.0f * canvas.getHeight() / 3.0f, canvas.getWidth() - 1.0f, 2.0f * canvas.getHeight() / 3.0f, p);
-                break;
-            case "preference_grid_phi_3x3":
-                p.setColor(Color.WHITE);
-                canvas.drawLine(canvas.getWidth() / 2.618f, 0.0f, canvas.getWidth() / 2.618f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(1.618f * canvas.getWidth() / 2.618f, 0.0f, 1.618f * canvas.getWidth() / 2.618f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(0.0f, canvas.getHeight() / 2.618f, canvas.getWidth() - 1.0f, canvas.getHeight() / 2.618f, p);
-                canvas.drawLine(0.0f, 1.618f * canvas.getHeight() / 2.618f, canvas.getWidth() - 1.0f, 1.618f * canvas.getHeight() / 2.618f, p);
-                break;
-            case "preference_grid_4x2":
-                p.setColor(Color.GRAY);
-                canvas.drawLine(canvas.getWidth() / 4.0f, 0.0f, canvas.getWidth() / 4.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(canvas.getWidth() / 2.0f, 0.0f, canvas.getWidth() / 2.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(3.0f * canvas.getWidth() / 4.0f, 0.0f, 3.0f * canvas.getWidth() / 4.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(0.0f, canvas.getHeight() / 2.0f, canvas.getWidth() - 1.0f, canvas.getHeight() / 2.0f, p);
-                p.setColor(Color.WHITE);
-                int crosshairs_radius = (int) (20 * scale + 0.5f); // convert dps to pixels
-
-                canvas.drawLine(canvas.getWidth() / 2.0f, canvas.getHeight() / 2.0f - crosshairs_radius, canvas.getWidth() / 2.0f, canvas.getHeight() / 2.0f + crosshairs_radius, p);
-                canvas.drawLine(canvas.getWidth() / 2.0f - crosshairs_radius, canvas.getHeight() / 2.0f, canvas.getWidth() / 2.0f + crosshairs_radius, canvas.getHeight() / 2.0f, p);
-                break;
-            case "preference_grid_crosshair":
-                p.setColor(Color.WHITE);
-                canvas.drawLine(canvas.getWidth() / 2.0f, 0.0f, canvas.getWidth() / 2.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(0.0f, canvas.getHeight() / 2.0f, canvas.getWidth() - 1.0f, canvas.getHeight() / 2.0f, p);
-                break;
-            case "preference_grid_golden_spiral_right":
-            case "preference_grid_golden_spiral_left":
-            case "preference_grid_golden_spiral_upside_down_right":
-            case "preference_grid_golden_spiral_upside_down_left":
-                canvas.save();
-                switch( preference_grid_pref ) {
-                    case "preference_grid_golden_spiral_left":
-                        canvas.scale(-1.0f, 1.0f, canvas.getWidth() * 0.5f, canvas.getHeight() * 0.5f);
-                        break;
-                    case "preference_grid_golden_spiral_right":
-                        // no transformation needed
-                        break;
-                    case "preference_grid_golden_spiral_upside_down_left":
-                        canvas.rotate(180.0f, canvas.getWidth() * 0.5f, canvas.getHeight() * 0.5f);
-                        break;
-                    case "preference_grid_golden_spiral_upside_down_right":
-                        canvas.scale(1.0f, -1.0f, canvas.getWidth() * 0.5f, canvas.getHeight() * 0.5f);
-                        break;
-                }
-                p.setColor(Color.WHITE);
-                p.setStyle(Paint.Style.STROKE);
-                p.setStrokeWidth(stroke_width);
-                int fibb = 34;
-                int fibb_n = 21;
-                int left = 0, top = 0;
-                int full_width = canvas.getWidth();
-                int full_height = canvas.getHeight();
-                int width = (int) (full_width * ((double) fibb_n) / (double) (fibb));
-                int height = full_height;
-
-                for (int count = 0; count < 2; count++) {
-                    canvas.save();
-                    draw_rect.set(left, top, left + width, top + height);
-                    canvas.clipRect(draw_rect);
-                    canvas.drawRect(draw_rect, p);
-                    draw_rect.set(left, top, left + 2 * width, top + 2 * height);
-                    canvas.drawOval(draw_rect, p);
-                    canvas.restore();
-
-                    int old_fibb = fibb;
-                    fibb = fibb_n;
-                    fibb_n = old_fibb - fibb;
-
-                    left += width;
-                    full_width = full_width - width;
-                    width = full_width;
-                    height = (int) (height * ((double) fibb_n) / (double) (fibb));
-
-                    canvas.save();
-                    draw_rect.set(left, top, left + width, top + height);
-                    canvas.clipRect(draw_rect);
-                    canvas.drawRect(draw_rect, p);
-                    draw_rect.set(left - width, top, left + width, top + 2 * height);
-                    canvas.drawOval(draw_rect, p);
-                    canvas.restore();
-
-                    old_fibb = fibb;
-                    fibb = fibb_n;
-                    fibb_n = old_fibb - fibb;
-
-                    top += height;
-                    full_height = full_height - height;
-                    height = full_height;
-                    width = (int) (width * ((double) fibb_n) / (double) (fibb));
-                    left += full_width - width;
-
-                    canvas.save();
-                    draw_rect.set(left, top, left + width, top + height);
-                    canvas.clipRect(draw_rect);
-                    canvas.drawRect(draw_rect, p);
-                    draw_rect.set(left - width, top - height, left + width, top + height);
-                    canvas.drawOval(draw_rect, p);
-                    canvas.restore();
-
-                    old_fibb = fibb;
-                    fibb = fibb_n;
-                    fibb_n = old_fibb - fibb;
-
-                    full_width = full_width - width;
-                    width = full_width;
-                    left -= width;
-                    height = (int) (height * ((double) fibb_n) / (double) (fibb));
-                    top += full_height - height;
-
-                    canvas.save();
-                    draw_rect.set(left, top, left + width, top + height);
-                    canvas.clipRect(draw_rect);
-                    canvas.drawRect(draw_rect, p);
-                    draw_rect.set(left, top - height, left + 2 * width, top + height);
-                    canvas.drawOval(draw_rect, p);
-                    canvas.restore();
-
-                    old_fibb = fibb;
-                    fibb = fibb_n;
-                    fibb_n = old_fibb - fibb;
-
-                    full_height = full_height - height;
-                    height = full_height;
-                    top -= height;
-                    width = (int) (width * ((double) fibb_n) / (double) (fibb));
-                }
-
-                canvas.restore();
-                p.setStyle(Paint.Style.FILL); // reset
-
-                break;
-            case "preference_grid_golden_triangle_1":
-            case "preference_grid_golden_triangle_2":
-                p.setColor(Color.WHITE);
-                double theta = Math.atan2(canvas.getWidth(), canvas.getHeight());
-                double dist = canvas.getHeight() * Math.cos(theta);
-                float dist_x = (float) (dist * Math.sin(theta));
-                float dist_y = (float) (dist * Math.cos(theta));
-                if( preference_grid_pref.equals("preference_grid_golden_triangle_1") ) {
-                    canvas.drawLine(0.0f, canvas.getHeight() - 1.0f, canvas.getWidth() - 1.0f, 0.0f, p);
-                    canvas.drawLine(0.0f, 0.0f, dist_x, canvas.getHeight() - dist_y, p);
-                    canvas.drawLine(canvas.getWidth() - 1.0f - dist_x, dist_y - 1.0f, canvas.getWidth() - 1.0f, canvas.getHeight() - 1.0f, p);
-                }
-                else {
-                    canvas.drawLine(0.0f, 0.0f, canvas.getWidth() - 1.0f, canvas.getHeight() - 1.0f, p);
-                    canvas.drawLine(canvas.getWidth() - 1.0f, 0.0f, canvas.getWidth() - 1.0f - dist_x, canvas.getHeight() - dist_y, p);
-                    canvas.drawLine(dist_x, dist_y - 1.0f, 0.0f, canvas.getHeight() - 1.0f, p);
-                }
-                break;
-            case "preference_grid_diagonals":
-                p.setColor(Color.WHITE);
-                canvas.drawLine(0.0f, 0.0f, canvas.getHeight() - 1.0f, canvas.getHeight() - 1.0f, p);
-                canvas.drawLine(canvas.getHeight() - 1.0f, 0.0f, 0.0f, canvas.getHeight() - 1.0f, p);
-                int diff = canvas.getWidth() - canvas.getHeight();
-                if (diff > 0) {
-                    canvas.drawLine(diff, 0.0f, diff + canvas.getHeight() - 1.0f, canvas.getHeight() - 1.0f, p);
-                    canvas.drawLine(diff + canvas.getHeight() - 1.0f, 0.0f, diff, canvas.getHeight() - 1.0f, p);
-                }
-                break;
-        }
-    }
-
     private void drawCropGuides(Canvas canvas) {
         Preview preview = main_activity.getPreview();
         CameraController camera_controller = preview.getCameraController();
@@ -1952,8 +1771,6 @@ public class DrawPreview {
     }
 
     public void onDrawPreview(Canvas canvas) {
-		/*if( MyDebug.LOG )
-			Log.d(TAG, "onDrawPreview");*/
         if( !has_settings ) {
             if( MyDebug.LOG )
                 Log.d(TAG, "onDrawPreview: need to update settings");
@@ -2027,7 +1844,6 @@ public class DrawPreview {
             p.setStyle(Paint.Style.FILL); // reset
             p.setStrokeWidth(stroke_width); // reset
         }
-        drawGrids(canvas);
 
         drawCropGuides(canvas);
 

@@ -79,7 +79,7 @@ public class CameraController2 extends CameraController {
     private boolean supports_face_detect_mode_full;
     private boolean supports_optical_stabilization;
     private boolean supports_photo_video_recording;
-    private boolean supports_white_balance_temperature;
+
 
     private final static int tonemap_log_max_curve_points_c = 64;
     private final static float [] jtvideo_values_base = new float[] {
@@ -374,17 +374,10 @@ public class CameraController2 extends CameraController {
         }
 
         private void setupBuilder(CaptureRequest.Builder builder, boolean is_still) {
-            //builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
-            //builder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            //builder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_AUTO);
-            //builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
-            //builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_ALWAYS_FLASH);
-
             builder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_IDLE);
 
             setSceneMode(builder);
             setColorEffect(builder);
-            setWhiteBalance(builder);
             setAntiBanding(builder);
             setAEMode(builder, is_still);
             setCropRegion(builder);
@@ -513,29 +506,6 @@ public class CameraController2 extends CameraController {
                 return true;
             }
             return false;
-        }
-
-        private boolean setWhiteBalance(CaptureRequest.Builder builder) {
-            boolean changed = false;
-            /*if( builder.get(CaptureRequest.CONTROL_AWB_MODE) == null && white_balance == CameraMetadata.CONTROL_AWB_MODE_AUTO ) {
-                // can leave off
-            }
-            else*/ if( builder.get(CaptureRequest.CONTROL_AWB_MODE) == null || builder.get(CaptureRequest.CONTROL_AWB_MODE) != white_balance ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "setting white balance: " + white_balance);
-                builder.set(CaptureRequest.CONTROL_AWB_MODE, white_balance);
-                changed = true;
-            }
-            if( white_balance == CameraMetadata.CONTROL_AWB_MODE_OFF ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "setting white balance temperature: " + white_balance_temperature);
-                // manual white balance
-                RggbChannelVector rggbChannelVector = convertTemperatureToRggb(white_balance_temperature);
-                builder.set(CaptureRequest.COLOR_CORRECTION_MODE, CameraMetadata.COLOR_CORRECTION_MODE_TRANSFORM_MATRIX);
-                builder.set(CaptureRequest.COLOR_CORRECTION_GAINS, rggbChannelVector);
-                changed = true;
-            }
-            return changed;
         }
 
         private boolean setAntiBanding(CaptureRequest.Builder builder) {
@@ -1119,64 +1089,6 @@ public class CameraController2 extends CameraController {
         }
         
         // n.b., if we add more methods, remember to update setupBuilder() above!
-    }
-
-    /** Converts a white balance temperature to red, green even, green odd and blue components.
-     */
-    private RggbChannelVector convertTemperatureToRggb(int temperature_kelvin) {
-        float temperature = temperature_kelvin / 100.0f;
-        float red;
-        float green;
-        float blue;
-
-        if( temperature <= 66 ) {
-            red = 255;
-        }
-        else {
-            red = temperature - 60;
-            red = (float)(329.698727446 * (Math.pow(red, -0.1332047592)));
-            if( red < 0 )
-                red = 0;
-            if( red > 255 )
-                red = 255;
-        }
-
-        if( temperature <= 66 ) {
-            green = temperature;
-            green = (float)(99.4708025861 * Math.log(green) - 161.1195681661);
-            if( green < 0 )
-                green = 0;
-            if( green > 255 )
-                green = 255;
-        }
-        else {
-            green = temperature - 60;
-            green = (float)(288.1221695283 * (Math.pow(green, -0.0755148492)));
-            if (green < 0)
-                green = 0;
-            if (green > 255)
-                green = 255;
-        }
-
-        if( temperature >= 66 )
-            blue = 255;
-        else if( temperature <= 19 )
-            blue = 0;
-        else {
-            blue = temperature - 10;
-            blue = (float)(138.5177312231 * Math.log(blue) - 305.0447927307);
-            if( blue < 0 )
-                blue = 0;
-            if( blue > 255 )
-                blue = 255;
-        }
-
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "red: " + red);
-            Log.d(TAG, "green: " + green);
-            Log.d(TAG, "blue: " + blue);
-        }
-        return new RggbChannelVector((red/255)*2,(green/255),(green/255),(blue/255)*2);
     }
 
     /** Converts a red, green even, green odd and blue components to a white balance temperature.
@@ -2577,22 +2489,6 @@ public class CameraController2 extends CameraController {
         camera_features.is_photo_video_recording_supported = CameraControllerManager2.isHardwareLevelSupported(characteristics, CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED);
         supports_photo_video_recording = camera_features.is_photo_video_recording_supported;
 
-        int [] white_balance_modes = characteristics.get(CameraCharacteristics.CONTROL_AWB_AVAILABLE_MODES);
-        if( white_balance_modes != null ) {
-            for(int value : white_balance_modes) {
-                // n.b., Galaxy S10e for front and ultra-wide cameras offers CONTROL_AWB_MODE_OFF despite
-                // capabilities_manual_post_processing==false; if we don't check for capabilities_manual_post_processing,
-                // adjusting white balance temperature seems to work, but seems safest to require
-                // capabilities_manual_post_processing anyway
-                if( value == CameraMetadata.CONTROL_AWB_MODE_OFF && capabilities_manual_post_processing && allowManualWB() ) {
-                    camera_features.supports_white_balance_temperature = true;
-                    camera_features.min_temperature = min_white_balance_temperature_c;
-                    camera_features.max_temperature = max_white_balance_temperature_c;
-                }
-            }
-        }
-        supports_white_balance_temperature = camera_features.supports_white_balance_temperature;
-
         // see note above
         //if( capabilities_manual_sensor )
         if( CameraControllerManager2.isHardwareLevelSupported(characteristics, CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED) )
@@ -2847,179 +2743,6 @@ public class CameraController2 extends CameraController {
         return convertColorEffect(value2);
     }
 
-    private String convertWhiteBalance(int value2) {
-        String value;
-        switch( value2 ) {
-        case CameraMetadata.CONTROL_AWB_MODE_AUTO:
-            value = WHITE_BALANCE_DEFAULT;
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_CLOUDY_DAYLIGHT:
-            value = "cloudy-daylight";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_DAYLIGHT:
-            value = "daylight";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_FLUORESCENT:
-            value = "fluorescent";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_INCANDESCENT:
-            value = "incandescent";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_SHADE:
-            value = "shade";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_TWILIGHT:
-            value = "twilight";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_WARM_FLUORESCENT:
-            value = "warm-fluorescent";
-            break;
-        case CameraMetadata.CONTROL_AWB_MODE_OFF:
-            value = "manual";
-            break;
-        default:
-            if( MyDebug.LOG )
-                Log.d(TAG, "unknown white balance: " + value2);
-            value = null;
-            break;
-        }
-        return value;
-    }
-
-    /** Whether we should allow manual white balance, even if the device supports CONTROL_AWB_MODE_OFF.
-     */
-    private boolean allowManualWB() {
-        boolean is_nexus6 = Build.MODEL.toLowerCase(Locale.US).contains("nexus 6");
-        // manual white balance doesn't seem to work on Nexus 6!
-        return !is_nexus6;
-    }
-
-    @Override
-    public SupportedValues setWhiteBalance(String value) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setWhiteBalance: " + value);
-        // we convert to/from strings to be compatible with original Android Camera API
-        int [] values2 = characteristics.get(CameraCharacteristics.CONTROL_AWB_AVAILABLE_MODES);
-        if( values2 == null ) {
-            return null;
-        }
-        List<String> values = new ArrayList<>();
-        for(int value2 : values2) {
-            String this_value = convertWhiteBalance(value2);
-            if( this_value != null ) {
-                if( value2 == CameraMetadata.CONTROL_AWB_MODE_OFF && !supports_white_balance_temperature ) {
-                    // filter
-                }
-                else {
-                    values.add(this_value);
-                }
-            }
-        }
-        {
-            // re-order so that auto is first, manual is second
-            boolean has_auto = values.remove(WHITE_BALANCE_DEFAULT);
-            boolean has_manual = values.remove("manual");
-            if( has_manual )
-                values.add(0, "manual");
-            if( has_auto )
-                values.add(0, WHITE_BALANCE_DEFAULT);
-        }
-        SupportedValues supported_values = checkModeIsSupported(values, value, WHITE_BALANCE_DEFAULT);
-        if( supported_values != null ) {
-            int selected_value2 = CameraMetadata.CONTROL_AWB_MODE_AUTO;
-            switch(supported_values.selected_value) {
-                case WHITE_BALANCE_DEFAULT:
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_AUTO;
-                    break;
-                case "cloudy-daylight":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_CLOUDY_DAYLIGHT;
-                    break;
-                case "daylight":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_DAYLIGHT;
-                    break;
-                case "fluorescent":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_FLUORESCENT;
-                    break;
-                case "incandescent":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_INCANDESCENT;
-                    break;
-                case "shade":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_SHADE;
-                    break;
-                case "twilight":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_TWILIGHT;
-                    break;
-                case "warm-fluorescent":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_WARM_FLUORESCENT;
-                    break;
-                case "manual":
-                    selected_value2 = CameraMetadata.CONTROL_AWB_MODE_OFF;
-                    break;
-                default:
-                    if (MyDebug.LOG)
-                        Log.d(TAG, "unknown selected_value: " + supported_values.selected_value);
-                    break;
-            }
-
-            camera_settings.white_balance = selected_value2;
-            if( camera_settings.setWhiteBalance(previewBuilder) ) {
-                try {
-                    setRepeatingRequest();
-                }
-                catch(CameraAccessException e) {
-                    if( MyDebug.LOG ) {
-                        Log.e(TAG, "failed to set white balance");
-                        Log.e(TAG, "reason: " + e.getReason());
-                        Log.e(TAG, "message: " + e.getMessage());
-                    }
-                    e.printStackTrace();
-                } 
-            }
-        }
-        return supported_values;
-    }
-
-    @Override
-    public String getWhiteBalance() {
-        if( previewBuilder.get(CaptureRequest.CONTROL_AWB_MODE) == null )
-            return null;
-        int value2 = previewBuilder.get(CaptureRequest.CONTROL_AWB_MODE);
-        return convertWhiteBalance(value2);
-    }
-
-    @Override
-    // Returns whether white balance temperature was modified
-    public boolean setWhiteBalanceTemperature(int temperature) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setWhiteBalanceTemperature: " + temperature);
-        if( camera_settings.white_balance == temperature ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "already set");
-            return false;
-        }
-        try {
-            temperature = Math.max(temperature, min_white_balance_temperature_c);
-            temperature = Math.min(temperature, max_white_balance_temperature_c);
-            camera_settings.white_balance_temperature = temperature;
-            if( camera_settings.setWhiteBalance(previewBuilder) ) {
-                setRepeatingRequest();
-            }
-        }
-        catch(CameraAccessException e) {
-            if( MyDebug.LOG ) {
-                Log.e(TAG, "failed to set white balance temperature");
-                Log.e(TAG, "reason: " + e.getReason());
-                Log.e(TAG, "message: " + e.getMessage());
-            }
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    @Override
-    public int getWhiteBalanceTemperature() {
-        return camera_settings.white_balance_temperature;
-    }
 
     private String convertAntiBanding(int value2) {
         String value;

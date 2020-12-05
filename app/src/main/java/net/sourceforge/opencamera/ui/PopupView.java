@@ -680,69 +680,9 @@ public class PopupView extends LinearLayout {
                     Log.d(TAG, "PopupView time 12: " + (System.nanoTime() - debug_time));
             }
 
-            final String [] grid_values = getResources().getStringArray(R.array.preference_grid_values);
-            String [] grid_entries = getResources().getStringArray(R.array.preference_grid_entries);
-            String grid_value = sharedPreferences.getString(PreferenceKeys.ShowGridPreferenceKey, "preference_grid_none");
-            grid_index = Arrays.asList(grid_values).indexOf(grid_value);
-            if( grid_index == -1 ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "can't find grid_value " + grid_value + " in grid_values!");
-                grid_index = 0;
-            }
-            addArrayOptionsToPopup(Arrays.asList(grid_entries), getResources().getString(R.string.grid), true, true, grid_index, true, "GRID", new ArrayOptionsPopupListener() {
-                private void update() {
-                    if( grid_index == -1 )
-                        return;
-                    String new_grid_value = grid_values[grid_index];
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(PreferenceKeys.ShowGridPreferenceKey, new_grid_value);
-                    editor.apply();
-                    main_activity.getApplicationInterface().getDrawPreview().updateSettings(); // because we cache the grid
-                }
-                @Override
-                public int onClickPrev() {
-                    if( grid_index != -1 ) {
-                        grid_index--;
-                        if( grid_index < 0 )
-                            grid_index += grid_values.length;
-                        update();
-                        return grid_index;
-                    }
-                    return -1;
-                }
-                @Override
-                public int onClickNext() {
-                    if( grid_index != -1 ) {
-                        grid_index++;
-                        if( grid_index >= grid_values.length )
-                            grid_index -= grid_values.length;
-                        update();
-                        return grid_index;
-                    }
-                    return -1;
-                }
-            });
-            if( MyDebug.LOG )
-                Log.d(TAG, "PopupView time 13: " + (System.nanoTime() - debug_time));
 
             // popup should only be opened if we have a camera controller, but check just to be safe
             if( preview.getCameraController() != null ) {
-                List<String> supported_white_balances = preview.getSupportedWhiteBalances();
-                List<String> supported_white_balances_entries = null;
-                if( supported_white_balances != null ) {
-                    supported_white_balances_entries = new ArrayList<>();
-                    for(String value : supported_white_balances) {
-                        String entry = main_activity.getMainUI().getEntryForWhiteBalance(value);
-                        supported_white_balances_entries.add(entry);
-                    }
-                }
-                addRadioOptionsToPopup(sharedPreferences, supported_white_balances_entries, supported_white_balances, getResources().getString(R.string.white_balance), PreferenceKeys.WhiteBalancePreferenceKey, CameraController.WHITE_BALANCE_DEFAULT, null, "TEST_WHITE_BALANCE", new RadioOptionsListener() {
-                    @Override
-                    public void onClick(String selected_value) {
-                        switchToWhiteBalance(selected_value);
-                    }
-                });
 
                 List<String> supported_color_effects = preview.getSupportedColorEffects();
                 List<String> supported_color_effects_entries = null;
@@ -822,56 +762,6 @@ public class PopupView extends LinearLayout {
             main_activity.updateForSettings(toast_message); // need to setup the camera again, as options may change (e.g., required burst mode, or whether RAW is allowed in this mode)
             main_activity.getMainUI().destroyPopup(); // need to recreate popup for new selection
         }
-    }
-
-    public void switchToWhiteBalance(String selected_value) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "switchToWhiteBalance: " + selected_value);
-        final MainActivity main_activity = (MainActivity)this.getContext();
-        final Preview preview = main_activity.getPreview();
-        boolean close_popup = false;
-        int temperature = -1;
-        if( selected_value.equals("manual") ) {
-            if( preview.getCameraController() != null ) {
-                String current_white_balance = preview.getCameraController().getWhiteBalance();
-                if( current_white_balance == null || !current_white_balance.equals("manual") ) {
-                    // try to choose a default manual white balance temperature as close as possible to the current auto
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "changed to manual white balance");
-                    close_popup = true;
-                    if( preview.getCameraController().captureResultHasWhiteBalanceTemperature() ) {
-                        temperature = preview.getCameraController().captureResultWhiteBalanceTemperature();
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "default to manual white balance temperature: " + temperature);
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putInt(PreferenceKeys.WhiteBalanceTemperaturePreferenceKey, temperature);
-                        editor.apply();
-                    }
-                    // otherwise default to the saved value
-
-                    if( !main_activity.getMainUI().isExposureUIOpen() ) {
-                        // also open the exposure UI, to show the
-                        main_activity.getMainUI().toggleExposureUI();
-                    }
-                }
-            }
-        }
-
-        if( preview.getCameraController() != null ) {
-            preview.getCameraController().setWhiteBalance(selected_value);
-            if( temperature > 0 ) {
-                preview.getCameraController().setWhiteBalanceTemperature(temperature);
-                // also need to update the slider!
-                main_activity.setManualWBSeekbar();
-            }
-        }
-        // keep popup open, unless switching to manual
-        if( close_popup ) {
-            main_activity.closePopup();
-        }
-        //main_activity.updateForSettings(getResources().getString(R.string.white_balance) + ": " + selected_value);
-        //main_activity.closePopup();
     }
 
     static abstract class ButtonOptionsPopupListener {

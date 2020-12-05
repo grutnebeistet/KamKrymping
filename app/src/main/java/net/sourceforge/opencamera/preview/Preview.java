@@ -252,7 +252,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
     private boolean is_white_balance_locked;
 
     private List<String> color_effects;
-    private List<String> scene_modes;
     private List<String> white_balances;
     private List<String> antibanding;
     private List<String> edge_modes;
@@ -1300,7 +1299,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         set_flash_value_after_autofocus = "";
         successfully_focused = false;
         preview_targetRatio = 0.0;
-        scene_modes = null;
         camera_controller_supports_zoom = false;
         has_zoom = false;
         max_zoom_factor = 0;
@@ -1961,7 +1959,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             this.tonemap_max_curve_points = camera_features.tonemap_max_curve_points;
             this.supports_tonemap_curve = camera_features.supports_tonemap_curve;
             this.supported_apertures = camera_features.apertures;
-            this.supports_white_balance_temperature = camera_features.supports_white_balance_temperature;
             this.min_temperature = camera_features.min_temperature;
             this.max_temperature = camera_features.max_temperature;
             this.supports_iso_range = camera_features.supports_iso_range;
@@ -2226,9 +2223,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 applicationInterface.clearColorEffectPref();
             }
         }
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "setupCameraParameters: time after color effect: " + (System.currentTimeMillis() - debug_time));
-        }
 
         {
             if( MyDebug.LOG )
@@ -2236,24 +2230,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             String value = applicationInterface.getWhiteBalancePref();
             if( MyDebug.LOG )
                 Log.d(TAG, "saved white balance: " + value);
-
-            CameraController.SupportedValues supported_values = camera_controller.setWhiteBalance(value);
-            if( supported_values != null ) {
-                white_balances = supported_values.values;
-                // now save, so it's available for PreferenceActivity
-                applicationInterface.setWhiteBalancePref(supported_values.selected_value);
-
-                if( supported_values.selected_value.equals("manual") && this.supports_white_balance_temperature ) {
-                    int temperature = applicationInterface.getWhiteBalanceTemperaturePref();
-                    camera_controller.setWhiteBalanceTemperature(temperature);
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "saved white balance: " + value);
-                }
-            }
-            else {
-                // delete key in case it's present (e.g., if feature no longer available due to change in OS, or switching APIs)
-                applicationInterface.clearWhiteBalancePref();
-            }
         }
         if( MyDebug.LOG ) {
             Log.d(TAG, "setupCameraParameters: time after white balance: " + (System.currentTimeMillis() - debug_time));
@@ -3857,21 +3833,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 // now save
                 applicationInterface.setExposureCompensationPref(new_exposure);
                 showToast(getExposureCompensationString(new_exposure), 0, true);
-            }
-        }
-    }
-
-    /** Set a manual white balance temperature. The white balance mode must be set to "manual" for
-     *  this to have an effect.
-     */
-    public void setWhiteBalanceTemperature(int new_temperature) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "seWhiteBalanceTemperature(): " + new_temperature);
-        if( camera_controller != null ) {
-            if( camera_controller.setWhiteBalanceTemperature(new_temperature) ) {
-                // now save
-                applicationInterface.setWhiteBalanceTemperaturePref(new_temperature);
-                showToast(getResources().getString(R.string.white_balance) + " " + new_temperature, 0, true);
             }
         }
     }
@@ -6490,11 +6451,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
     }
 
 
-    public List<String> getSupportedWhiteBalances() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "getSupportedWhiteBalances");
-        return this.white_balances;
-    }
 
     public List<String> getSupportedAntiBanding() {
         if( MyDebug.LOG )

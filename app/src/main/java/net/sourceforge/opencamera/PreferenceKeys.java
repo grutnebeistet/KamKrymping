@@ -270,7 +270,6 @@ public class PreferenceKeys {
 
     public static final String ShowBatteryPreferenceKey = "preference_show_battery";
 
-    public static final String ShowGridPreferenceKey = "preference_grid";
 
     public static final String ShowCropGuidePreferenceKey = "preference_crop_guide";
 

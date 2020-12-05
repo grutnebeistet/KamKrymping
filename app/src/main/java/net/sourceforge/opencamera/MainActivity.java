@@ -2068,7 +2068,6 @@ public class MainActivity extends Activity {
         bundle.putFloat("camera_view_angle_y", preview.getViewAngleY(false));
 
         putBundleExtra(bundle, "color_effects", this.preview.getSupportedColorEffects());
-        putBundleExtra(bundle, "white_balances", this.preview.getSupportedWhiteBalances());
         putBundleExtra(bundle, "isos", this.preview.getSupportedISOs());
         bundle.putString("iso_key", this.preview.getISOKey());
         if( this.preview.getCameraController() != null ) {
@@ -3445,7 +3444,6 @@ public class MainActivity extends Activity {
                 }
             }
         }
-        setManualWBSeekbar();
         if( MyDebug.LOG )
             Log.d(TAG, "cameraSetup: time after setting up iso: " + (System.currentTimeMillis() - debug_time));
         {
@@ -3589,43 +3587,6 @@ public class MainActivity extends Activity {
         SeekBar focusSeekBar = findViewById(is_target_distance ? R.id.focus_bracketing_target_seekbar : R.id.focus_seekbar);
         final int visibility = is_visible ? View.VISIBLE : View.GONE;
         focusSeekBar.setVisibility(visibility);
-    }
-
-    public void setManualWBSeekbar() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setManualWBSeekbar");
-        if( preview.getSupportedWhiteBalances() != null && preview.supportsWhiteBalanceTemperature() ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "set up manual white balance");
-            SeekBar white_balance_seek_bar = findViewById(R.id.white_balance_seekbar);
-            white_balance_seek_bar.setOnSeekBarChangeListener(null); // clear an existing listener - don't want to call the listener when setting up the progress bar to match the existing state
-            final int minimum_temperature = preview.getMinimumWhiteBalanceTemperature();
-            final int maximum_temperature = preview.getMaximumWhiteBalanceTemperature();
-			/*
-			// white balance should use linear scaling
-			white_balance_seek_bar.setMax(maximum_temperature - minimum_temperature);
-			white_balance_seek_bar.setProgress(preview.getCameraController().getWhiteBalanceTemperature() - minimum_temperature);
-			*/
-            manualSeekbars.setProgressSeekbarWhiteBalance(white_balance_seek_bar, minimum_temperature, maximum_temperature, preview.getCameraController().getWhiteBalanceTemperature());
-            white_balance_seek_bar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "white balance seekbar onProgressChanged: " + progress);
-                    //int temperature = minimum_temperature + progress;
-                    //preview.setWhiteBalanceTemperature(temperature);
-                    preview.setWhiteBalanceTemperature( manualSeekbars.getWhiteBalanceTemperature(progress) );
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                }
-            });
-        }
     }
 
     public boolean supportsAutoStabilise() {
@@ -3943,16 +3904,8 @@ public class MainActivity extends Activity {
         }
         try {
 
-            String white_balance = camera_controller.getWhiteBalance();
             String color_effect = camera_controller.getColorEffect();
 
-            if( white_balance != null && !white_balance.equals(CameraController.WHITE_BALANCE_DEFAULT) ) {
-                toast_string += "\n" + getResources().getString(R.string.white_balance) + ": " + mainUI.getEntryForWhiteBalance(white_balance);
-                if( white_balance.equals("manual") && preview.supportsWhiteBalanceTemperature() ) {
-                    toast_string += " " + camera_controller.getWhiteBalanceTemperature();
-                }
-                simple = false;
-            }
             if( color_effect != null && !color_effect.equals(CameraController.COLOR_EFFECT_DEFAULT) ) {
                 toast_string += "\n" + getResources().getString(R.string.color_effect) + ": " + mainUI.getEntryForColorEffect(color_effect);
                 simple = false;
