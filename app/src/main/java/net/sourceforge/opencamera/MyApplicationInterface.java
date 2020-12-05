@@ -88,35 +88,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
 
     private boolean last_images_saf; // whether the last images array are using SAF or not
 
-    /** This class keeps track of the images saved in this batch, for use with Pause Preview option, so we can share or trash images.
-     */
-    private static class LastImage {
-        final boolean share; // one of the images in the list should have share set to true, to indicate which image to share
-        final String name;
-        Uri uri;
-
-        LastImage(Uri uri, boolean share) {
-            this.name = null;
-            this.uri = uri;
-            this.share = share;
-        }
-
-        LastImage(String filename, boolean share) {
-            this.name = filename;
-            if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ) {
-                // previous to Android 7, we could just use a "file://" uri, but this is no longer supported on Android 7, and
-                // results in a android.os.FileUriExposedException when trying to share!
-                // see https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
-                // so instead we leave null for now, and set it from MyApplicationInterface.scannedFile().
-                this.uri = null;
-            }
-            else {
-                this.uri = Uri.parse("file://" + this.name);
-            }
-            this.share = share;
-        }
-    }
-    private final List<LastImage> last_images = new ArrayList<>();
 
     private final ToastBoxer photo_delete_toast = new ToastBoxer();
 
@@ -317,11 +288,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     }
 
     @Override
-    public String getSceneModePref() {
-        return sharedPreferences.getString(PreferenceKeys.SceneModePreferenceKey, CameraController.SCENE_MODE_DEFAULT);
-    }
-
-    @Override
     public String getColorEffectPref() {
         return sharedPreferences.getString(PreferenceKeys.ColorEffectPreferenceKey, CameraController.COLOR_EFFECT_DEFAULT);
     }
@@ -374,52 +340,9 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         return exposure;
     }
 
-    public static CameraController.Size choosePanoramaResolution(List<CameraController.Size> sizes) {
-        // if we allow panorama with higher resolutions, review against memory requirements under MainActivity.supportsPanorama()
-        // also may need to update the downscaling in the testing code
-        final int max_width_c = 2080;
-        boolean found = false;
-        CameraController.Size best_size = null;
-        // find largest width <= max_width_c with aspect ratio 4:3
-        for(CameraController.Size size : sizes) {
-            if( size.width <= max_width_c ) {
-                double aspect_ratio = ((double)size.width) / (double)size.height;
-                if( Math.abs(aspect_ratio - 4.0/3.0) < 1.0e-5 ) {
-                    if( !found || size.width > best_size.width ) {
-                        found = true;
-                        best_size = size;
-                    }
-                }
-            }
-        }
-        if( found ) {
-            return best_size;
-        }
-        // else find largest width <= max_width_c
-        for(CameraController.Size size : sizes) {
-            if( size.width <= max_width_c ) {
-                if( !found || size.width > best_size.width ) {
-                    found = true;
-                    best_size = size;
-                }
-            }
-        }
-        if( found ) {
-            return best_size;
-        }
-        // else find smallest width
-        for(CameraController.Size size : sizes) {
-            if( !found || size.width < best_size.width ) {
-                found = true;
-                best_size = size;
-            }
-        }
-        return best_size;
-    }
 
     @Override
     public Pair<Integer, Integer> getCameraResolutionPref(CameraResolutionConstraints constraints) {
-        PhotoMode photo_mode = getPhotoMode();
 
         String resolution_value = sharedPreferences.getString(PreferenceKeys.getResolutionPreferenceKey(cameraId), "");
         if( MyDebug.LOG )
@@ -1382,20 +1305,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         drawPreview.onContinuousFocusMove(start);
     }
 
-    void startPanorama() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "startPanorama");
-
-        n_panorama_pics = 0;
-        panorama_pic_accepted = false;
-        panorama_dir_left_to_right = true;
-
-        main_activity.getMainUI().setTakePhotoIcon();
-        View cancelPanoramaButton = main_activity.findViewById(R.id.cancel_panorama);
-        cancelPanoramaButton.setVisibility(View.VISIBLE);
-        main_activity.getMainUI().closeExposureUI(); // close seekbars if open (popup is already closed when taking a photo)
-        // taking the photo will end up calling MainUI.showGUI(), which will hide the other on-screen icons
-    }
 
     @Override
     public void touchEvent(MotionEvent event) {
@@ -1808,7 +1717,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         else {
             shareButton.setVisibility(View.GONE);
             trashButton.setVisibility(View.GONE);
-            this.clearLastImages();
         }
     }
 
@@ -1954,20 +1862,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     public void setVideoPref(boolean is_video) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(PreferenceKeys.IsVideoPreferenceKey, is_video);
-        editor.apply();
-    }
-
-    @Override
-    public void setSceneModePref(String scene_mode) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PreferenceKeys.SceneModePreferenceKey, scene_mode);
-        editor.apply();
-    }
-
-    @Override
-    public void clearSceneModePref() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(PreferenceKeys.SceneModePreferenceKey);
         editor.apply();
     }
 
@@ -2379,70 +2273,7 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     }
 
 
-    void addLastImage(File file, boolean share) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "addLastImage: " + file);
-            Log.d(TAG, "share?: " + share);
-        }
-        last_images_saf = false;
-        LastImage last_image = new LastImage(file.getAbsolutePath(), share);
-        last_images.add(last_image);
-    }
 
-    void addLastImageSAF(Uri uri, boolean share) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "addLastImageSAF: " + uri);
-            Log.d(TAG, "share?: " + share);
-        }
-        last_images_saf = true;
-        LastImage last_image = new LastImage(uri, share);
-        last_images.add(last_image);
-    }
-
-    void clearLastImages() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "clearLastImages");
-        last_images_saf = false;
-        last_images.clear();
-        drawPreview.clearLastImage();
-    }
-
-    void shareLastImage() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "shareLastImage");
-        Preview preview  = main_activity.getPreview();
-        if( preview.isPreviewPaused() ) {
-            LastImage share_image = null;
-            for(int i=0;i<last_images.size() && share_image == null;i++) {
-                LastImage last_image = last_images.get(i);
-                if( last_image.share ) {
-                    share_image = last_image;
-                }
-            }
-            boolean done = true;
-            if( share_image != null ) {
-                Uri last_image_uri = share_image.uri;
-                if( MyDebug.LOG )
-                    Log.d(TAG, "Share: " + last_image_uri);
-                if( last_image_uri == null ) {
-                    // could happen with Android 7+ with non-SAF if the image hasn't been scanned yet,
-                    // so we don't know the uri yet
-                    Log.e(TAG, "can't share last image as don't yet have uri");
-                    done = false;
-                }
-                else {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/jpeg");
-                    intent.putExtra(Intent.EXTRA_STREAM, last_image_uri);
-                    main_activity.startActivity(Intent.createChooser(intent, "Photo"));
-                }
-            }
-            if( done ) {
-                clearLastImages();
-                preview.startCameraPreview();
-            }
-        }
-    }
 
     boolean hasThumbnailAnimation() {
         return this.drawPreview.hasThumbnailAnimation();

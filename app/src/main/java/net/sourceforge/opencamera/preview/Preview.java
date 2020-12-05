@@ -1918,31 +1918,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
     private void initCameraParameters() throws CameraControllerException {
         if( MyDebug.LOG )
             Log.d(TAG, "initCameraParameters()");
-        {
-            // get available scene modes
-            // important, from old Camera API docs:
-            // "Changing scene mode may override other parameters (such as flash mode, focus mode, white balance).
-            // For example, suppose originally flash mode is on and supported flash modes are on/off. In night
-            // scene mode, both flash mode and supported flash mode may be changed to off. After setting scene
-            // mode, applications should call getParameters to know if some parameters are changed."
-            // this doesn't appear to apply to Camera2 API, but we still might as well set scene mode first
-            if( MyDebug.LOG )
-                Log.d(TAG, "set up scene mode");
-            String value = applicationInterface.getSceneModePref();
-            if( MyDebug.LOG )
-                Log.d(TAG, "saved scene mode: " + value);
-
-            CameraController.SupportedValues supported_values = camera_controller.setSceneMode(value);
-            if( supported_values != null ) {
-                scene_modes = supported_values.values;
-                // now save, so it's available for PreferenceActivity
-                applicationInterface.setSceneModePref(supported_values.selected_value);
-            }
-            else {
-                // delete key in case it's present (e.g., if feature no longer available due to change in OS, or switching APIs)
-                applicationInterface.clearSceneModePref();
-            }
-        }
 
         {
             // grab all read-only info from parameters
@@ -6514,11 +6489,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         return this.color_effects;
     }
 
-    public List<String> getSupportedSceneModes() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "getSupportedSceneModes");
-        return this.scene_modes;
-    }
 
     public List<String> getSupportedWhiteBalances() {
         if( MyDebug.LOG )

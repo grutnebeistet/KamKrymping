@@ -46,11 +46,6 @@ public abstract class BasicApplicationInterface implements ApplicationInterface 
     }
 
     @Override
-    public String getSceneModePref() {
-        return CameraController.SCENE_MODE_DEFAULT;
-    }
-
-    @Override
     public String getColorEffectPref() {
         return CameraController.COLOR_EFFECT_DEFAULT;
     }
@@ -528,16 +523,6 @@ public abstract class BasicApplicationInterface implements ApplicationInterface 
 
     @Override
     public void setVideoPref(boolean is_video) {
-
-    }
-
-    @Override
-    public void setSceneModePref(String scene_mode) {
-
-    }
-
-    @Override
-    public void clearSceneModePref() {
 
     }
 

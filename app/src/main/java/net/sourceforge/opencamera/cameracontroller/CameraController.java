@@ -306,16 +306,7 @@ public abstract class CameraController {
     public boolean shouldCoverPreview() {
         return false;
     }
-    public abstract SupportedValues setSceneMode(String value);
-    /**
-     * @return The current scene mode. Will be null if scene mode not supported.
-     */
-    public abstract String getSceneMode();
-    /**
-     * @return Returns true iff changing the scene mode can affect the available camera functionality
-     *         (e.g., changing to Night scene mode might mean flash modes are no longer available).
-     */
-    public abstract boolean sceneModeAffectsFunctionality();
+
     public abstract SupportedValues setColorEffect(String value);
     public abstract String getColorEffect();
     public abstract SupportedValues setWhiteBalance(String value);
@@ -609,15 +600,7 @@ public abstract class CameraController {
     public float captureResultAperture() {
         return 0.0f;
     }
-	/*public boolean captureResultHasFocusDistance() {
-		return false;
-	}*/
-	/*public float captureResultFocusDistanceMin() {
-		return 0.0f;
-	}*/
-	/*public float captureResultFocusDistanceMax() {
-		return 0.0f;
-	}*/
+
 
     // gets the available values of a generic mode, e.g., scene, color etc, and makes sure the requested mode is available
     SupportedValues checkModeIsSupported(List<String> values, String value, String default_value) {

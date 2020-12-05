@@ -222,34 +222,6 @@ public class ImageSaver extends Thread {
             this.sample_factor = sample_factor;
         }
 
-        /** Returns a copy of this object. Note that it is not a deep copy - data such as JPEG and RAW
-         *  data will not be copied.
-         */
-        Request copy() {
-            return new Request(this.type,
-                    this.process_type,
-                    this.force_suffix,
-                    this.suffix_offset,
-                    this.save_base,
-                    this.jpeg_images,
-                    this.image_capture_intent, this.image_capture_intent_uri,
-                    this.using_camera2,
-                    this.image_format, this.image_quality,
-                    this.do_auto_stabilise, this.level_angle, this.gyro_rotation_matrix,
-                    this.is_front_facing,
-                    this.mirror,
-                    this.current_date,
-                    this.preference_hdr_contrast_enhancement,
-                    this.iso,
-                    this.exposure_time,
-                    this.zoom_factor,
-                    this.preference_stamp, this.preference_textstamp, this.font_size, this.color, this.pref_style, this.preference_stamp_dateformat, this.preference_stamp_timeformat, this.preference_stamp_gpsformat, this.preference_stamp_geo_address, this.preference_units_distance,
-                    this.panorama_crop, this.store_location, this.location, this.store_geo_direction, this.geo_direction,
-                    this.pitch_angle, this.store_ypr,
-                    this.custom_tag_artist,
-                    this.custom_tag_copyright,
-                    this.sample_factor);
-        }
     }
 
     ImageSaver(MainActivity main_activity) {
@@ -1913,7 +1885,7 @@ public class ImageSaver extends Thread {
             // no saved image to record
         }
         else if( success ) {
-            applicationInterface.addLastImage(picFile, share_image);
+//            applicationInterface.addLastImage(picFile, share_image);
         }
 
         // I have received crashes where camera_controller was null - could perhaps happen if this thread was running just as the camera is closing?

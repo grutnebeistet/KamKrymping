@@ -1272,7 +1272,7 @@ public class MainActivity extends Activity {
         }
 
         speechControl.stopSpeechRecognizer();
-        applicationInterface.clearLastImages(); // this should happen when pausing the preview, but call explicitly just to be safe
+//        applicationInterface.clearLastImages(); // this should happen when pausing the preview, but call explicitly just to be safe
         applicationInterface.getDrawPreview().clearGhostImage();
         preview.onPause();
 
@@ -2068,7 +2068,6 @@ public class MainActivity extends Activity {
         bundle.putFloat("camera_view_angle_y", preview.getViewAngleY(false));
 
         putBundleExtra(bundle, "color_effects", this.preview.getSupportedColorEffects());
-        putBundleExtra(bundle, "scene_modes", this.preview.getSupportedSceneModes());
         putBundleExtra(bundle, "white_balances", this.preview.getSupportedWhiteBalances());
         putBundleExtra(bundle, "isos", this.preview.getSupportedISOs());
         bundle.putString("iso_key", this.preview.getISOKey());
@@ -2305,17 +2304,8 @@ public class MainActivity extends Activity {
         boolean need_reopen = false;
         if( preview.getCameraController() != null ) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String scene_mode = preview.getCameraController().getSceneMode();
-            if( MyDebug.LOG )
-                Log.d(TAG, "scene mode was: " + scene_mode);
-            String key = PreferenceKeys.SceneModePreferenceKey;
-            String value = sharedPreferences.getString(key, CameraController.SCENE_MODE_DEFAULT);
-            if( !value.equals(scene_mode) ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "scene mode changed to: " + value);
-                need_reopen = true;
-            }
-            else {
+
+            String key = PreferenceKeys.SceneModePreferenceKey;{
                 if( applicationInterface.useCamera2() ) {
                     // need to reopen if fake flash mode changed, as it changes the available camera features, and we can only set this after opening the camera
                     boolean camera2_fake_flash = preview.getCameraController().getUseCamera2FakeFlash();
@@ -3952,13 +3942,10 @@ public class MainActivity extends Activity {
             }
         }
         try {
-            String scene_mode = camera_controller.getSceneMode();
+
             String white_balance = camera_controller.getWhiteBalance();
             String color_effect = camera_controller.getColorEffect();
-            if( scene_mode != null && !scene_mode.equals(CameraController.SCENE_MODE_DEFAULT) ) {
-                toast_string += "\n" + getResources().getString(R.string.scene_mode) + ": " + mainUI.getEntryForSceneMode(scene_mode);
-                simple = false;
-            }
+
             if( white_balance != null && !white_balance.equals(CameraController.WHITE_BALANCE_DEFAULT) ) {
                 toast_string += "\n" + getResources().getString(R.string.white_balance) + ": " + mainUI.getEntryForWhiteBalance(white_balance);
                 if( white_balance.equals("manual") && preview.supportsWhiteBalanceTemperature() ) {

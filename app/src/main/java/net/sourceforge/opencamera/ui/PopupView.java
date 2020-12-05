@@ -743,36 +743,6 @@ public class PopupView extends LinearLayout {
                         switchToWhiteBalance(selected_value);
                     }
                 });
-                if( MyDebug.LOG )
-                    Log.d(TAG, "PopupView time 14: " + (System.nanoTime() - debug_time));
-
-                List<String> supported_scene_modes = preview.getSupportedSceneModes();
-                List<String> supported_scene_modes_entries = null;
-                if( supported_scene_modes != null ) {
-                    supported_scene_modes_entries = new ArrayList<>();
-                    for(String value : supported_scene_modes) {
-                        String entry = main_activity.getMainUI().getEntryForSceneMode(value);
-                        supported_scene_modes_entries.add(entry);
-                    }
-                }
-                addRadioOptionsToPopup(sharedPreferences, supported_scene_modes_entries, supported_scene_modes, getResources().getString(R.string.scene_mode), PreferenceKeys.SceneModePreferenceKey, CameraController.SCENE_MODE_DEFAULT, null, "TEST_SCENE_MODE", new RadioOptionsListener() {
-                    @Override
-                    public void onClick(String selected_value) {
-                        if( preview.getCameraController() != null ) {
-                            if( preview.getCameraController().sceneModeAffectsFunctionality() ) {
-                                // need to call updateForSettings() and close the popup, as changing scene mode can change available camera features
-                                main_activity.updateForSettings(getResources().getString(R.string.scene_mode) + ": " + main_activity.getMainUI().getEntryForSceneMode(selected_value));
-                                main_activity.closePopup();
-                            }
-                            else {
-                                preview.getCameraController().setSceneMode(selected_value);
-                                // keep popup open
-                            }
-                        }
-                    }
-                });
-                if( MyDebug.LOG )
-                    Log.d(TAG, "PopupView time 15: " + (System.nanoTime() - debug_time));
 
                 List<String> supported_color_effects = preview.getSupportedColorEffects();
                 List<String> supported_color_effects_entries = null;

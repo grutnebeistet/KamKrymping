@@ -36,32 +36,6 @@ public class ManualSeekbars {
         seekBar.setProgress(new_value);
     }
 
-    /*public static long exponentialScaling(double frac, double min, double max) {
-		// We use S(frac) = A * e^(s * frac)
-		// We want S(0) = min, S(1) = max
-		// So A = min
-		// and Ae^s = max
-		// => s = ln(max/min)
-		double s = Math.log(max / min);
-		return (long)(min * Math.exp(s * frac) + 0.5f); // add 0.5f so we round to nearest
-	}
-
-    private static double exponentialScalingInverse(double value, double min, double max) {
-		double s = Math.log(max / min);
-		return Math.log(value / min) / s;
-	}
-
-	public void setProgressSeekbarExponential(SeekBar seekBar, double min_value, double max_value, double value) {
-		seekBar.setMax(manual_n);
-		double frac = exponentialScalingInverse(value, min_value, max_value);
-		int new_value = (int)(frac*manual_n + 0.5); // add 0.5 for rounding
-		if( new_value < 0 )
-			new_value = 0;
-		else if( new_value > manual_n )
-			new_value = manual_n;
-		seekBar.setProgress(new_value);
-	}*/
-
     private List<Long> seekbar_values_white_balance;
     private List<Long> seekbar_values_iso;
     private List<Long> seekbar_values_shutter_speed;
