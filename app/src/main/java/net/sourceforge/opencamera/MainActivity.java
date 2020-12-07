@@ -1747,11 +1747,6 @@ public class MainActivity extends Activity {
             changed = changed || (button.getVisibility() != View.GONE);
             button.setVisibility(View.GONE);
         }
-        if( !mainUI.showFaceDetectionIcon() ) {
-            View button = findViewById(R.id.face_detection);
-            changed = changed || (button.getVisibility() != View.GONE);
-            button.setVisibility(View.GONE);
-        }
         if( !showSwitchMultiCamIcon() ) {
             // also handle the multi-cam icon here, as this can change when switching between front/back cameras
             // (e.g., if say a device only has multiple back cameras)

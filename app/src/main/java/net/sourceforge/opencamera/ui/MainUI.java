@@ -846,13 +846,6 @@ public class MainUI {
         return sharedPreferences.getBoolean(PreferenceKeys.ShowCycleFlashPreferenceKey, false);
     }
 
-    public boolean showFaceDetectionIcon() {
-        if( !main_activity.getPreview().supportsFaceDetection() )
-            return false;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowFaceDetectionPreferenceKey, false);
-    }
-
     public void setImmersiveMode(final boolean immersive_mode) {
         if( MyDebug.LOG )
             Log.d(TAG, "setImmersiveMode: " + immersive_mode);
@@ -910,8 +903,6 @@ public class MainUI {
                     autoLevelButton.setVisibility(visibility);
                 if( showCycleFlashIcon() )
                     cycleFlashButton.setVisibility(visibility);
-                if( showFaceDetectionIcon() )
-                    faceDetectionButton.setVisibility(visibility);
                 if( main_activity.hasAudioControl() )
                     audioControlButton.setVisibility(visibility);
                 popupButton.setVisibility(visibility);
@@ -1020,8 +1011,6 @@ public class MainUI {
                     autoLevelButton.setVisibility(visibility);
                 if( showCycleFlashIcon() )
                     cycleFlashButton.setVisibility(visibility);
-                if( showFaceDetectionIcon() )
-                    faceDetectionButton.setVisibility(visibility);
                 if( main_activity.hasAudioControl() )
                     audioControlButton.setVisibility(visibility);
 

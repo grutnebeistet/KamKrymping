@@ -54,10 +54,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.TextureView;
 
-/** Provides support using Android 5's Camera 2 API
- *  android.hardware.camera2.*.
- */
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
 public class CameraController2 extends CameraController {
     private static final String TAG = "CameraController2";
 
@@ -403,65 +400,6 @@ public class CameraController2 extends CameraController {
 
             setEdgeMode(builder);
             setNoiseReductionMode(builder);
-
-            /*builder.set(CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE, CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE_OFF);
-            builder.set(CaptureRequest.SHADING_MODE, CaptureRequest.SHADING_MODE_OFF);
-            builder.set(CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE, CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE_OFF);
-            builder.set(CaptureRequest.HOT_PIXEL_MODE, CaptureRequest.HOT_PIXEL_MODE_OFF);*/
-
-            /*builder.set(CaptureRequest.NOISE_REDUCTION_MODE, CaptureRequest.NOISE_REDUCTION_MODE_OFF);
-            builder.set(CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE, CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE_OFF);
-            builder.set(CaptureRequest.EDGE_MODE, CaptureRequest.EDGE_MODE_OFF);
-            if( Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M ) {
-                builder.set(CaptureRequest.TONEMAP_MODE, CaptureRequest.TONEMAP_MODE_GAMMA_VALUE);
-                builder.set(CaptureRequest.TONEMAP_GAMMA, 5.0f);
-            }*/
-            /*if( Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N ) {
-                builder.set(CaptureRequest.CONTROL_POST_RAW_SENSITIVITY_BOOST, 0);
-            }*/
-            /*builder.set(CaptureRequest.CONTROL_EFFECT_MODE, CaptureRequest.CONTROL_EFFECT_MODE_OFF);
-            builder.set(CaptureRequest.NOISE_REDUCTION_MODE, CaptureRequest.NOISE_REDUCTION_MODE_OFF);
-            builder.set(CaptureRequest.HOT_PIXEL_MODE, CaptureRequest.HOT_PIXEL_MODE_OFF);
-            builder.set(CaptureRequest.CONTROL_SCENE_MODE, CaptureRequest.CONTROL_SCENE_MODE_DISABLED);
-            builder.set(CaptureRequest.COLOR_CORRECTION_MODE, CaptureRequest.COLOR_CORRECTION_MODE_HIGH_QUALITY);
-            builder.set(CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE, CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE_HIGH_QUALITY);
-            builder.set(CaptureRequest.EDGE_MODE, CaptureRequest.EDGE_MODE_OFF);
-            builder.set(CaptureRequest.SHADING_MODE, CaptureRequest.SHADING_MODE_OFF);
-            builder.set(CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE, CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE_OFF);*/
-            /*if( MyDebug.LOG ) {
-                builder.set(CaptureRequest.TONEMAP_MODE, CaptureRequest.TONEMAP_MODE_HIGH_QUALITY);
-                TonemapCurve original_curve = builder.get(CaptureRequest.TONEMAP_CURVE);
-                for(int c=0;c<3;c++) {
-                    Log.d(TAG, "color c = " + c);
-                    for(int i=0;i<original_curve.getPointCount(c);i++) {
-                        PointF point = original_curve.getPoint(c, i);
-                        Log.d(TAG, "    i = " + i);
-                        Log.d(TAG, "        in: " + point.x);
-                        Log.d(TAG, "        out: " + point.y);
-                    }
-                }
-            }*/
-            /*if( Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M ) {
-                builder.set(CaptureRequest.TONEMAP_MODE, CaptureRequest.TONEMAP_MODE_PRESET_CURVE);
-                builder.set(CaptureRequest.TONEMAP_PRESET_CURVE, CaptureRequest.TONEMAP_PRESET_CURVE_SRGB);
-            }*/
-
-            if( MyDebug.LOG ) {
-                if( is_still ) {
-                    Integer nr_mode = builder.get(CaptureRequest.NOISE_REDUCTION_MODE);
-                    Log.d(TAG, "nr_mode: " + (nr_mode==null ? "null" : nr_mode));
-                    Integer edge_mode = builder.get(CaptureRequest.EDGE_MODE);
-                    Log.d(TAG, "edge_mode: " + (edge_mode==null ? "null" : edge_mode));
-                    Integer cc_mode = builder.get(CaptureRequest.COLOR_CORRECTION_ABERRATION_MODE);
-                    Log.d(TAG, "cc_mode: " + (cc_mode==null ? "null" : cc_mode));
-                    /*if( Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N ) {
-                        Integer raw_sensitivity_boost = builder.get(CaptureRequest.CONTROL_POST_RAW_SENSITIVITY_BOOST);
-                        Log.d(TAG, "raw_sensitivity_boost: " + (raw_sensitivity_boost==null ? "null" : raw_sensitivity_boost));
-                    }*/
-                }
-                //Integer ois_mode = builder.get(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE);
-                //Log.d(TAG, "ois_mode: " + (ois_mode==null ? "null" : ois_mode));
-            }
         }
 
         private boolean setSceneMode(CaptureRequest.Builder builder) {
@@ -4452,78 +4390,7 @@ public class CameraController2 extends CameraController {
         }
     }
 
-    @Override
-    public boolean startFaceDetection() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "startFaceDetection");
-        if( previewBuilder.get(CaptureRequest.STATISTICS_FACE_DETECT_MODE) != null && previewBuilder.get(CaptureRequest.STATISTICS_FACE_DETECT_MODE) != CaptureRequest.STATISTICS_FACE_DETECT_MODE_OFF ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "face detection already enabled");
-            return false;
-        }
-        if( supports_face_detect_mode_full ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "use full face detection");
-            camera_settings.has_face_detect_mode = true;
-            camera_settings.face_detect_mode = CaptureRequest.STATISTICS_FACE_DETECT_MODE_FULL;
-        }
-        else if( supports_face_detect_mode_simple ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "use simple face detection");
-            camera_settings.has_face_detect_mode = true;
-            camera_settings.face_detect_mode = CaptureRequest.STATISTICS_FACE_DETECT_MODE_SIMPLE;
-        }
-        else {
-            Log.e(TAG, "startFaceDetection() called but face detection not available");
-            return false;
-        }
-        camera_settings.setFaceDetectMode(previewBuilder);
-        camera_settings.setSceneMode(previewBuilder); // also need to set the scene mode
-        try {
-            setRepeatingRequest();
-        }
-        catch(CameraAccessException e) {
-            if( MyDebug.LOG ) {
-                Log.e(TAG, "failed to start face detection");
-                Log.e(TAG, "reason: " + e.getReason());
-                Log.e(TAG, "message: " + e.getMessage());
-            }
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public void setFaceDetectionListener(final FaceDetectionListener listener) {
-        this.face_detection_listener = listener;
-        this.last_faces_detected = -1;
-    }
 
-    /* If do_af_trigger_for_continuous is false, doing an autoFocus() in continuous focus mode just
-       means we call the autofocus callback the moment focus is not scanning (as with old Camera API).
-       If do_af_trigger_for_continuous is true, we set CONTROL_AF_TRIGGER_START, and wait for
-       CONTROL_AF_STATE_FOCUSED_LOCKED or CONTROL_AF_STATE_NOT_FOCUSED_LOCKED, similar to other focus
-       methods.
-       do_af_trigger_for_continuous==true has advantages:
-         - On Nexus 6 for flash auto, it means ae state is set to FLASH_REQUIRED if it is required
-           when it comes to taking the photo. If do_af_trigger_for_continuous==false, sometimes
-           it's set to CONTROL_AE_STATE_CONVERGED even for dark scenes, so we think we can skip
-           the precapture, causing photos to come out dark (or we can force always doing precapture,
-           but that makes things slower when flash isn't needed)
-         - On OnePlus 3T, with do_af_trigger_for_continuous==false photos come out with blue tinge
-           if the scene is not dark (but still dark enough that you'd want flash).
-           do_af_trigger_for_continuous==true fixes this for cases where the flash fires for autofocus.
-           Note that the problem is still not fixed for flash on where the scene is bright enough to
-           not need flash (and so we don't fire flash for autofocus).
-       do_af_trigger_for_continuous==true has disadvantage:
-         - On both Nexus 6 and OnePlus 3T, taking photos with flash is longer, as we have flash firing
-           for autofocus and precapture. Though note this is the case with autofocus mode anyway.
-       Note for fake flash mode, we still can use do_af_trigger_for_continuous==false (and doing the
-       af trigger for fake flash mode can sometimes mean flash fires for too long and we get a worse
-       result).
-     */
-    //private final static boolean do_af_trigger_for_continuous = false;
     private final static boolean do_af_trigger_for_continuous = true;
 
     @Override
@@ -4564,14 +4431,7 @@ public class CameraController2 extends CameraController {
                 cb.onAutoFocus(true);
                 return;
             }
-            /*if( state == STATE_WAITING_AUTOFOCUS ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "already waiting for an autofocus");
-                // need to update the callback!
-                this.capture_follows_autofocus_hint = capture_follows_autofocus_hint;
-                this.autofocus_cb = cb;
-                return;
-            }*/
+
             CaptureRequest.Builder afBuilder = previewBuilder;
             if( MyDebug.LOG ) {
                 {

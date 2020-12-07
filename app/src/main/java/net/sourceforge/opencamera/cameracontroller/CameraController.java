@@ -430,8 +430,6 @@ public abstract class CameraController {
      */
     public abstract void startPreview() throws CameraControllerException;
     public abstract void stopPreview();
-    public abstract boolean startFaceDetection();
-    public abstract void setFaceDetectionListener(final CameraController.FaceDetectionListener listener);
 
     /**
      * @param cb Callback to be called when autofocus completes.

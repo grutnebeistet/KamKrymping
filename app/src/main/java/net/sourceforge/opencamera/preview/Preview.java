@@ -295,9 +295,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
 
     private int ui_rotation;
 
-    private boolean supports_face_detection;
-    private boolean using_face_detection;
-    private CameraController.Face [] faces_detected;
     private final RectF face_rect = new RectF();
     private final AccessibilityManager accessibility_manager;
     private boolean supports_optical_stabilization;
@@ -583,7 +580,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         cancelAutoFocus();
 
         // don't set focus areas on touch if the user is touching to unpause!
-        if( camera_controller != null && !this.using_face_detection && !was_paused ) {
+        if( camera_controller != null && !was_paused ) {
             this.has_focus_area = false;
             ArrayList<CameraController.Area> areas = getAreas(event.getX(), event.getY());
             if( camera_controller.setFocusAndMeteringArea(areas) ) {
@@ -1300,9 +1297,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         max_zoom_factor = 0;
         minimum_focus_distance = 0.0f;
         zoom_ratios = null;
-        faces_detected = null;
-        supports_face_detection = false;
-        using_face_detection = false;
+
         supports_optical_stabilization = false;
         supports_video_stabilization = false;
         supports_photo_video_recording = false;
@@ -1827,7 +1822,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
                 this.zoom_ratios = null;
             }
             this.minimum_focus_distance = camera_features.minimum_focus_distance;
-            this.supports_face_detection = camera_features.supports_face_detection;
+
             this.photo_sizes = camera_features.picture_sizes;
             if( test_burst_resolution ) {
                 // this flag means we pretend the largest resolution doesn't support burst
@@ -1877,201 +1872,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         long debug_time = 0;
         if( MyDebug.LOG ) {
             debug_time = System.currentTimeMillis();
-        }
-
-        {
-            if( MyDebug.LOG )
-                Log.d(TAG, "set up face detection");
-            // get face detection supported
-            this.faces_detected = null;
-            if( this.supports_face_detection ) {
-                this.using_face_detection = applicationInterface.getFaceDetectionPref();
-            }
-            else {
-                this.using_face_detection = false;
-            }
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "supports_face_detection?: " + supports_face_detection);
-                Log.d(TAG, "using_face_detection?: " + using_face_detection);
-            }
-            if( this.using_face_detection ) {
-                class MyFaceDetectionListener implements CameraController.FaceDetectionListener {
-                    private final Handler handler = new Handler();
-                    private int last_n_faces = -1;
-                    private FaceLocation last_face_location = FaceLocation.FACELOCATION_UNSET;
-
-                    /** Note, at least for Camera2 API, onFaceDetection() isn't called on UI thread.
-                     */
-                    @Override
-                    public void onFaceDetection(final CameraController.Face[] faces) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "onFaceDetection: " + faces.length + " : " + Arrays.toString(faces));
-                        if( camera_controller == null ) {
-                            // can get a crash in some cases when switching camera when face detection is on (at least for Camera2)
-                            Activity activity = (Activity)Preview.this.getContext();
-                            activity.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    faces_detected = null;
-                                }
-                            });
-                            return;
-                        }
-                        // don't assign to faces_detected yet, as that has to be done on the UI thread
-
-                        // We don't synchronize on faces_detected, as the array may be passed to other
-                        // classes via getFacesDetected(). Although that function could copy instead,
-                        // that would mean an allocation in every frame in DrawPreview.
-                        // Easier to just do the assignment on the UI thread.
-                        Activity activity = (Activity)Preview.this.getContext();
-                        activity.runOnUiThread(new Runnable() {
-                            public void run() {
-                                // convert rects to preview screen space - also needs to be done on UI thread
-                                // (otherwise can have crashes if camera_controller becomes null in the meantime)
-                                final Matrix matrix = getCameraToPreviewMatrix();
-                                for(CameraController.Face face : faces) {
-                                    face_rect.set(face.rect);
-                                    matrix.mapRect(face_rect);
-                                    face_rect.round(face.rect);
-                                }
-
-                                reportFaces(faces);
-
-                                if( faces_detected == null || faces_detected.length != faces.length ) {
-                                    // avoid unnecessary reallocations
-                                    if( MyDebug.LOG )
-                                        Log.d(TAG, "allocate new faces_detected");
-                                    faces_detected = new CameraController.Face[faces.length];
-                                }
-                                System.arraycopy(faces, 0, faces_detected, 0, faces.length);
-                            }
-                        });
-                    }
-
-                    /** Accessibility: report number of faces for talkback etc.
-                     */
-                    private void reportFaces(CameraController.Face[] local_faces) {
-                        // View.announceForAccessibility requires JELLY_BEAN
-                        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && accessibility_manager.isEnabled() && accessibility_manager.isTouchExplorationEnabled() ) {
-                            int n_faces = local_faces.length;
-                            FaceLocation face_location = FaceLocation.FACELOCATION_UNKNOWN;
-                            if( n_faces > 0 ) {
-                                // set face_location
-                                float avg_x = 0, avg_y = 0;
-                                final float bdry_frac_c = 0.35f;
-                                boolean all_centre = true;
-                                for(CameraController.Face face : local_faces) {
-                                    float face_x = face.rect.centerX();
-                                    float face_y = face.rect.centerY();
-                                    face_x /= (float)cameraSurface.getView().getWidth();
-                                    face_y /= (float)cameraSurface.getView().getHeight();
-                                    if( all_centre ) {
-                                        if( face_x < bdry_frac_c || face_x > 1.0f-bdry_frac_c || face_y < bdry_frac_c || face_y > 1.0f-bdry_frac_c )
-                                            all_centre = false;
-                                    }
-                                    avg_x += face_x;
-                                    avg_y += face_y;
-                                }
-                                avg_x /= n_faces;
-                                avg_y /= n_faces;
-                                if( MyDebug.LOG ) {
-                                    Log.d(TAG, "    avg_x: " + avg_x);
-                                    Log.d(TAG, "    avg_y: " + avg_y);
-                                    Log.d(TAG, "    ui_rotation: " + ui_rotation);
-                                }
-                                if( all_centre ) {
-                                    face_location = FaceLocation.FACELOCATION_CENTRE;
-                                }
-                                else {
-                                    switch( ui_rotation ) {
-                                        case 0:
-                                            break;
-                                        case 90: {
-                                            float temp = avg_x;
-                                            //noinspection SuspiciousNameCombination
-                                            avg_x = avg_y;
-                                            avg_y = 1.0f-temp;
-                                            break;
-                                        }
-                                        case 180:
-                                            avg_x = 1.0f-avg_x;
-                                            avg_y = 1.0f-avg_y;
-                                            break;
-                                        case 270: {
-                                            float temp = avg_x;
-                                            avg_x = 1.0f-avg_y;
-                                            avg_y = temp;
-                                            break;
-                                        }
-                                    }
-                                    if( MyDebug.LOG ) {
-                                        Log.d(TAG, "    avg_x: " + avg_x);
-                                        Log.d(TAG, "    avg_y: " + avg_y);
-                                    }
-                                    if( avg_x < bdry_frac_c )
-                                        face_location = FaceLocation.FACELOCATION_LEFT;
-                                    else if( avg_x > 1.0f-bdry_frac_c )
-                                        face_location = FaceLocation.FACELOCATION_RIGHT;
-                                    else if( avg_y < bdry_frac_c )
-                                        face_location = FaceLocation.FACELOCATION_TOP;
-                                    else if( avg_y > 1.0f-bdry_frac_c )
-                                        face_location = FaceLocation.FACELOCATION_BOTTOM;
-                                }
-                            }
-
-                            if( n_faces != last_n_faces || face_location != last_face_location ) {
-                                if( n_faces == 0 && last_n_faces == -1 ) {
-                                    // only say 0 faces detected if previously the number was non-zero
-                                }
-                                else {
-                                    String string = n_faces + " " + getContext().getResources().getString(n_faces==1 ? R.string.face_detected : R.string.faces_detected);
-                                    if( n_faces > 0 && face_location != FaceLocation.FACELOCATION_UNKNOWN ) {
-                                        switch( face_location ) {
-                                            case FACELOCATION_CENTRE:
-                                                string += " " + getContext().getResources().getString(R.string.centre_of_screen);
-                                                break;
-                                            case FACELOCATION_LEFT:
-                                                string += " " + getContext().getResources().getString(R.string.left_of_screen);
-                                                break;
-                                            case FACELOCATION_RIGHT:
-                                                string += " " + getContext().getResources().getString(R.string.right_of_screen);
-                                                break;
-                                            case FACELOCATION_TOP:
-                                                string += " " + getContext().getResources().getString(R.string.top_of_screen);
-                                                break;
-                                            case FACELOCATION_BOTTOM:
-                                                string += " " + getContext().getResources().getString(R.string.bottom_of_screen);
-                                                break;
-                                        }
-                                    }
-                                    final String string_f = string;
-                                    if( MyDebug.LOG )
-                                        Log.d(TAG, string);
-                                    // to avoid having a big queue of saying "one face detected, two faces detected" etc, we only report
-                                    // after a delay, cancelling any that were previously queued
-                                    handler.removeCallbacksAndMessages(null);
-                                    handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if( MyDebug.LOG )
-                                                Log.d(TAG, "announceForAccessibility: " + string_f);
-                                            if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ) {
-                                                Preview.this.getView().announceForAccessibility(string_f);
-                                            }
-                                        }
-                                    }, 500);
-                                }
-
-                                last_n_faces = n_faces;
-                                last_face_location = face_location;
-                            }
-                        }
-                    }
-                }
-                camera_controller.setFaceDetectionListener(new MyFaceDetectionListener());
-            }
-        }
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "setupCameraParameters: time after setting face detection: " + (System.currentTimeMillis() - debug_time));
         }
 
         {
@@ -5886,13 +5686,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             }
         }
         ensureFlashCorrect();
-        if( this.using_face_detection && !cancelled ) {
-            // On some devices such as mtk6589, face detection does not resume as written in documentation so we have
-            // to cancelfocus when focus is finished
-            if( camera_controller != null ) {
-                camera_controller.cancelAutoFocus();
-            }
-        }
 
         boolean local_take_photo_after_autofocus;
         synchronized(this) {
@@ -5939,12 +5732,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
             this.is_preview_started = true;
             if( MyDebug.LOG ) {
                 Log.d(TAG, "startCameraPreview: time after starting camera preview: " + (System.currentTimeMillis() - debug_time));
-            }
-            if( this.using_face_detection ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "start face detection");
-                camera_controller.startFaceDetection();
-                faces_detected = null;
             }
         }
         this.setPreviewPaused(false);
@@ -6168,10 +5955,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         return geo_direction[0];
     }
 
-    public boolean supportsFaceDetection() {
-        // don't log this, as we call from DrawPreview!
-        return supports_face_detection;
-    }
+
 
     /** Whether optical image stabilization (OIS) is supported by the device.
      */
@@ -7872,11 +7656,6 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
      */
     private boolean recentlyFocused() {
         return this.successfully_focused && System.currentTimeMillis() < this.successfully_focused_time + 5000;
-    }
-
-    public CameraController.Face [] getFacesDetected() {
-        // FindBugs warns about returning the array directly, but in fact we need to return direct access rather than copying, so that the on-screen display of faces rectangles updates
-        return this.faces_detected;
     }
 
     /** Returns the current zoom factor of the camera. Always returns 1.0f if zoom isn't supported.
