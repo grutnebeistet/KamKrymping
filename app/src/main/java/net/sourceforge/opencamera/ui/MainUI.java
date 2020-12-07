@@ -53,11 +53,6 @@ public class MainUI {
 
     private final MainActivity main_activity;
 
-    private volatile boolean popup_view_is_open; // must be volatile for test project reading the state
-    private PopupView popup_view;
-    private final static boolean cache_popup = true; // if false, we recreate the popup each time
-    private boolean force_destroy_popup = false; // if true, then the popup isn't cached for only the next time the popup is closed
-
     private int current_orientation;
     enum UIPlacement {
         UIPLACEMENT_RIGHT,
@@ -673,57 +668,6 @@ public class MainUI {
             view.setLayoutParams(lp);
         }
 
-        if( popupIsOpen() )
-        {
-            final View view = main_activity.findViewById(R.id.popup_container);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
-            if( ui_placement == UIPlacement.UIPLACEMENT_TOP ) {
-                layoutParams.addRule(align_right, 0);
-                layoutParams.addRule(above, 0);
-                layoutParams.addRule(below, 0);
-                layoutParams.addRule(left_of, 0);
-                layoutParams.addRule(right_of, R.id.popup);
-                layoutParams.addRule(align_parent_top, RelativeLayout.TRUE);
-                layoutParams.addRule(align_parent_bottom, RelativeLayout.TRUE);
-            }
-            else {
-                layoutParams.addRule(align_right, R.id.popup);
-                layoutParams.addRule(above, 0);
-                layoutParams.addRule(below, R.id.popup);
-                layoutParams.addRule(left_of, 0);
-                layoutParams.addRule(right_of, 0);
-                layoutParams.addRule(align_parent_top, 0);
-                layoutParams.addRule(align_parent_bottom, RelativeLayout.TRUE);
-            }
-            view.setLayoutParams(layoutParams);
-
-            //setPopupViewRotation(ui_rotation, display_height);
-            view.getViewTreeObserver().addOnGlobalLayoutListener(
-                    new OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "onGlobalLayout()");
-                            // We need to call setPopupViewRotation after the above layout param changes
-                            // have taken effect, otherwise we can have problems due to popup_height being incorrect.
-                            // Example bugs:
-                            // Left-handed UI, portrait: Restart and open popup, it doesn't appear until device is rotated.
-                            // Top UI, reverse-portrait: Restart and open popup, it appears in wrong location.
-                            // Top UI, reverse-landscape: Restart and open popup, it appears in wrong location.
-                            setPopupViewRotation(ui_rotation, display_height);
-
-                            // stop listening - only want to call this once!
-                            if( Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 ) {
-                                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            }
-                            else {
-                                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            }
-                        }
-                    }
-            );
-        }
-
         if( !popup_container_only ) {
             setTakePhotoIcon();
             // no need to call setSwitchCameraContentDescription()
@@ -734,80 +678,7 @@ public class MainUI {
         }
     }
 
-    private void setPopupViewRotation(int ui_rotation, int display_height) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setPopupViewRotation");
-        View view = main_activity.findViewById(R.id.popup_container);
-        setViewRotation(view, ui_rotation);
-        // reset:
-        view.setTranslationX(0.0f);
-        view.setTranslationY(0.0f);
 
-        int popup_width = view.getWidth();
-        int popup_height = view.getHeight();
-        test_saved_popup_width = popup_width;
-        test_saved_popup_height = popup_height;
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "popup_width: " + popup_width);
-            Log.d(TAG, "popup_height: " + popup_height);
-            if( popup_view != null )
-                Log.d(TAG, "popup total width: " + popup_view.getTotalWidth());
-        }
-        if( popup_view != null && popup_width > popup_view.getTotalWidth()*1.2  ) {
-            // This is a workaround for the rare but annoying bug where the popup window is too large
-            // (and appears partially off-screen). Unfortunately have been unable to fix - and trying
-            // to force the popup container to have a particular width just means some of the contents
-            // (e.g., Timer) are missing. But at least stop caching it, so that reopening the popup
-            // should fix it, rather than having to restart or pause/resume Open Camera.
-            // Also note, normally we should expect popup_width == popup_view.getTotalWidth(), but
-            // have put a fudge factor of 1.2 just in case it's normally slightly larger on some
-            // devices.
-            Log.e(TAG, "### popup view is too big?!");
-            force_destroy_popup = true;
-			/*popup_width = popup_view.getTotalWidth();
-			ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(
-					popup_width,
-					RelativeLayout.LayoutParams.WRAP_CONTENT);
-			view.setLayoutParams(params);*/
-        }
-        else {
-            force_destroy_popup = false;
-        }
-
-        if( ui_rotation == 0 || ui_rotation == 180 ) {
-            view.setPivotX(popup_width/2.0f);
-            view.setPivotY(popup_height/2.0f);
-        }
-        else if( ui_placement == UIPlacement.UIPLACEMENT_TOP ) {
-            view.setPivotX(0.0f);
-            view.setPivotY(0.0f);
-            if( ui_rotation == 90 ) {
-                //noinspection SuspiciousNameCombination
-                view.setTranslationX(popup_height);
-            }
-            else if( ui_rotation == 270 ) {
-                view.setTranslationY(display_height);
-            }
-        }
-        else {
-            view.setPivotX(popup_width);
-            view.setPivotY(ui_placement == UIPlacement.UIPLACEMENT_RIGHT ? 0.0f : popup_height);
-            if( ui_placement == UIPlacement.UIPLACEMENT_RIGHT ) {
-                if( ui_rotation == 90 ) {
-                    //noinspection SuspiciousNameCombination
-                    view.setTranslationY( popup_width );
-                }
-                else if( ui_rotation == 270 )
-                    view.setTranslationX( - popup_height );
-            }
-            else {
-                if( ui_rotation == 90 )
-                    view.setTranslationX( - popup_height );
-                else if( ui_rotation == 270 )
-                    view.setTranslationY( - popup_width );
-            }
-        }
-    }
 
     /** Set icons for taking photos vs videos.
      *  Also handles content descriptions for the take photo button and switch video button.
@@ -901,11 +772,6 @@ public class MainUI {
     }
 
     public void onOrientationChanged(int orientation) {
-		/*if( MyDebug.LOG ) {
-			Log.d(TAG, "onOrientationChanged()");
-			Log.d(TAG, "orientation: " + orientation);
-			Log.d(TAG, "current_orientation: " + current_orientation);
-		}*/
         if( orientation == OrientationEventListener.ORIENTATION_UNKNOWN )
             return;
         int diff = Math.abs(orientation - current_orientation);
@@ -924,28 +790,6 @@ public class MainUI {
                 layoutUI();
                 view_rotate_animation = false;
 
-                // Call DrawPreview.updateSettings() so that we reset calculations that depend on
-                // getLocationOnScreen() - since the result is affected by a View's rotation, we need
-                // to recompute - this also means we need to delay slightly until after the rotation
-                // animation is complete.
-                // To reproduce issues, rotate from upside-down-landscape to portrait, and observe
-                // the info-text placement (when using icons-along-top), or with on-screen angle
-                // displayed when in 16:9 preview.
-                // Potentially we could use Animation.setAnimationListener(), but we set a separate
-                // animation for every icon.
-                // Note, this seems to be unneeded due to the fix in DrawPreview for
-                // "getRotation() == 180.0f", but good to clear the cached values (e.g., in case we
-                // compute them during when the icons are being rotated).
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "onOrientationChanged->postDelayed()");
-
-                        main_activity.getApplicationInterface().getDrawPreview().updateSettings();
-                    }
-                }, view_rotate_animation_duration+20);
             }
         }
     }
@@ -1180,9 +1024,6 @@ public class MainUI {
                     faceDetectionButton.setVisibility(visibility);
                 if( main_activity.hasAudioControl() )
                     audioControlButton.setVisibility(visibility);
-                if( !(show_gui_photo && show_gui_video) ) {
-                    closePopup(); // we still allow the popup when recording video, but need to update the UI (so it only shows flash options), so easiest to just close
-                }
 
                 View remoteConnectedIcon = main_activity.findViewById(R.id.kraken_icon);
                     remoteConnectedIcon.setVisibility(View.GONE);
@@ -1328,7 +1169,7 @@ public class MainUI {
     public void toggleExposureUI() {
         if( MyDebug.LOG )
             Log.d(TAG, "toggleExposureUI");
-        closePopup();
+
         mSelectingExposureUIElement = false;
         if( isExposureUIOpen() ) {
             closeExposureUI();
@@ -1520,80 +1361,6 @@ public class MainUI {
         }
     }
 
-    /**
-     * Select element on exposure UI. Based on the value of mExposureLine
-     *         // Our order for lines is:
-     *         // - ISO buttons
-     *         // - ISO slider
-     *         // - Shutter speed
-     *         // - exposure seek bar
-     */
-    private void selectExposureUILine() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "selectExposureUILine");
-        if (!isExposureUIOpen()) { // Safety check
-            return;
-        }
-
-        if (mExposureLine == 0) { // ISO presets
-            ViewGroup iso_buttons_container = main_activity.findViewById(R.id.iso_buttons);
-            iso_buttons_container.setBackgroundColor(highlightColorExposureUIElement);
-            //iso_buttons_container.setAlpha(1f);
-            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-            String current_iso = sharedPreferences.getString(PreferenceKeys.ISOPreferenceKey, CameraController.ISO_DEFAULT);
-            // if the manual ISO value isn't one of the "preset" values, then instead highlight the manual ISO icon
-            boolean found = false;
-            Button manualButton = null;
-            for(View view : iso_buttons) {
-                Button button = (Button)view;
-                String button_text = "" + button.getText();
-                if( button_text.contains(current_iso) ) {
-                    PopupView.setButtonSelected(button, true);
-                    //button.setBackgroundColor(highlightColorExposureUIElement);
-                    //button.setAlpha(0.3f);
-                    found = true;
-                }
-                else {
-                    if (button_text.contains("m")) {
-                        manualButton = button;
-                    }
-                    PopupView.setButtonSelected(button, false);
-                    button.setBackgroundColor(Color.TRANSPARENT);
-                }
-            }
-            if (!found && manualButton != null) {
-                // We are in manual ISO, highlight the "M" button
-                PopupView.setButtonSelected(manualButton, true);
-                manualButton.setBackgroundColor(highlightColorExposureUIElement);
-                //manualButton.setAlpha(0.3f);
-            }
-            mSelectingExposureUIElement = true;
-        } else if (mExposureLine == 1) {
-            // ISO seek bar - change color
-            View seek_bar = main_activity.findViewById(R.id.iso_seekbar);
-            //seek_bar.setAlpha(0.1f);
-            seek_bar.setBackgroundColor(highlightColorExposureUIElement);
-            mSelectingExposureUIElement = true;
-        } else if (mExposureLine == 2) {
-            // ISO seek bar - change color
-            View seek_bar = main_activity.findViewById(R.id.exposure_time_seekbar);
-            //seek_bar.setAlpha(0.1f);
-            seek_bar.setBackgroundColor(highlightColorExposureUIElement);
-            mSelectingExposureUIElement = true;
-        } else if (mExposureLine == 3) {
-            // Exposure compensation
-            View container = main_activity.findViewById(R.id.exposure_container);
-            //container.setAlpha(0.1f);
-            container.setBackgroundColor(highlightColorExposureUIElement);
-            mSelectingExposureUIElement = true;
-        } else if (mExposureLine == 4) {
-            // Manual white balance
-            View container = main_activity.findViewById(R.id.white_balance_seekbar);
-            //container.setAlpha(0.1f);
-            container.setBackgroundColor(highlightColorExposureUIElement);
-            mSelectingExposureUIElement = true;
-        }
-    }
 
     /** Returns the height of the device in dp (or width in portrait mode), allowing for space for the
      *  on-screen UI icons.
@@ -1635,14 +1402,7 @@ public class MainUI {
         if( MyDebug.LOG )
             Log.d(TAG, "processRemoteUpButton");
         boolean didProcess = false;
-        if (popupIsOpen()) {
-            didProcess = true;
-            if (selectingIcons()) {
-                previousPopupIcon();
-            } else if (selectingLines()) {
-                previousPopupLine();
-            }
-        } else if (isExposureUIOpen()) {
+  if (isExposureUIOpen()) {
             didProcess = true;
             if (isSelectingExposureUIElement()) {
                 nextExposureUIItem();
@@ -1661,14 +1421,7 @@ public class MainUI {
         if( MyDebug.LOG )
             Log.d(TAG, "processRemoteDownButton");
         boolean didProcess = false;
-        if (popupIsOpen()) {
-            if (selectingIcons()) {
-                nextPopupIcon();
-            } else if (selectingLines()) {
-                nextPopupLine();
-            }
-            didProcess = true;
-        } else if (isExposureUIOpen()) {
+if (isExposureUIOpen()) {
             if (isSelectingExposureUIElement()) {
                 previousExposureUIItem();
             } else {
@@ -1683,247 +1436,6 @@ public class MainUI {
     private int iso_button_manual_index = -1;
     private final static String manual_iso_value = "m";
 
-    /** Opens the exposure UI if not already open, and sets up or updates the UI.
-     */
-    public void setupExposureUI() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setupExposureUI");
-        test_ui_buttons.clear();
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        final Preview preview = main_activity.getPreview();
-        ImageButton view = main_activity.findViewById(R.id.exposure);
-        view.setImageResource(R.drawable.ic_exposure_red_48dp);
-        View sliders_container = main_activity.findViewById(R.id.sliders_container);
-        sliders_container.setVisibility(View.VISIBLE);
-        ViewGroup iso_buttons_container = main_activity.findViewById(R.id.iso_buttons);
-        iso_buttons_container.removeAllViews();
-        List<String> supported_isos;
-        if( preview.isVideoRecording() ) {
-            supported_isos = null;
-        }
-        else if( preview.supportsISORange() ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "supports ISO range");
-            int min_iso = preview.getMinimumISO();
-            int max_iso = preview.getMaximumISO();
-            List<String> values = new ArrayList<>();
-            values.add(CameraController.ISO_DEFAULT);
-            values.add(manual_iso_value);
-            iso_button_manual_index = 1; // must match where we place the manual button!
-            int [] iso_values = {50, 100, 200, 400, 800, 1600, 3200, 6400};
-            values.add("" + min_iso);
-            for(int iso_value : iso_values) {
-                if( iso_value > min_iso && iso_value < max_iso ) {
-                    values.add("" + iso_value);
-                }
-            }
-            values.add("" + max_iso);
-            supported_isos = values;
-        }
-        else {
-            supported_isos = preview.getSupportedISOs();
-            iso_button_manual_index = -1;
-        }
-        String current_iso = sharedPreferences.getString(PreferenceKeys.ISOPreferenceKey, CameraController.ISO_DEFAULT);
-        // if the manual ISO value isn't one of the "preset" values, then instead highlight the manual ISO icon
-        if( !current_iso.equals(CameraController.ISO_DEFAULT) && supported_isos != null && supported_isos.contains(manual_iso_value) && !supported_isos.contains(current_iso) )
-            current_iso = manual_iso_value;
-
-
-        int total_width_dp = 280;
-        int max_width_dp = getMaxHeightDp(true);
-        if( total_width_dp > max_width_dp )
-            total_width_dp = max_width_dp;
-        if( MyDebug.LOG )
-            Log.d(TAG, "total_width_dp: " + total_width_dp);
-
-        // n.b., we hardcode the string "ISO" as this isn't a user displayed string, rather it's used to filter out "ISO" included in old Camera API parameters
-        iso_buttons = PopupView.createButtonOptions(iso_buttons_container, main_activity, total_width_dp, test_ui_buttons, supported_isos, -1, -1, "ISO", false, current_iso, 0, "TEST_ISO", new PopupView.ButtonOptionsPopupListener() {
-            @Override
-            public void onClick(String option) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "clicked iso: " + option);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                String old_iso = sharedPreferences.getString(PreferenceKeys.ISOPreferenceKey, CameraController.ISO_DEFAULT);
-                if( MyDebug.LOG )
-                    Log.d(TAG, "old_iso: " + old_iso);
-                editor.putString(PreferenceKeys.ISOPreferenceKey, option);
-                String toast_option = option;
-
-                if( preview.supportsISORange() ) {
-                    if( option.equals(CameraController.ISO_DEFAULT) ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "switched from manual to auto iso");
-                        // also reset exposure time when changing from manual to auto from the popup menu:
-                        editor.putLong(PreferenceKeys.ExposureTimePreferenceKey, CameraController.EXPOSURE_TIME_DEFAULT);
-                        editor.apply();
-                        preview.showToast("ISO: " + toast_option, 0, true); // supply offset_y_dp to be consistent with preview.setExposure(), preview.setISO()
-                        main_activity.updateForSettings(""); // already showed the toast, so block from showing again
-                    }
-                    else if( old_iso.equals(CameraController.ISO_DEFAULT) ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "switched from auto to manual iso");
-                        if( option.equals("m") ) {
-                            // if we used the generic "manual", then instead try to preserve the current iso if it exists
-                            if( preview.getCameraController() != null && preview.getCameraController().captureResultHasIso() ) {
-                                int iso = preview.getCameraController().captureResultIso();
-                                if( MyDebug.LOG )
-                                    Log.d(TAG, "apply existing iso of " + iso);
-                                editor.putString(PreferenceKeys.ISOPreferenceKey, "" + iso);
-                                toast_option = "" + iso;
-                            }
-                            else {
-                                if( MyDebug.LOG )
-                                    Log.d(TAG, "no existing iso available");
-                                // use a default
-                                final int iso = 800;
-                                editor.putString(PreferenceKeys.ISOPreferenceKey, "" + iso);
-                                toast_option = "" + iso;
-                            }
-                        }
-
-                        // if changing from auto to manual, preserve the current exposure time if it exists
-                        if( preview.getCameraController() != null && preview.getCameraController().captureResultHasExposureTime() ) {
-                            long exposure_time = preview.getCameraController().captureResultExposureTime();
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "apply existing exposure time of " + exposure_time);
-                            editor.putLong(PreferenceKeys.ExposureTimePreferenceKey, exposure_time);
-                        }
-                        else {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "no existing exposure time available");
-                        }
-
-                        editor.apply();
-                        preview.showToast("ISO: " + toast_option, 0, true); // supply offset_y_dp to be consistent with preview.setExposure(), preview.setISO()
-                        main_activity.updateForSettings(""); // already showed the toast, so block from showing again
-                    }
-                    else {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "changed manual iso");
-                        if( option.equals("m") ) {
-                            // if user selected the generic "manual", then just keep the previous non-ISO option
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "keep existing iso of " + old_iso);
-                            editor.putString(PreferenceKeys.ISOPreferenceKey, "" + old_iso);
-                        }
-
-                        editor.apply();
-                        int iso = preview.parseManualISOValue(option);
-                        if( iso >= 0 ) {
-                            // if changing between manual ISOs, no need to call updateForSettings, just change the ISO directly (as with changing the ISO via manual slider)
-                            //preview.setISO(iso);
-                            //updateSelectedISOButton();
-                            // rather than set ISO directly, we move the seekbar, and the ISO will be changed via the seekbar listener
-                            SeekBar iso_seek_bar = main_activity.findViewById(R.id.iso_seekbar);
-                            main_activity.getManualSeekbars().setISOProgressBarToClosest(iso_seek_bar, iso);
-                        }
-                    }
-                }
-                else {
-                    editor.apply();
-                    if( preview.getCameraController() != null ) {
-                        preview.getCameraController().setISO(option);
-                    }
-                }
-
-                setupExposureUI();
-            }
-        });
-        if( supported_isos != null ) {
-            View iso_container_view = main_activity.findViewById(R.id.iso_container);
-            iso_container_view.setVisibility(View.VISIBLE);
-        }
-
-        View exposure_seek_bar = main_activity.findViewById(R.id.exposure_container);
-        View manual_exposure_seek_bar = main_activity.findViewById(R.id.manual_exposure_container);
-        String iso_value = main_activity.getApplicationInterface().getISOPref();
-        if( !iso_value.equals(CameraController.ISO_DEFAULT) ) {
-            exposure_seek_bar.setVisibility(View.GONE);
-
-            // with Camera2 API, when using manual ISO we instead show sliders for ISO range and exposure time
-            if( main_activity.getPreview().supportsISORange() ) {
-                manual_exposure_seek_bar.setVisibility(View.VISIBLE);
-                SeekBar exposure_time_seek_bar = main_activity.findViewById(R.id.exposure_time_seekbar);
-                if( main_activity.getPreview().supportsExposureTime() ) {
-                    exposure_time_seek_bar.setVisibility(View.VISIBLE);
-                }
-                else {
-                    exposure_time_seek_bar.setVisibility(View.GONE);
-                }
-            }
-            else {
-                manual_exposure_seek_bar.setVisibility(View.GONE);
-            }
-        }
-        else {
-            manual_exposure_seek_bar.setVisibility(View.GONE);
-
-            if( main_activity.getPreview().supportsExposures() ) {
-                exposure_seek_bar.setVisibility(View.VISIBLE);
-                ZoomControls seek_bar_zoom = main_activity.findViewById(R.id.exposure_seekbar_zoom);
-                seek_bar_zoom.setVisibility(View.VISIBLE);
-            }
-            else {
-                exposure_seek_bar.setVisibility(View.GONE);
-            }
-        }
-
-        View manual_white_balance_seek_bar = main_activity.findViewById(R.id.manual_white_balance_container);
-        if( main_activity.getPreview().supportsWhiteBalanceTemperature()) {
-            // we also show slider for manual white balance, if in that mode
-            String white_balance_value = main_activity.getApplicationInterface().getWhiteBalancePref();
-            if(white_balance_value.equals("manual") ) {
-                manual_white_balance_seek_bar.setVisibility(View.VISIBLE);
-            }
-            else {
-                manual_white_balance_seek_bar.setVisibility(View.GONE);
-            }
-        }
-        else {
-            manual_white_balance_seek_bar.setVisibility(View.GONE);
-        }
-
-        //layoutUI(); // needed to update alignment of exposure UI
-    }
-
-    /** If the exposure panel is open, updates the selected ISO button to match the current ISO value,
-     *  if a continuous range of ISO values are supported by the camera.
-     */
-    public void updateSelectedISOButton() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "updateSelectedISOButton");
-        Preview preview = main_activity.getPreview();
-        if( preview.supportsISORange() && isExposureUIOpen() ) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-            String current_iso = sharedPreferences.getString(PreferenceKeys.ISOPreferenceKey, CameraController.ISO_DEFAULT);
-            // if the manual ISO value isn't one of the "preset" values, then instead highlight the manual ISO icon
-            if( MyDebug.LOG )
-                Log.d(TAG, "current_iso: " + current_iso);
-            boolean found = false;
-            for(View view : iso_buttons) {
-                Button button = (Button)view;
-                if( MyDebug.LOG )
-                    Log.d(TAG, "button: " + button.getText());
-                String button_text = "" + button.getText();
-                if( button_text.contains(current_iso) ) {
-                    PopupView.setButtonSelected(button, true);
-                    found = true;
-                }
-                else {
-                    PopupView.setButtonSelected(button, false);
-                }
-            }
-            if( !found && !current_iso.equals(CameraController.ISO_DEFAULT) ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "must be manual");
-                if( iso_button_manual_index >= 0 && iso_button_manual_index < iso_buttons.size() ) {
-                    Button button = (Button)iso_buttons.get(iso_button_manual_index);
-                    PopupView.setButtonSelected(button, true);
-                }
-            }
-        }
-    }
 
     public void setSeekbarZoom(int new_zoom) {
         if( MyDebug.LOG )
@@ -2004,36 +1516,6 @@ public class MainUI {
         }
     }
 
-    public void closePopup() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "close popup");
-        if( popupIsOpen() ) {
-            clearRemoteControlForPopup(); // must be called before we set popup_view_is_open to false; and before clearSelectionState() so we know which highlighting to disable
-            clearSelectionState();
-
-            popup_view_is_open = false;
-            /* Not destroying the popup doesn't really gain any performance.
-             * Also there are still outstanding bugs to fix if we wanted to do this:
-             *   - Not resetting the popup menu when switching between photo and video mode. See test testVideoPopup().
-             *   - When changing options like flash/focus, the new option isn't selected when reopening the popup menu. See test
-             *     testPopup().
-             *   - Changing settings potentially means we have to recreate the popup, so the natural place to do this is in
-             *     MainActivity.updateForSettings(), but doing so makes the popup close when checking photo or video resolutions!
-             *     See test testSwitchResolution().
-             */
-            if( cache_popup && !force_destroy_popup ) {
-                popup_view.setVisibility(View.GONE);
-            }
-            else {
-                destroyPopup();
-            }
-            main_activity.initImmersiveMode(); // to reset the timer when closing the popup
-        }
-    }
-
-    public boolean popupIsOpen() {
-        return popup_view_is_open;
-    }
 
     public boolean selectingIcons() {
         return mSelectingIcons;
@@ -2043,17 +1525,6 @@ public class MainUI {
         return mSelectingLines;
     }
 
-    public void destroyPopup() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "destroyPopup");
-        force_destroy_popup = false;
-        if( popupIsOpen() ) {
-            closePopup();
-        }
-        ViewGroup popup_container = main_activity.findViewById(R.id.popup_container);
-        popup_container.removeAllViews();
-        popup_view = null;
-    }
 
     /**
      * Higlights the next LinearLayout view
@@ -2063,10 +1534,6 @@ public class MainUI {
             Log.d(TAG, "highlightPopupLine");
             Log.d(TAG, "highlight: " + highlight);
             Log.d(TAG, "goUp: " + goUp);
-        }
-        if (!popupIsOpen()) { // Safety check
-            clearSelectionState();
-            return;
         }
         final ViewGroup popup_container = main_activity.findViewById(R.id.popup_container);
         Rect scrollBounds = new Rect();
@@ -2107,76 +1574,8 @@ public class MainUI {
             Log.d(TAG,"Current line: " + mPopupLine);
     }
 
-    /**
-     * Highlights an icon on a horizontal line, such as flash mode,
-     * focus mode, etc. Checks that the popup is open in case it is
-     * wrongly called, so that it doesn't crash the app.
-     */
-    private void highlightPopupIcon(boolean highlight, boolean goLeft) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "highlightPopupIcon");
-            Log.d(TAG, "highlight: " + highlight);
-            Log.d(TAG, "goLeft: " + goLeft);
-        }
-        if (!popupIsOpen()) { // Safety check
-            clearSelectionState();
-            return;
-        }
-        highlightPopupLine(false, false);
-        int count = mHighlightedLine.getChildCount();
-        boolean foundIcon = false;
-        while (!foundIcon) {
-            // Ensure we stay within our bounds:
-            // (careful, modulo in Java will allow negative numbers, hence the line below:
-            mPopupIcon= (mPopupIcon + count ) % count;
-            View v = mHighlightedLine.getChildAt(mPopupIcon);
-            if( MyDebug.LOG )
-                Log.d(TAG, "row: " + mPopupIcon + " view: " + v);
-            if (v instanceof ImageButton || v instanceof Button ) {
-                if (highlight) {
-                    v.setBackgroundColor(highlightColor);
-                    //v.setAlpha(0.5f);
-                    mHighlightedIcon = v;
-                    mSelectingIcons = true;
-                } else {
-                    v.setBackgroundColor(Color.TRANSPARENT);
-                }
-                if( MyDebug.LOG )
-                    Log.d(TAG, "found icon at row: " + mPopupIcon);
-                foundIcon = true;
-            } else {
-                mPopupIcon+= goLeft ? -1 : 1;
-            }
-        }
-    }
 
-    /**
-     * Select the next line on the settings popup. Called by MainActivity
-     * when receiving a remote control command.
-     */
-    private void nextPopupLine() {
-        highlightPopupLine(false, false);
-        mPopupLine++;
-        highlightPopupLine(true, false);
-    }
 
-    private void previousPopupLine() {
-        highlightPopupLine(false, true);
-        mPopupLine--;
-        highlightPopupLine(true, true);
-    }
-
-    private void nextPopupIcon() {
-        highlightPopupIcon(false, false);
-        mPopupIcon++;
-        highlightPopupIcon(true, false);
-    }
-
-    private void previousPopupIcon() {
-        highlightPopupIcon(false, true);
-        mPopupIcon--;
-        highlightPopupIcon(true, true);
-    }
 
     /**
      * Simulates a press on the currently selected icon
@@ -2204,157 +1603,6 @@ public class MainUI {
         mHighlightedLine = null;
     }
 
-    /**
-     * Opens or closes the settings popup on the camera preview. The popup that
-     * differs depending whether we're in photo or video mode
-     */
-    public void togglePopupSettings() {
-        final ViewGroup popup_container = main_activity.findViewById(R.id.popup_container);
-        if( popupIsOpen() ) {
-            closePopup();
-            return;
-        }
-        if( main_activity.getPreview().getCameraController() == null ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "camera not opened!");
-            return;
-        }
-
-        if( MyDebug.LOG )
-            Log.d(TAG, "open popup");
-
-        closeExposureUI();
-        main_activity.getPreview().cancelTimer(); // best to cancel any timer, in case we take a photo while settings window is open, or when changing settings
-
-        final long time_s = System.currentTimeMillis();
-
-        {
-            // prevent popup being transparent
-            popup_container.setBackgroundColor(Color.BLACK);
-            popup_container.setAlpha(0.9f);
-        }
-
-        if( popup_view == null ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "create new popup_view");
-            test_ui_buttons.clear();
-            popup_view = new PopupView(main_activity);
-            popup_container.addView(popup_view);
-        }
-        else {
-            if( MyDebug.LOG )
-                Log.d(TAG, "use cached popup_view");
-            popup_view.setVisibility(View.VISIBLE);
-        }
-        popup_view_is_open = true;
-
-        // need to call layoutUI to make sure the new popup is oriented correctly
-        // but need to do after the layout has been done, so we have a valid width/height to use
-        // n.b., even though we only need the portion of layoutUI for the popup container, there
-        // doesn't seem to be any performance benefit in only calling that part
-        popup_container.getViewTreeObserver().addOnGlobalLayoutListener(
-                new OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "onGlobalLayout()");
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "time after global layout: " + (System.currentTimeMillis() - time_s));
-                        layoutUI(true);
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "time after layoutUI: " + (System.currentTimeMillis() - time_s));
-                        // stop listening - only want to call this once!
-                        if( Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1 ) {
-                            popup_container.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                        else {
-                            popup_container.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        }
-
-                        UIPlacement ui_placement = computeUIPlacement();
-                        float pivot_x;
-                        float pivot_y;
-                        switch( ui_placement ) {
-                            case UIPLACEMENT_TOP:
-                                if( main_activity.getPreview().getUIRotation() == 270 ) {
-                                    pivot_x = 0.0f;
-                                    pivot_y = 1.0f;
-                                }
-                                else {
-                                    pivot_x = 0.0f;
-                                    pivot_y = 0.0f;
-                                }
-                                break;
-                            case UIPLACEMENT_LEFT:
-                                pivot_x = 1.0f;
-                                pivot_y = 1.0f;
-                                break;
-                            default:
-                                pivot_x = 1.0f;
-                                pivot_y = 0.0f;
-                                break;
-                        }
-                        ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, pivot_x, Animation.RELATIVE_TO_SELF, pivot_y);
-                        animation.setDuration(100);
-                        popup_container.setAnimation(animation);
-                    }
-                }
-        );
-
-        if( MyDebug.LOG )
-            Log.d(TAG, "time to create popup: " + (System.currentTimeMillis() - time_s));
-    }
-
-    private void initRemoteControlForPopup() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "initRemoteControlForPopup");
-        if( popupIsOpen() ) { // just in case
-            // For remote control, we want to highlight lines and icons on the popup view
-            // so that we can control those just with the up/down buttons and "OK"
-            clearSelectionState();
-            remote_control_mode = true;
-            mSelectingLines = true;
-            highlightPopupLine(true, false);
-        }
-    }
-
-    private void clearRemoteControlForPopup() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "clearRemoteControlForPopup");
-        if( popupIsOpen() && remote_control_mode ) {
-            remote_control_mode = false;
-
-            // reset highlighting
-            final ViewGroup popup_container = main_activity.findViewById(R.id.popup_container);
-            Rect scrollBounds = new Rect();
-            popup_container.getDrawingRect(scrollBounds);
-            final LinearLayout inside = (LinearLayout) popup_container.getChildAt(0);
-            if( inside == null )
-                return; // Safety check
-            View v = inside.getChildAt(mPopupLine);
-            if( v.isShown() && v instanceof LinearLayout ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "reset " + mPopupLine + "th view: " + v);
-                v.setBackgroundColor(Color.TRANSPARENT);
-                v.setAlpha(1f);
-            }
-            if( mHighlightedLine != null ) {
-                v = mHighlightedLine.getChildAt(mPopupIcon);
-                if( v instanceof ImageButton || v instanceof Button ) {
-                    v.setBackgroundColor(Color.TRANSPARENT);
-                }
-            }
-			/*for(int i=0;i<inside.getChildCount();i++) {
-				View v = inside.getChildAt(i);
-				if( v.isShown() && v instanceof LinearLayout ) {
-					if( MyDebug.LOG )
-						Log.d(TAG, "reset " + i + "th view: " + v);
-					v.setBackgroundColor(Color.TRANSPARENT);
-					v.setAlpha(1f);
-				}
-			}*/
-        }
-    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if( MyDebug.LOG )
@@ -2446,8 +1694,6 @@ public class MainUI {
                             editor.apply();
                             String message = main_activity.getResources().getString(R.string.preference_auto_stabilise) + ": " + main_activity.getResources().getString(auto_stabilise ? R.string.on : R.string.off);
                             main_activity.getPreview().showToast(main_activity.getChangedAutoStabiliseToastBoxer(), message);
-                            main_activity.getApplicationInterface().getDrawPreview().updateSettings(); // because we cache the auto-stabilise setting
-                            this.destroyPopup(); // need to recreate popup in order to update the auto-level checkbox
                         }
                         else {
                             main_activity.getPreview().showToast(main_activity.getChangedAutoStabiliseToastBoxer(), R.string.auto_stabilise_not_supported);
@@ -2465,7 +1711,6 @@ public class MainUI {
                 // needed to support hardware menu button
                 // tested successfully on Samsung S3 (via RTL)
                 // see http://stackoverflow.com/questions/8264611/how-to-detect-when-user-presses-menu-key-on-their-android-device
-                main_activity.openSettings();
                 return true;
             }
             case KeyEvent.KEYCODE_CAMERA:
@@ -2508,10 +1753,6 @@ public class MainUI {
                     commandMenuExposure();
                     return true;
                 }
-                else if( popupIsOpen() && remote_control_mode ) {
-                    commandMenuPopup();
-                    return true;
-                }
                 else if( event.getRepeatCount() == 0 ) {
                     main_activity.takePicture(false);
                     return true;
@@ -2522,10 +1763,6 @@ public class MainUI {
             case KeyEvent.KEYCODE_NUMPAD_8:
                 //case KeyEvent.KEYCODE_VOLUME_UP: // test
                 if( !remote_control_mode ) {
-                    if( popupIsOpen() ) {
-                        initRemoteControlForPopup();
-                        return true;
-                    }
                 }
                 else if( processRemoteUpButton() )
                     return true;
@@ -2534,17 +1771,12 @@ public class MainUI {
             case KeyEvent.KEYCODE_NUMPAD_2:
                 //case KeyEvent.KEYCODE_VOLUME_DOWN: // test
                 if( !remote_control_mode ) {
-                    if( popupIsOpen() ) {
-                        initRemoteControlForPopup();
-                        return true;
-                    }
                 }
                 else if( processRemoteDownButton() )
                     return true;
                 break;
             case KeyEvent.KEYCODE_FUNCTION:
             case KeyEvent.KEYCODE_NUMPAD_MULTIPLY:
-                togglePopupSettings();
                 break;
             case KeyEvent.KEYCODE_SLASH:
             case KeyEvent.KEYCODE_NUMPAD_DIVIDE:
@@ -2576,7 +1808,6 @@ public class MainUI {
             }
             else {
                 // Select current element in Exposure UI
-                selectExposureUILine();
             }
         }
     }
@@ -2586,14 +1817,6 @@ public class MainUI {
     public void commandMenuPopup() {
         if( MyDebug.LOG )
             Log.d(TAG, "commandMenuPopup");
-        if( popupIsOpen() ) {
-            if( selectingIcons() ) {
-                clickSelectedIcon();
-            }
-            else {
-                highlightPopupIcon(true, false);
-            }
-        }
     }
 
     /** Shows an information dialog, with a button to request not to show again.
@@ -2885,10 +2108,6 @@ public class MainUI {
 
     Map<String, View> getTestUIButtonsMap() {
         return test_ui_buttons;
-    }
-
-    public PopupView getPopupView() {
-        return popup_view;
     }
 
     public boolean testGetRemoteControlMode() {

@@ -294,11 +294,6 @@ public abstract class BasicApplicationInterface implements ApplicationInterface 
     }
 
     @Override
-    public boolean getBurstForNoiseReduction() {
-        return false;
-    }
-
-    @Override
     public NRModePref getNRModePref() {
         return NRModePref.NRMODE_NORMAL;
     }

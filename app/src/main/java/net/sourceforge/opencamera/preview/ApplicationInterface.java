@@ -35,7 +35,6 @@ public interface ApplicationInterface {
 
     // methods that request information
     Context getContext(); // get the application context
-    boolean useCamera2(); // should Android 5's Camera 2 API be used?
     Location getLocation(); // get current location - null if not available (or you don't care about geotagging)
     int createOutputVideoMethod(); // return a VIDEOMETHOD_* value to specify how to create a video file
     File createOutputVideoFile(String extension) throws IOException; // will be called if createOutputVideoUsingSAF() returns VIDEOMETHOD_FILE; extension is the recommended filename extension for the chosen video type
@@ -138,7 +137,6 @@ public interface ApplicationInterface {
     // Camera2 only modes:
     long getExposureTimePref(); // only called if getISOPref() is not "default"
     float getFocusDistancePref(boolean is_target_distance);
-    boolean getBurstForNoiseReduction(); // only relevant if isCameraBurstPref() returns true; see CameraController doc for setBurstForNoiseReduction().
     enum NRModePref {
         NRMODE_NORMAL,
         NRMODE_LOW_LIGHT

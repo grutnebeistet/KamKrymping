@@ -1,7 +1,6 @@
 package net.sourceforge.opencamera;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -16,14 +15,9 @@ import java.util.TimerTask;
 import net.sourceforge.opencamera.cameracontroller.CameraController;
 import net.sourceforge.opencamera.preview.ApplicationInterface;
 import net.sourceforge.opencamera.preview.BasicApplicationInterface;
-import net.sourceforge.opencamera.preview.Preview;
 import net.sourceforge.opencamera.preview.VideoProfile;
-import net.sourceforge.opencamera.ui.DrawPreview;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -33,19 +27,13 @@ import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -63,7 +51,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     }
 
     private final MainActivity main_activity;
-    private final DrawPreview drawPreview;
     private final ImageSaver imageSaver;
 
     private final static float panorama_pics_per_screen = 3.33333f;
@@ -119,7 +106,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
             Log.d(TAG, "MyApplicationInterface: time after creating location supplier: " + (System.currentTimeMillis() - debug_time));
         if( MyDebug.LOG )
             Log.d(TAG, "MyApplicationInterface: time after creating storage utils: " + (System.currentTimeMillis() - debug_time));
-        this.drawPreview = new DrawPreview(main_activity, this);
 
         this.imageSaver = new ImageSaver(main_activity);
         this.imageSaver.start();
@@ -166,9 +152,7 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     void onDestroy() {
         if( MyDebug.LOG )
             Log.d(TAG, "onDestroy");
-        if( drawPreview != null ) {
-            drawPreview.onDestroy();
-        }
+
         if( imageSaver != null ) {
             imageSaver.onDestroy();
         }
@@ -178,25 +162,12 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         return imageSaver;
     }
 
-    public DrawPreview getDrawPreview() {
-        return drawPreview;
-    }
 
     @Override
     public Context getContext() {
         return main_activity;
     }
 
-    @Override
-    public boolean useCamera2() {
-        if( main_activity.supportsCamera2() ) {
-            String camera_api = sharedPreferences.getString(PreferenceKeys.CameraAPIPreferenceKey, PreferenceKeys.CameraAPIPreferenceDefault);
-            if( "preference_camera_api_camera2".equals(camera_api) ) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     public int createOutputVideoMethod() {
@@ -1186,8 +1157,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     @Override
     public boolean usePhotoVideoRecording() {
         // we only show the preference for Camera2 API (since there's no point disabling the feature for old API)
-        if( !useCamera2() )
-            return true;
         return sharedPreferences.getBoolean(PreferenceKeys.Camera2PhotoVideoRecordingPreferenceKey, true);
     }
 
@@ -1212,25 +1181,23 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     @Override
     public void cameraSetup() {
         main_activity.cameraSetup();
-        drawPreview.clearContinuousFocusMove();
+
         // Need to cause drawPreview.updateSettings(), otherwise icons like HDR won't show after force-restart, because we only
         // know that HDR is supported after the camera is opened
         // Also needed for settings which update when switching between photo and video mode.
-        drawPreview.updateSettings();
     }
 
     @Override
     public void onContinuousFocusMove(boolean start) {
         if( MyDebug.LOG )
             Log.d(TAG, "onContinuousFocusMove: " + start);
-        drawPreview.onContinuousFocusMove(start);
+
     }
 
 
     @Override
     public void touchEvent(MotionEvent event) {
         main_activity.getMainUI().closeExposureUI();
-        main_activity.getMainUI().closePopup();
         if( main_activity.usingKitKatImmersiveMode() ) {
             main_activity.setImmersiveMode(false);
         }
@@ -1246,7 +1213,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         view.setImageResource(R.drawable.take_video_recording);
         view.setContentDescription( getContext().getResources().getString(R.string.stop_video) );
         view.setTag(R.drawable.take_video_recording); // for testing
-        main_activity.getMainUI().destroyPopup(); // as the available popup options change while recording video
     }
 
     @Override
@@ -1271,7 +1237,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
                 Log.d(TAG, "need to update exposure UI for start video recording");
             // need to update the exposure UI when starting/stopping video recording, to remove/add
             // ability to switch between auto and manual
-            main_activity.getMainUI().setupExposureUI();
         }
         final int video_method = this.createOutputVideoMethod();
         boolean dategeo_subtitles = getVideoSubtitlePref().equals("preference_video_subtitle_yes");
@@ -1501,13 +1466,11 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         View takePhotoVideoButton = main_activity.findViewById(R.id.take_photo_when_video_recording);
         takePhotoVideoButton.setVisibility(View.GONE);
         main_activity.getMainUI().setPauseVideoContentDescription(); // just to be safe
-        main_activity.getMainUI().destroyPopup(); // as the available popup options change while recording video
         if( main_activity.getMainUI().isExposureUIOpen() ) {
             if( MyDebug.LOG )
                 Log.d(TAG, "need to update exposure UI for stop video recording");
             // need to update the exposure UI when starting/stopping video recording, to remove/add
             // ability to switch between auto and manual
-            main_activity.getMainUI().setupExposureUI();
         }
         if( subtitleVideoTimerTask != null ) {
             subtitleVideoTimerTask.cancel();
@@ -1649,7 +1612,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
             main_activity.setBrightnessForCamera(false); // ensure screen brightness matches user preference, after using front screen flash
             used_front_screen_flash = false;
         }
-        drawPreview.cameraInOperation(in_operation);
         main_activity.getMainUI().showGUI(!in_operation, is_video);
     }
 
@@ -1659,7 +1621,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
             Log.d(TAG, "turnFrontScreenFlashOn");
         used_front_screen_flash = true;
         main_activity.setBrightnessForCamera(true); // ensure we have max screen brightness, even if user preference not set for max brightness
-        drawPreview.turnFrontScreenFlashOn();
     }
 
     @Override
@@ -1668,7 +1629,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
             Log.d(TAG, "onCaptureStarted");
         n_capture_images = 0;
         n_capture_images_raw = 0;
-        drawPreview.onCaptureStarted();
     }
 
     @Override
@@ -1684,9 +1644,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
             photo_mode = PhotoMode.Standard;
         }
 
-        // call this, so that if pause-preview-after-taking-photo option is set, we remove the "taking photo" border indicator straight away
-        // also even for normal (not pausing) behaviour, good to remove the border asap
-        drawPreview.cameraInOperation(false);
     }
 
     @Override
@@ -1694,18 +1651,14 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         if( MyDebug.LOG )
             Log.d(TAG, "cameraClosed");
         main_activity.getMainUI().closeExposureUI();
-        main_activity.getMainUI().destroyPopup(); // need to close popup - and when camera reopened, it may have different settings
-        drawPreview.clearContinuousFocusMove();
+
     }
 
     void updateThumbnail(Bitmap thumbnail, boolean is_video) {
         if( MyDebug.LOG )
             Log.d(TAG, "updateThumbnail");
         main_activity.updateGalleryIcon(thumbnail);
-        drawPreview.updateThumbnail(thumbnail, is_video, true);
-        if( !is_video && this.getPausePreviewPref() ) {
-            drawPreview.showLastImage();
-        }
+
     }
 
     @Override
@@ -1895,7 +1848,6 @@ public class MyApplicationInterface extends BasicApplicationInterface {
     public void onDrawPreview(Canvas canvas) {
         if( !main_activity.isCameraInBackground() ) {
             // no point drawing when in background (e.g., settings open)
-            drawPreview.onDrawPreview(canvas);
         }
     }
 
@@ -2195,7 +2147,7 @@ public class MyApplicationInterface extends BasicApplicationInterface {
 
 
     boolean hasThumbnailAnimation() {
-        return this.drawPreview.hasThumbnailAnimation();
+        return false;
     }
 
     public boolean test_set_available_memory = false;

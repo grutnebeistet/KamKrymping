@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
 
     private SpeechControl speechControl;
 
-    private Preview preview;
+    private net.sourceforge.opencamera.preview.Preview preview;
     private OrientationEventListener orientationEventListener;
     private int large_heap_memory;
     private boolean supports_auto_stabilise;
@@ -153,10 +153,7 @@ public class MainActivity extends Activity {
 
     // application shortcuts:
     static private final String ACTION_SHORTCUT_CAMERA = "net.sourceforge.opencamera.SHORTCUT_CAMERA";
-    static private final String ACTION_SHORTCUT_SELFIE = "net.sourceforge.opencamera.SHORTCUT_SELFIE";
     static private final String ACTION_SHORTCUT_VIDEO = "net.sourceforge.opencamera.SHORTCUT_VIDEO";
-    static private final String ACTION_SHORTCUT_GALLERY = "net.sourceforge.opencamera.SHORTCUT_GALLERY";
-    static private final String ACTION_SHORTCUT_SETTINGS = "net.sourceforge.opencamera.SHORTCUT_SETTINGS";
 
     private static final int CHOOSE_SAVE_FOLDER_SAF_CODE = 42;
     private static final int CHOOSE_GHOST_IMAGE_SAF_CODE = 43;
@@ -772,17 +769,6 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "launching from quick settings tile or application shortcut for Open Camera: video mode");
             applicationInterface.setVideoPref(true);
         }
-        else if(  ACTION_SHORTCUT_SELFIE.equals(action) ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "launching from quick settings tile or application shortcut for Open Camera: selfie mode");
-            done_facing = true;
-            applicationInterface.switchToCamera(true);
-        }
-        else if( ACTION_SHORTCUT_SETTINGS.equals(action) ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "launching from application shortcut for Open Camera: settings");
-            openSettings();
-        }
 
         Bundle extras = this.getIntent().getExtras();
         if( extras != null ) {
@@ -1031,11 +1017,8 @@ public class MainActivity extends Activity {
     void audioTrigger() {
         if( MyDebug.LOG )
             Log.d(TAG, "ignore audio trigger due to popup open");
-        if( popupIsOpen() ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "ignore audio trigger due to popup open");
-        }
-        else if( camera_in_background ) {
+
+         if( camera_in_background ) {
             if( MyDebug.LOG )
                 Log.d(TAG, "ignore audio trigger due to camera in background");
         }
@@ -1227,7 +1210,6 @@ public class MainActivity extends Activity {
         super.onPause(); // docs say to call this before freeing other things
         this.app_is_paused = true;
 
-        mainUI.destroyPopup(); // important as user could change/reset settings from Android settings when pausing
         mSensorManager.unregisterListener(accelerometerListener);
         orientationEventListener.disable();
         try {
@@ -1240,7 +1222,6 @@ public class MainActivity extends Activity {
 
         speechControl.stopSpeechRecognizer();
 //        applicationInterface.clearLastImages(); // this should happen when pausing the preview, but call explicitly just to be safe
-        applicationInterface.getDrawPreview().clearGhostImage();
         preview.onPause();
 
         if( applicationInterface.getImageSaver().getNImagesToSave() > 0) {
@@ -1323,7 +1304,6 @@ public class MainActivity extends Activity {
             editor.apply();
 
             mainUI.updateCycleRawIcon();
-            applicationInterface.getDrawPreview().updateSettings();
             preview.reopenCamera(); // needed for RAW options to take effect
         }
     }
@@ -1340,14 +1320,12 @@ public class MainActivity extends Activity {
         editor.apply();
 
         mainUI.updateStoreLocationIcon();
-        applicationInterface.getDrawPreview().updateSettings(); // because we cache the geotagging setting
-        this.closePopup();
+
     }
 
     public void clickedTextStamp(View view) {
         if( MyDebug.LOG )
             Log.d(TAG, "clickedTextStamp");
-        this.closePopup();
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle(R.string.preference_textstamp);
@@ -1392,8 +1370,6 @@ public class MainActivity extends Activity {
         if( MyDebug.LOG )
             Log.d(TAG, "clickedStamp");
 
-        this.closePopup();
-
         boolean value = applicationInterface.getStampPref().equals("preference_stamp_yes");
         value = !value;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -1402,7 +1378,6 @@ public class MainActivity extends Activity {
         editor.apply();
 
         mainUI.updateStampIcon();
-        applicationInterface.getDrawPreview().updateSettings();
         preview.showToast(stamp_toast, value ? R.string.stamp_enabled : R.string.stamp_disabled);
     }
 
@@ -1436,8 +1411,6 @@ public class MainActivity extends Activity {
         }
 
         mainUI.updateAutoLevelIcon();
-        applicationInterface.getDrawPreview().updateSettings(); // because we cache the auto-stabilise setting
-        this.closePopup();
     }
 
     public void clickedCycleFlash(View view) {
@@ -1451,8 +1424,6 @@ public class MainActivity extends Activity {
     public void clickedFaceDetection(View view) {
         if( MyDebug.LOG )
             Log.d(TAG, "clickedFaceDetection");
-
-        this.closePopup();
 
         boolean value = applicationInterface.getFaceDetectionPref();
         value = !value;
@@ -1476,7 +1447,6 @@ public class MainActivity extends Activity {
                 Log.e(TAG, "clickedAudioControl, but hasAudioControl returns false!");
             return;
         }
-        this.closePopup();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String audio_control = sharedPreferences.getString(PreferenceKeys.AudioControlPreferenceKey, "none");
         if( audio_control.equals("voice") && speechControl.hasSpeechRecognition() ) {
@@ -1634,7 +1604,6 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "already opening camera in background thread");
             return;
         }
-        this.closePopup();
         if( this.preview.canSwitchCamera() ) {
             int cameraId = getNextCameraId();
             if( !isMultiCamEnabled() ) {
@@ -1666,7 +1635,7 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "already opening camera in background thread");
             return;
         }
-        this.closePopup();
+
         if( this.preview.canSwitchCamera() ) {
             int cameraId = getNextMultiCameraId();
             pushCameraIdToast(cameraId);
@@ -1678,15 +1647,6 @@ public class MainActivity extends Activity {
      * Toggles Photo/Video mode
      */
     public void clickedSwitchVideo(View view) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "clickedSwitchVideo");
-        this.closePopup();
-        mainUI.destroyPopup(); // important as we don't want to use a cached popup, as we can show different options depending on whether we're in photo or video mode
-
-        // In practice stopping the gyro sensor shouldn't be needed as (a) we don't show the switch
-        // photo/video icon when recording, (b) at the time of writing switching to video mode
-        // reopens the camera, which will stop panorama recording anyway, but we do this just to be
-        // safe.
 
         View switchVideoButton = findViewById(R.id.switch_video);
         switchVideoButton.setEnabled(false); // prevent slowdown if user repeatedly clicks
@@ -1728,598 +1688,16 @@ public class MainActivity extends Activity {
         mainUI.toggleExposureUI();
     }
 
-    public void clickedSettings(View view) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "clickedSettings");
-        openSettings();
-    }
-
-    public boolean popupIsOpen() {
-        return mainUI.popupIsOpen();
-    }
-
     // for testing
     public View getUIButton(String key) {
         return mainUI.getUIButton(key);
     }
 
-    public void closePopup() {
-        mainUI.closePopup();
-    }
 
     public Bitmap getPreloadedBitmap(int resource) {
         return this.preloaded_bitmap_resources.get(resource);
     }
 
-    public void clickedPopupSettings(View view) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "clickedPopupSettings");
-        mainUI.togglePopupSettings();
-    }
-
-    private final PreferencesListener preferencesListener = new PreferencesListener();
-
-    /** Keeps track of changes to SharedPreferences.
-     */
-    class PreferencesListener implements SharedPreferences.OnSharedPreferenceChangeListener {
-        private static final String TAG = "PreferencesListener";
-
-        private boolean any_significant_change; // whether any changes that require updateForSettings have been made since startListening()
-        private boolean any_change; // whether any changes have been made since startListening()
-
-        void startListening() {
-            if( MyDebug.LOG )
-                Log.d(TAG, "startListening");
-            any_significant_change = false;
-            any_change = false;
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            // n.b., registerOnSharedPreferenceChangeListener warns that we must keep a reference to the listener (which
-            // is this class) as long as we want to listen for changes, otherwise the listener may be garbage collected!
-            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        }
-
-        void stopListening() {
-            if( MyDebug.LOG )
-                Log.d(TAG, "stopListening");
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        }
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "onSharedPreferenceChanged: " + key);
-
-            any_change = true;
-
-            switch( key ) {
-                // we whitelist preferences where we're sure that we don't need to call updateForSettings() if they've changed
-                //case "preference_face_detection": // need to update camera controller
-                case "preference_timer":
-                case "preference_burst_mode":
-                case "preference_burst_interval":
-                case "preference_touch_capture":
-                case "preference_pause_preview":
-                case "preference_shutter_sound":
-                case "preference_timer_beep":
-                case "preference_timer_speak":
-                case "preference_volume_keys":
-                    //case "preference_audio_control": // need to update the UI
-                case "preference_audio_noise_control_sensitivity":
-                    //case "preference_enable_remote": // handled below
-                    //case "preference_remote_type":
-                    //case "preference_remote_device_name": // handled below
-                    //case "preference_remote_disconnect_screen_dim":
-                    //case "preference_water_type": // handled below
-                case "preference_lock_orientation":
-                    //case "preference_save_location": // we could probably whitelist this, but accessed it a lot of places...
-                case "preference_using_saf":
-                case "preference_save_photo_prefix":
-                case "preference_save_video_prefix":
-                case "preference_save_zulu_time":
-                case "preference_show_when_locked":
-                case "preference_startup_focus":
-                    //case "preference_preview_size": // need to update preview
-                    //case "preference_ghost_image": // don't whitelist this, as may need to reload ghost image (at fullscreen resolution) if "last" is enabled
-                case "ghost_image_alpha":
-                case "preference_focus_assist":
-                case "preference_show_zoom":
-                case "preference_show_angle":
-                case "preference_show_angle_line":
-                case "preference_show_pitch_lines":
-                case "preference_angle_highlight_color":
-                    //case "preference_show_geo_direction": // don't whitelist these, as if enabled we need to call checkMagneticAccuracy()
-                    //case "preference_show_geo_direction_lines": // as above
-                case "preference_show_battery":
-                case "preference_show_time":
-                case "preference_free_memory":
-                case "preference_show_iso":
-                case "preference_histogram":
-                case "preference_zebra_stripes":
-                case "preference_zebra_stripes_foreground_color":
-                case "preference_zebra_stripes_background_color":
-                case "preference_focus_peaking":
-                case "preference_focus_peaking_color":
-                case "preference_show_video_max_amp":
-                case "preference_grid":
-                case "preference_crop_guide":
-                case "preference_thumbnail_animation":
-                case "preference_take_photo_border":
-                    //case "preference_rotate_preview": // need to update the Preview
-                    //case "preference_ui_placement": // need to update the UI
-                    //case "preference_immersive_mode": // probably could whitelist?
-                    //case "preference_show_face_detection": // need to update the UI
-                    //case "preference_show_cycle_flash": // need to update the UI
-                    //case "preference_show_auto_level": // need to update the UI
-                    //case "preference_show_stamp": // need to update the UI
-                    //case "preference_show_textstamp": // need to update the UI
-                    //case "preference_show_store_location": // need to update the UI
-                    //case "preference_show_cycle_raw": // need to update the UI
-                    //case "preference_show_white_balance_lock": // need to update the UI
-                    //case "preference_show_exposure_lock": // need to update the UI
-                    //case "preference_show_zoom_controls": // need to update the UI
-                    //case "preference_show_zoom_slider_controls": // need to update the UI
-                    //case "preference_show_take_photo": // need to update the UI
-                case "preference_show_toasts":
-                case "preference_show_whats_new":
-                //case "preference_multi_cam_button": // need to update the UI
-                case "preference_keep_display_on":
-                case "preference_max_brightness":
-                    //case "preference_resolution": // need to set up camera controller and preview
-                    //case "preference_quality": // need to set up camera controller
-                    //case "preference_image_format": // need to set up camera controller (as it can affect the image quality that we set)
-                    //case "preference_raw": // need to update as it affects how we set up camera controller
-                    //case "preference_raw_expo_bracketing": // as above
-                    //case "preference_raw_focus_bracketing": // as above
-                    //case "preference_nr_save": // we could probably whitelist this, but have not done so in case in future we allow RAW to be saved for the base image
-                    //case "preference_hdr_save_expo": // we need to update if this is changed, as it affects whether we request RAW or not in HDR mode when RAW is enabled
-                case "preference_hdr_contrast_enhancement":
-                    //case "preference_expo_bracketing_n_images": // need to set up camera controller
-                    //case "preference_expo_bracketing_stops": // need to set up camera controller
-                case "preference_panorama_crop":
-                    //case "preference_panorama_save": // we could probably whitelist this, but have not done so in case in future we allow RAW to be saved for the base images
-                case "preference_front_camera_mirror":
-                case "preference_exif_artist":
-                case "preference_exif_copyright":
-                case "preference_stamp":
-                case "preference_stamp_dateformat":
-                case "preference_stamp_timeformat":
-                case "preference_stamp_gpsformat":
-                case "preference_stamp_geo_address":
-                case "preference_units_distance":
-                case "preference_textstamp":
-                case "preference_stamp_fontsize":
-                case "preference_stamp_font_color":
-                case "preference_stamp_style":
-                    //case "preference_camera2_fake_flash": // need to update camera controller
-                    //case "preference_camera2_fast_burst": // could probably whitelist?
-                    //case "preference_camera2_photo_video_recording": // need to update camera controller
-                case "preference_background_photo_saving":
-                    //case "preference_video_quality": // need to update camera controller and preview
-                    //case "preference_video_stabilization": // need to update camera controller
-                    //case "preference_video_output_format": // could probably whitelist, but safest to restart camera
-                    //case "preference_video_log": // need to update camera controller
-                    //case "preference_video_profile_gamma": // as above
-                    //case "preference_video_max_duration": // could probably whitelist, but safest to restart camera
-                    //case "preference_video_restart": // could probably whitelist, but safest to restart camera
-                    //case "preference_video_max_filesize": // could probably whitelist, but safest to restart camera
-                    //case "preference_video_restart_max_filesize": // could probably whitelist, but safest to restart camera
-                case "preference_record_audio":
-                case "preference_record_audio_src":
-                case "preference_record_audio_channels":
-                case "preference_lock_video":
-                case "preference_video_subtitle":
-                    //case "preference_video_bitrate": // could probably whitelist, but safest to restart camera
-                    //case "preference_video_fps": // could probably whitelist, but safest to restart camera
-                    //case "preference_force_video_4k": // could probably whitelist, but safest to restart camera
-                case "preference_video_low_power_check":
-                case "preference_video_flash":
-                    //case "preference_location": // need to enable/disable gps listeners etc
-                    //case "preference_gps_direction": // need to update listeners
-                case "preference_require_location":
-                    //case "preference_antibanding": // need to set up camera controller
-                    //case "preference_edge_mode": // need to set up camera controller
-                    //case "preference_noise_reduction_mode": // need to set up camera controller
-                    //case "preference_camera_api": // no point whitelisting as we restart anyway
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "this change doesn't require update");
-                    break;
-                case PreferenceKeys.WaterType:
-                    boolean wt = sharedPreferences.getBoolean(PreferenceKeys.WaterType, true);
-                    mWaterDensity = wt ? WATER_DENSITY_SALTWATER : WATER_DENSITY_FRESHWATER;
-                    break;
-                default:
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "this change does require update");
-                    any_significant_change = true;
-                    break;
-            }
-        }
-
-        boolean anyChange() {
-            return any_change;
-        }
-
-        boolean anySignificantChange() {
-            return any_significant_change;
-        }
-    }
-
-    public void openSettings() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "openSettings");
-        closePopup();
-        preview.cancelTimer(); // best to cancel any timer, in case we take a photo while settings window is open, or when changing settings
-        preview.cancelRepeat(); // similarly cancel the auto-repeat mode!
-        preview.stopVideo(false); // important to stop video, as we'll be changing camera parameters when the settings window closes
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("cameraId", this.preview.getCameraId());
-        bundle.putInt("nCameras", preview.getCameraControllerManager().getNumberOfCameras());
-        bundle.putString("camera_api", this.preview.getCameraAPI());
-        bundle.putString("photo_mode_string", getPhotoModeString(applicationInterface.getPhotoMode(), true));
-        bundle.putBoolean("supports_auto_stabilise", this.supports_auto_stabilise);
-        bundle.putBoolean("supports_flash", this.preview.supportsFlash());
-        bundle.putBoolean("supports_force_video_4k", this.supports_force_video_4k);
-        bundle.putBoolean("supports_camera2", this.supports_camera2);
-        bundle.putBoolean("supports_face_detection", this.preview.supportsFaceDetection());
-        bundle.putBoolean("supports_preview_bitmaps", this.supportsPreviewBitmaps());
-        bundle.putBoolean("supports_exposure_compensation", this.preview.supportsExposures());
-        bundle.putInt("exposure_compensation_min", this.preview.getMinimumExposure());
-        bundle.putInt("exposure_compensation_max", this.preview.getMaximumExposure());
-        bundle.putBoolean("supports_iso_range", this.preview.supportsISORange());
-        bundle.putInt("iso_range_min", this.preview.getMinimumISO());
-        bundle.putInt("iso_range_max", this.preview.getMaximumISO());
-        bundle.putBoolean("supports_exposure_time", this.preview.supportsExposureTime());
-        bundle.putBoolean("supports_exposure_lock", this.preview.supportsExposureLock());
-        bundle.putBoolean("supports_white_balance_lock", this.preview.supportsWhiteBalanceLock());
-        bundle.putLong("exposure_time_min", this.preview.getMinimumExposureTime());
-        bundle.putLong("exposure_time_max", this.preview.getMaximumExposureTime());
-        bundle.putBoolean("supports_white_balance_temperature", this.preview.supportsWhiteBalanceTemperature());
-        bundle.putInt("white_balance_temperature_min", this.preview.getMinimumWhiteBalanceTemperature());
-        bundle.putInt("white_balance_temperature_max", this.preview.getMaximumWhiteBalanceTemperature());
-        bundle.putBoolean("is_multi_cam", this.is_multi_cam);
-        bundle.putBoolean("supports_optical_stabilization", this.preview.supportsOpticalStabilization());
-        bundle.putBoolean("optical_stabilization_enabled", this.preview.getOpticalStabilization());
-        bundle.putBoolean("supports_video_stabilization", this.preview.supportsVideoStabilization());
-        bundle.putBoolean("video_stabilization_enabled", this.preview.getVideoStabilization());
-        bundle.putBoolean("can_disable_shutter_sound", this.preview.canDisableShutterSound());
-        bundle.putInt("tonemap_max_curve_points", this.preview.getTonemapMaxCurvePoints());
-        bundle.putBoolean("supports_tonemap_curve", this.preview.supportsTonemapCurve());
-        bundle.putBoolean("supports_photo_video_recording", this.preview.supportsPhotoVideoRecording());
-        bundle.putFloat("camera_view_angle_x", preview.getViewAngleX(false));
-        bundle.putFloat("camera_view_angle_y", preview.getViewAngleY(false));
-
-        putBundleExtra(bundle, "color_effects", this.preview.getSupportedColorEffects());
-        putBundleExtra(bundle, "isos", this.preview.getSupportedISOs());
-        bundle.putString("iso_key", this.preview.getISOKey());
-        if( this.preview.getCameraController() != null ) {
-            bundle.putString("parameters_string", preview.getCameraController().getParametersString());
-        }
-        List<String> antibanding = this.preview.getSupportedAntiBanding();
-        putBundleExtra(bundle, "antibanding", antibanding);
-        if( antibanding != null ) {
-            String [] entries_arr = new String[antibanding.size()];
-            int i=0;
-            for(String value: antibanding) {
-                entries_arr[i] = getMainUI().getEntryForAntiBanding(value);
-                i++;
-            }
-            bundle.putStringArray("antibanding_entries", entries_arr);
-        }
-        List<String> edge_modes = this.preview.getSupportedEdgeModes();
-        putBundleExtra(bundle, "edge_modes", edge_modes);
-        if( edge_modes != null ) {
-            String [] entries_arr = new String[edge_modes.size()];
-            int i=0;
-            for(String value: edge_modes) {
-                entries_arr[i] = getMainUI().getEntryForNoiseReductionMode(value);
-                i++;
-            }
-            bundle.putStringArray("edge_modes_entries", entries_arr);
-        }
-        List<String> noise_reduction_modes = this.preview.getSupportedNoiseReductionModes();
-        putBundleExtra(bundle, "noise_reduction_modes", noise_reduction_modes);
-        if( noise_reduction_modes != null ) {
-            String [] entries_arr = new String[noise_reduction_modes.size()];
-            int i=0;
-            for(String value: noise_reduction_modes) {
-                entries_arr[i] = getMainUI().getEntryForNoiseReductionMode(value);
-                i++;
-            }
-            bundle.putStringArray("noise_reduction_modes_entries", entries_arr);
-        }
-
-        List<CameraController.Size> preview_sizes = this.preview.getSupportedPreviewSizes();
-        if( preview_sizes != null ) {
-            int [] widths = new int[preview_sizes.size()];
-            int [] heights = new int[preview_sizes.size()];
-            int i=0;
-            for(CameraController.Size size: preview_sizes) {
-                widths[i] = size.width;
-                heights[i] = size.height;
-                i++;
-            }
-            bundle.putIntArray("preview_widths", widths);
-            bundle.putIntArray("preview_heights", heights);
-        }
-        bundle.putInt("preview_width", preview.getCurrentPreviewSize().width);
-        bundle.putInt("preview_height", preview.getCurrentPreviewSize().height);
-
-        // Note that we set check_burst to false, as the Settings always displays all supported resolutions (along with the "saved"
-        // resolution preference, even if that doesn't support burst and we're in a burst mode).
-        // This is to be consistent with other preferences, e.g., we still show RAW settings even though that might not be supported
-        // for the current photo mode.
-        List<CameraController.Size> sizes = this.preview.getSupportedPictureSizes(false);
-        if( sizes != null ) {
-            int [] widths = new int[sizes.size()];
-            int [] heights = new int[sizes.size()];
-            int i=0;
-            for(CameraController.Size size: sizes) {
-                widths[i] = size.width;
-                heights[i] = size.height;
-                i++;
-            }
-            bundle.putIntArray("resolution_widths", widths);
-            bundle.putIntArray("resolution_heights", heights);
-        }
-        if( preview.getCurrentPictureSize() != null ) {
-            bundle.putInt("resolution_width", preview.getCurrentPictureSize().width);
-            bundle.putInt("resolution_height", preview.getCurrentPictureSize().height);
-        }
-
-        //List<String> video_quality = this.preview.getVideoQualityHander().getSupportedVideoQuality();
-        String fps_value = applicationInterface.getVideoFPSPref(); // n.b., this takes into account slow motion mode putting us into a high frame rate
-        if( MyDebug.LOG )
-            Log.d(TAG, "fps_value: " + fps_value);
-        List<String> video_quality = this.preview.getSupportedVideoQuality(fps_value);
-        if( video_quality == null || video_quality.size() == 0 ) {
-            Log.e(TAG, "can't find any supported video sizes for current fps!");
-            // fall back to unfiltered list
-            video_quality = this.preview.getVideoQualityHander().getSupportedVideoQuality();
-        }
-        if( video_quality != null && this.preview.getCameraController() != null ) {
-            String [] video_quality_arr = new String[video_quality.size()];
-            String [] video_quality_string_arr = new String[video_quality.size()];
-            int i=0;
-            for(String value: video_quality) {
-                video_quality_arr[i] = value;
-                video_quality_string_arr[i] = this.preview.getCamcorderProfileDescription(value);
-                i++;
-            }
-            bundle.putStringArray("video_quality", video_quality_arr);
-            bundle.putStringArray("video_quality_string", video_quality_string_arr);
-
-            boolean is_high_speed = this.preview.fpsIsHighSpeed(fps_value);
-            bundle.putBoolean("video_is_high_speed", is_high_speed);
-            String video_quality_preference_key = PreferenceKeys.getVideoQualityPreferenceKey(this.preview.getCameraId(), is_high_speed);
-            if( MyDebug.LOG )
-                Log.d(TAG, "video_quality_preference_key: " + video_quality_preference_key);
-            bundle.putString("video_quality_preference_key", video_quality_preference_key);
-        }
-
-        if( preview.getVideoQualityHander().getCurrentVideoQuality() != null ) {
-            bundle.putString("current_video_quality", preview.getVideoQualityHander().getCurrentVideoQuality());
-        }
-        VideoProfile camcorder_profile = preview.getVideoProfile();
-        bundle.putInt("video_frame_width", camcorder_profile.videoFrameWidth);
-        bundle.putInt("video_frame_height", camcorder_profile.videoFrameHeight);
-        bundle.putInt("video_bit_rate", camcorder_profile.videoBitRate);
-        bundle.putInt("video_frame_rate", camcorder_profile.videoFrameRate);
-        bundle.putDouble("video_capture_rate", camcorder_profile.videoCaptureRate);
-        bundle.putBoolean("video_high_speed", preview.isVideoHighSpeed());
-        bundle.putFloat("video_capture_rate_factor", applicationInterface.getVideoCaptureRateFactor());
-
-        List<CameraController.Size> video_sizes = this.preview.getVideoQualityHander().getSupportedVideoSizes();
-        if( video_sizes != null ) {
-            int [] widths = new int[video_sizes.size()];
-            int [] heights = new int[video_sizes.size()];
-            int i=0;
-            for(CameraController.Size size: video_sizes) {
-                widths[i] = size.width;
-                heights[i] = size.height;
-                i++;
-            }
-            bundle.putIntArray("video_widths", widths);
-            bundle.putIntArray("video_heights", heights);
-        }
-
-        // set up supported fps values
-            // with Camera2, we know what frame rates are supported
-            int [] candidate_fps = {15, 24, 25, 30, 60, 96, 100, 120, 240};
-            List<Integer> video_fps = new ArrayList<>();
-            List<Boolean> video_fps_high_speed = new ArrayList<>();
-            for(int fps : candidate_fps) {
-                if( preview.fpsIsHighSpeed("" + fps) ) {
-                    video_fps.add(fps);
-                    video_fps_high_speed.add(true);
-                }
-                else if( this.preview.getVideoQualityHander().videoSupportsFrameRate(fps) ) {
-                    video_fps.add(fps);
-                    video_fps_high_speed.add(false);
-                }
-            }
-            int [] video_fps_array = new int[video_fps.size()];
-            for(int i=0;i<video_fps.size();i++) {
-                video_fps_array[i] = video_fps.get(i);
-            }
-            bundle.putIntArray("video_fps", video_fps_array);
-            boolean [] video_fps_high_speed_array = new boolean[video_fps_high_speed.size()];
-            for(int i=0;i<video_fps_high_speed.size();i++) {
-                video_fps_high_speed_array[i] = video_fps_high_speed.get(i);
-            }
-            bundle.putBooleanArray("video_fps_high_speed", video_fps_high_speed_array);
-
-
-        putBundleExtra(bundle, "flash_values", this.preview.getSupportedFlashValues());
-        putBundleExtra(bundle, "focus_values", this.preview.getSupportedFocusValues());
-
-        preferencesListener.startListening();
-
-        showPreview(false);
-        setWindowFlagsForSettings();
-        MyPreferenceFragment fragment = new MyPreferenceFragment();
-        fragment.setArguments(bundle);
-        // use commitAllowingStateLoss() instead of commit(), does to "java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState" crash seen on Google Play
-        // see http://stackoverflow.com/questions/7575921/illegalstateexception-can-not-perform-this-action-after-onsaveinstancestate-wit
-        getFragmentManager().beginTransaction().add(android.R.id.content, fragment, "PREFERENCE_FRAGMENT").addToBackStack(null).commitAllowingStateLoss();
-    }
-
-    public void updateForSettings() {
-        updateForSettings(null, false);
-    }
-
-    public void updateForSettings(String toast_message) {
-        updateForSettings(toast_message, false);
-    }
-
-    /** Must be called when an settings (as stored in SharedPreferences) are made, so we can update the
-     *  camera, and make any other necessary changes.
-     * @param toast_message If non-null, display this toast instead of the usual camera "startup" toast
-     *                      that's shown in showPhotoVideoToast(). If non-null but an empty string, then
-     *                      this means no toast is shown at all.
-     * @param keep_popup If false, the popup will be closed and destroyed. Set to true if you're sure
-     *                   that the changed setting isn't one that requires the PopupView to be recreated
-     */
-    public void updateForSettings(String toast_message, boolean keep_popup) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "updateForSettings()");
-            if( toast_message != null ) {
-                Log.d(TAG, "toast_message: " + toast_message);
-            }
-        }
-        long debug_time = 0;
-        if( MyDebug.LOG ) {
-            debug_time = System.currentTimeMillis();
-        }
-        // make sure we're into continuous video mode
-        // workaround for bug on Samsung Galaxy S5 with UHD, where if the user switches to another (non-continuous-video) focus mode, then goes to Settings, then returns and records video, the preview freezes and the video is corrupted
-        // so to be safe, we always reset to continuous video mode, and then reset it afterwards
-    	/*String saved_focus_value = preview.updateFocusForVideo(); // n.b., may be null if focus mode not changed
-		if( MyDebug.LOG )
-			Log.d(TAG, "saved_focus_value: " + saved_focus_value);*/
-
-        if( MyDebug.LOG )
-            Log.d(TAG, "update folder history");
-
-        // no need to update save_location_history_saf, as we always do this in onActivityResult()
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "updateForSettings: time after update folder history: " + (System.currentTimeMillis() - debug_time));
-        }
-
-        imageQueueChanged(); // needed at least for changing photo mode, but might as well call it always
-
-        if( !keep_popup ) {
-            mainUI.destroyPopup(); // important as we don't want to use a cached popup
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "updateForSettings: time after destroy popup: " + (System.currentTimeMillis() - debug_time));
-            }
-        }
-
-        // update camera for changes made in prefs - do this without closing and reopening the camera app if possible for speed!
-        // but need workaround for Nexus 7 bug on old camera API, where scene mode doesn't take effect unless the camera is restarted - I can reproduce this with other 3rd party camera apps, so may be a Nexus 7 issue...
-        // doesn't happen if we allow using Camera2 API on Nexus 7, but reopen for consistency (and changing scene modes via
-        // popup menu no longer should be calling updateForSettings() for Camera2, anyway)
-        boolean need_reopen = false;
-        if( preview.getCameraController() != null ) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-            String key = PreferenceKeys.SceneModePreferenceKey;{
-                if( applicationInterface.useCamera2() ) {
-                    // need to reopen if fake flash mode changed, as it changes the available camera features, and we can only set this after opening the camera
-                    boolean camera2_fake_flash = preview.getCameraController().getUseCamera2FakeFlash();
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "camera2_fake_flash was: " + camera2_fake_flash);
-                    if( applicationInterface.useCamera2FakeFlash() != camera2_fake_flash ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "camera2_fake_flash changed");
-                        need_reopen = true;
-                    }
-                }
-            }
-
-            if( !need_reopen ) {
-                CameraController.TonemapProfile old_tonemap_profile = preview.getCameraController().getTonemapProfile();
-                if( old_tonemap_profile != CameraController.TonemapProfile.TONEMAPPROFILE_OFF ) {
-                    CameraController.TonemapProfile new_tonemap_profile = applicationInterface.getVideoTonemapProfile();
-                    if( new_tonemap_profile != CameraController.TonemapProfile.TONEMAPPROFILE_OFF && new_tonemap_profile != old_tonemap_profile ) {
-                        // needed for Galaxy S10e when changing from TONEMAP_MODE_CONTRAST_CURVE to TONEMAP_MODE_PRESET_CURVE,
-                        // otherwise the contrast curve remains active!
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "switching between tonemap profiles");
-                        need_reopen = true;
-                    }
-                }
-            }
-        }
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "updateForSettings: time after check need_reopen: " + (System.currentTimeMillis() - debug_time));
-        }
-
-        mainUI.layoutUI(); // needed in case we've changed UI placement; or in "top" mode, if we've enabled/disabled on-screen UI icons
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "updateForSettings: time after layoutUI: " + (System.currentTimeMillis() - debug_time));
-        }
-
-        // ensure icons invisible if disabling them from showing from the Settings
-        // (if enabling them, we'll make the icon visible later on)
-        checkDisableGUIIcons();
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if( sharedPreferences.getString(PreferenceKeys.AudioControlPreferenceKey, "none").equals("none") ) {
-            View speechRecognizerButton = findViewById(R.id.audio_control);
-            speechRecognizerButton.setVisibility(View.GONE);
-        }
-
-        speechControl.initSpeechRecognizer(); // in case we've enabled or disabled speech recognizer
-
-        // we no longer call initLocation() here (for having enabled or disabled geotagging), as that's
-        // done in setWindowFlagsForCamera() - important not to call it here as well, otherwise if
-        // permission wasn't granted, we'll ask for permission twice in a row (on Android 9 or earlier
-        // at least)
-        //initLocation(); // in case we've enabled or disabled GPS
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "updateForSettings: time after init speech and location: " + (System.currentTimeMillis() - debug_time));
-        }
-        if( toast_message != null )
-            block_startup_toast = true;
-        if( need_reopen || preview.getCameraController() == null ) { // if camera couldn't be opened before, might as well try again
-            preview.reopenCamera();
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "updateForSettings: time after reopen: " + (System.currentTimeMillis() - debug_time));
-            }
-        }
-        else {
-            preview.setCameraDisplayOrientation(); // need to call in case the preview rotation option was changed
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "updateForSettings: time after set display orientation: " + (System.currentTimeMillis() - debug_time));
-            }
-            preview.pausePreview(true);
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "updateForSettings: time after pause: " + (System.currentTimeMillis() - debug_time));
-            }
-            preview.setupCamera(false);
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "updateForSettings: time after setup: " + (System.currentTimeMillis() - debug_time));
-            }
-        }
-        // don't set block_startup_toast to false yet, as camera might be closing/opening on background thread
-        if( toast_message != null && toast_message.length() > 0 )
-            preview.showToast(null, toast_message);
-
-        // don't need to reset to saved_focus_value, as we'll have done this when setting up the camera (or will do so when the camera is reopened, if need_reopen)
-    	/*if( saved_focus_value != null ) {
-			if( MyDebug.LOG )
-				Log.d(TAG, "switch focus back to: " + saved_focus_value);
-    		preview.updateFocus(saved_focus_value, true, false);
-    	}*/
-
-
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "updateForSettings: done: " + (System.currentTimeMillis() - debug_time));
-        }
-    }
 
     /** Disables the optional on-screen icons if either user doesn't want to enable them, or not
      *  supported). Note that displaying icons is done via MainUI.showGUI.
@@ -2384,50 +1762,6 @@ public class MainActivity extends Activity {
         return changed;
     }
 
-    public MyPreferenceFragment getPreferenceFragment() {
-        return (MyPreferenceFragment)getFragmentManager().findFragmentByTag("PREFERENCE_FRAGMENT");
-    }
-
-    private boolean settingsIsOpen() {
-        return getPreferenceFragment() != null;
-    }
-
-    /** Call when the settings is going to be closed.
-     */
-    private void settingsClosing() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "close settings");
-        setWindowFlagsForCamera();
-        showPreview(true);
-
-        preferencesListener.stopListening();
-
-        // Update the cached settings in DrawPreview
-        // Note that some GUI related settings won't trigger preferencesListener.anyChange(), so
-        // we always call this. Perhaps we could add more classifications to PreferencesListener
-        // to mark settings that need us to update DrawPreview but not call updateForSettings().
-        // However, DrawPreview.updateSettings() should be a quick function (the main point is
-        // to avoid reading the preferences in every single frame).
-        applicationInterface.getDrawPreview().updateSettings();
-
-        if( preferencesListener.anyChange() ) {
-            mainUI.updateOnScreenIcons();
-        }
-
-        if( preferencesListener.anySignificantChange() ) {
-            updateForSettings();
-        }
-        else {
-            if( MyDebug.LOG )
-                Log.d(TAG, "no need to call updateForSettings() for changes made to preferences");
-            if( preferencesListener.anyChange() ) {
-                // however we should still destroy cached popup, in case UI settings need to be kept in
-                // sync (e.g., changing the Repeat Mode)
-                mainUI.destroyPopup();
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
         if( MyDebug.LOG )
@@ -2436,9 +1770,6 @@ public class MainActivity extends Activity {
             preview.showToast(screen_locked_toast, R.string.screen_is_locked);
             return;
         }
-        if( settingsIsOpen() ) {
-            settingsClosing();
-        }
         else if( preview != null && preview.isPreviewPaused() ) {
             if( MyDebug.LOG )
                 Log.d(TAG, "preview was paused, so unpause it");
@@ -2446,10 +1777,6 @@ public class MainActivity extends Activity {
             return;
         }
         else {
-            if( popupIsOpen() ) {
-                closePopup();
-                return;
-            }
         }
         super.onBackPressed();
     }
@@ -2489,7 +1816,7 @@ public class MainActivity extends Activity {
             public void run(){
                 if( MyDebug.LOG )
                     Log.d(TAG, "setImmersiveTimer: run");
-                if( !camera_in_background && !popupIsOpen() && usingKitKatImmersiveMode() )
+                if( !camera_in_background && usingKitKatImmersiveMode() )
                     setImmersiveMode(true);
             }
         }, 5000);
@@ -2819,7 +2146,6 @@ public class MainActivity extends Activity {
     void imageQueueChanged() {
         if( MyDebug.LOG )
             Log.d(TAG, "imageQueueChanged");
-        applicationInterface.getDrawPreview().setImageQueueFull( !applicationInterface.canTakeNewPhoto() );
 
         if( applicationInterface.getImageSaver().getNImagesToSave() == 0) {
             cancelImageSavingNotification();
@@ -3029,8 +2355,6 @@ public class MainActivity extends Activity {
     void takePicturePressed(boolean photo_snapshot, boolean continuous_fast_burst) {
         if( MyDebug.LOG )
             Log.d(TAG, "takePicturePressed");
-
-        closePopup();
 
         this.last_continuous_fast_burst = continuous_fast_burst;
         this.preview.takePicturePressed(photo_snapshot, continuous_fast_burst);
@@ -3318,7 +2642,6 @@ public class MainActivity extends Activity {
                         // n.b., important to update even if fromUser==false (e.g., so this works when user changes ISO via clicking
                         // the ISO buttons rather than moving the slider directly, see MainUI.setupExposureUI())
                         preview.setISO( manualSeekbars.getISO(progress) );
-                        mainUI.updateSelectedISOButton();
                     }
 
                     @Override
