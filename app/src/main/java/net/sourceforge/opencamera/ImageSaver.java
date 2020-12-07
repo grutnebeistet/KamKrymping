@@ -115,9 +115,7 @@ public class ImageSaver extends Thread {
         /* image_format allows converting the standard JPEG image into another file format.
 #		 */
         enum ImageFormat {
-            STD, // leave unchanged from the standard JPEG format
-            WEBP,
-            PNG
+            STD // leave unchanged from the standard JPEG format
         }
         ImageFormat image_format;
         int image_quality;
@@ -130,29 +128,13 @@ public class ImageSaver extends Thread {
         final boolean is_front_facing;
         boolean mirror;
         final Date current_date;
-        final String preference_hdr_contrast_enhancement; // for HDR
         final int iso; // not applicable for RAW image
         final long exposure_time; // not applicable for RAW image
         final float zoom_factor; // not applicable for RAW image
         String preference_stamp;
         String preference_textstamp;
-        final int font_size;
-        final int color;
-        final String pref_style;
-        final String preference_stamp_dateformat;
-        final String preference_stamp_timeformat;
-        final String preference_stamp_gpsformat;
-        final String preference_stamp_geo_address;
-        final String preference_units_distance;
-        final boolean panorama_crop; // used for panorama
-        final boolean store_location;
-        final Location location;
-        final boolean store_geo_direction;
-        final double geo_direction; // in radians
         final boolean store_ypr; // whether to store geo_angle, pitch_angle, level_angle in USER_COMMENT if exif (for JPEGs)
         final double pitch_angle; // the pitch that the phone is at, in degrees
-        final String custom_tag_artist;
-        final String custom_tag_copyright;
         final int sample_factor; // sampling factor for thumbnail, higher means lower quality
 
         Request(Type type,
@@ -168,16 +150,10 @@ public class ImageSaver extends Thread {
                 boolean is_front_facing,
                 boolean mirror,
                 Date current_date,
-                String preference_hdr_contrast_enhancement,
                 int iso,
                 long exposure_time,
                 float zoom_factor,
-                String preference_stamp, String preference_textstamp, int font_size, int color, String pref_style, String preference_stamp_dateformat, String preference_stamp_timeformat, String preference_stamp_gpsformat, String preference_stamp_geo_address, String preference_units_distance,
-                boolean panorama_crop,
-                boolean store_location, Location location, boolean store_geo_direction, double geo_direction,
                 double pitch_angle, boolean store_ypr,
-                String custom_tag_artist,
-                String custom_tag_copyright,
                 int sample_factor) {
             this.type = type;
             this.process_type = process_type;
@@ -196,29 +172,13 @@ public class ImageSaver extends Thread {
             this.is_front_facing = is_front_facing;
             this.mirror = mirror;
             this.current_date = current_date;
-            this.preference_hdr_contrast_enhancement = preference_hdr_contrast_enhancement;
             this.iso = iso;
             this.exposure_time = exposure_time;
             this.zoom_factor = zoom_factor;
             this.preference_stamp = preference_stamp;
             this.preference_textstamp = preference_textstamp;
-            this.font_size = font_size;
-            this.color = color;
-            this.pref_style = pref_style;
-            this.preference_stamp_dateformat = preference_stamp_dateformat;
-            this.preference_stamp_timeformat = preference_stamp_timeformat;
-            this.preference_stamp_gpsformat = preference_stamp_gpsformat;
-            this.preference_stamp_geo_address = preference_stamp_geo_address;
-            this.preference_units_distance = preference_units_distance;
-            this.panorama_crop = panorama_crop;
-            this.store_location = store_location;
-            this.location = location;
-            this.store_geo_direction = store_geo_direction;
-            this.geo_direction = geo_direction;
             this.pitch_angle = pitch_angle;
             this.store_ypr = store_ypr;
-            this.custom_tag_artist = custom_tag_artist;
-            this.custom_tag_copyright = custom_tag_copyright;
             this.sample_factor = sample_factor;
         }
 
@@ -483,16 +443,10 @@ public class ImageSaver extends Thread {
                           boolean is_front_facing,
                           boolean mirror,
                           Date current_date,
-                          String preference_hdr_contrast_enhancement,
                           int iso,
                           long exposure_time,
                           float zoom_factor,
-                          String preference_stamp, String preference_textstamp, int font_size, int color, String pref_style, String preference_stamp_dateformat, String preference_stamp_timeformat, String preference_stamp_gpsformat, String preference_stamp_geo_address, String preference_units_distance,
-                          boolean panorama_crop,
-                          boolean store_location, Location location, boolean store_geo_direction, double geo_direction,
                           double pitch_angle, boolean store_ypr,
-                          String custom_tag_artist,
-                          String custom_tag_copyright,
                           int sample_factor) {
         if( MyDebug.LOG ) {
             Log.d(TAG, "saveImageJpeg");
@@ -513,160 +467,15 @@ public class ImageSaver extends Thread {
                 is_front_facing,
                 mirror,
                 current_date,
-                preference_hdr_contrast_enhancement,
                 iso,
                 exposure_time,
                 zoom_factor,
-                preference_stamp, preference_textstamp, font_size, color, pref_style, preference_stamp_dateformat, preference_stamp_timeformat, preference_stamp_gpsformat, preference_stamp_geo_address, preference_units_distance,
-                panorama_crop, store_location, location, store_geo_direction, geo_direction,
                 pitch_angle, store_ypr,
-                custom_tag_artist,
-                custom_tag_copyright,
                 sample_factor);
     }
 
-    /** Saves a RAW photo.
-     *  If do_in_background is true, the photo will be saved in a background thread. If the queue is full, the function will wait
-     *  until it isn't full. Otherwise it will return immediately. The function always returns true for background saving.
-     *  If do_in_background is false, the photo is saved on the current thread, and the function returns whether the photo was saved
-     *  successfully.
-     */
-    boolean saveImageRaw(boolean do_in_background,
-                         boolean force_suffix,
-                         int suffix_offset,
-                         Date current_date) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "saveImageRaw");
-            Log.d(TAG, "do_in_background? " + do_in_background);
-        }
-        return saveImage(do_in_background,
-                true,
-                false,
-                force_suffix,
-                suffix_offset,
-                false,
-                null,
-                false, null,
-                false,
-                Request.ImageFormat.STD, 0,
-                false, 0.0,
-                false,
-                false,
-                current_date,
-                null,
-                0,
-                0,
-                1.0f,
-                null, null, 0, 0, null, null, null, null, null, null,
-                false, false, null, false, 0.0,
-                0.0, false,
-                null, null,
-                1);
-    }
 
-    private Request pending_image_average_request = null;
 
-    /** Used for a batch of images that will be combined into a single request. This applies to
-     *  processType AVERAGE and PANORAMA.
-     */
-    void startImageBatch(boolean do_in_background,
-                           Request.ProcessType processType,
-                           Request.SaveBase save_base,
-                           boolean image_capture_intent, Uri image_capture_intent_uri,
-                           boolean using_camera2, // TODO alltid true, slett
-                           Request.ImageFormat image_format, int image_quality,
-                           boolean do_auto_stabilise, double level_angle, boolean want_gyro_matrices,
-                           boolean is_front_facing,
-                           boolean mirror,
-                           Date current_date,
-                           int iso,
-                           long exposure_time,
-                           float zoom_factor,
-                           String preference_stamp, String preference_textstamp, int font_size, int color, String pref_style, String preference_stamp_dateformat, String preference_stamp_timeformat, String preference_stamp_gpsformat, String preference_stamp_geo_address, String preference_units_distance,
-                           boolean panorama_crop,
-                           boolean store_location, Location location, boolean store_geo_direction, double geo_direction,
-                           double pitch_angle, boolean store_ypr,
-                           String custom_tag_artist,
-                           String custom_tag_copyright,
-                           int sample_factor) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "startImageBatch");
-            Log.d(TAG, "do_in_background? " + do_in_background);
-        }
-        pending_image_average_request = new Request(Request.Type.JPEG,
-                processType,
-                false,
-                0,
-                save_base,
-                new ArrayList<byte[]>(),
-                image_capture_intent, image_capture_intent_uri,
-                using_camera2,
-                image_format, image_quality,
-                do_auto_stabilise, level_angle, want_gyro_matrices ? new ArrayList<float []>() : null,
-                is_front_facing,
-                mirror,
-                current_date,
-                null,
-                iso,
-                exposure_time,
-                zoom_factor,
-                preference_stamp, preference_textstamp, font_size, color, pref_style, preference_stamp_dateformat, preference_stamp_timeformat, preference_stamp_gpsformat, preference_stamp_geo_address, preference_units_distance,
-                panorama_crop, store_location, location, store_geo_direction, geo_direction,
-                pitch_angle, store_ypr,
-                custom_tag_artist,
-                custom_tag_copyright,
-                sample_factor);
-    }
-
-    void addImageBatch(byte [] image, float [] gyro_rotation_matrix) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "addImageBatch");
-        if( pending_image_average_request == null ) {
-            Log.e(TAG, "addImageBatch called but no pending_image_average_request");
-            return;
-        }
-        pending_image_average_request.jpeg_images.add(image);
-        if( gyro_rotation_matrix != null ) {
-            float [] copy = new float[gyro_rotation_matrix.length];
-            System.arraycopy(gyro_rotation_matrix, 0, copy, 0, gyro_rotation_matrix.length);
-            pending_image_average_request.gyro_rotation_matrix.add(copy);
-        }
-        if( MyDebug.LOG )
-            Log.d(TAG, "image average request images: " + pending_image_average_request.jpeg_images.size());
-    }
-
-    Request getImageBatchRequest() {
-        return pending_image_average_request;
-    }
-
-    void finishImageBatch(boolean do_in_background) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "finishImageBatch");
-        if( pending_image_average_request == null ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "finishImageBatch called but no pending_image_average_request");
-            return;
-        }
-        if( do_in_background ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "add background request");
-            int cost = computeRequestCost(false, pending_image_average_request.jpeg_images.size());
-            addRequest(pending_image_average_request, cost);
-        }
-        else {
-            // wait for queue to be empty
-            waitUntilDone();
-            saveImageNow(pending_image_average_request);
-        }
-        pending_image_average_request = null;
-    }
-
-    void flushImageBatch() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "flushImageBatch");
-        // aside from resetting the state, this allows the allocated JPEG data to be garbage collected
-        pending_image_average_request = null;
-    }
 
     /** Internal saveImage method to handle both JPEG and RAW.
      */
@@ -684,16 +493,10 @@ public class ImageSaver extends Thread {
                               boolean is_front_facing,
                               boolean mirror,
                               Date current_date,
-                              String preference_hdr_contrast_enhancement,
                               int iso,
                               long exposure_time,
                               float zoom_factor,
-                              String preference_stamp, String preference_textstamp, int font_size, int color, String pref_style, String preference_stamp_dateformat, String preference_stamp_timeformat, String preference_stamp_gpsformat, String preference_stamp_geo_address, String preference_units_distance,
-                              boolean panorama_crop,
-                              boolean store_location, Location location, boolean store_geo_direction, double geo_direction,
                               double pitch_angle, boolean store_ypr,
-                              String custom_tag_artist,
-                              String custom_tag_copyright,
                               int sample_factor) {
         if( MyDebug.LOG ) {
             Log.d(TAG, "saveImage");
@@ -716,15 +519,10 @@ public class ImageSaver extends Thread {
                 is_front_facing,
                 mirror,
                 current_date,
-                preference_hdr_contrast_enhancement,
                 iso,
                 exposure_time,
                 zoom_factor,
-                preference_stamp, preference_textstamp, font_size, color, pref_style, preference_stamp_dateformat, preference_stamp_timeformat, preference_stamp_gpsformat, preference_stamp_geo_address, preference_units_distance,
-                panorama_crop, store_location, location, store_geo_direction, geo_direction,
                 pitch_angle, store_ypr,
-                custom_tag_artist,
-                custom_tag_copyright,
                 sample_factor);
 
         if( do_in_background ) {
@@ -1421,177 +1219,6 @@ public class ImageSaver extends Thread {
         return bitmap;
     }
 
-    /** Applies any photo stamp options (if they exist).
-     * @param data The jpeg data.
-     * @param bitmap Optional argument - the bitmap if already unpacked from the jpeg data.
-     * @return A bitmap representing the stamped jpeg. Will be null if the input bitmap is null and
-     *         no photo stamp is applied.
-     */
-    private Bitmap stampImage(final Request request, byte [] data, Bitmap bitmap) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "stampImage");
-        }
-        final MyApplicationInterface applicationInterface = main_activity.getApplicationInterface();
-        boolean dategeo_stamp = request.preference_stamp.equals("preference_stamp_yes");
-        boolean text_stamp = request.preference_textstamp.length() > 0;
-        if( dategeo_stamp || text_stamp ) {
-            if( bitmap == null ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "decode bitmap in order to stamp info");
-                bitmap = loadBitmapWithRotation(data, true);
-                if( bitmap == null ) {
-                    main_activity.getPreview().showToast(null, R.string.failed_to_stamp);
-                    System.gc();
-                }
-            }
-            if( bitmap != null ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "stamp info to bitmap: " + bitmap);
-                if( MyDebug.LOG )
-                    Log.d(TAG, "bitmap is mutable?: " + bitmap.isMutable());
-                int font_size = request.font_size;
-                int color = request.color;
-                String pref_style = request.pref_style;
-                if( MyDebug.LOG )
-                    Log.d(TAG, "pref_style: " + pref_style);
-                String preference_stamp_dateformat = request.preference_stamp_dateformat;
-                String preference_stamp_timeformat = request.preference_stamp_timeformat;
-                String preference_stamp_gpsformat = request.preference_stamp_gpsformat;
-                int width = bitmap.getWidth();
-                int height = bitmap.getHeight();
-                if( MyDebug.LOG ) {
-                    Log.d(TAG, "decoded bitmap size " + width + ", " + height);
-                    Log.d(TAG, "bitmap size: " + width*height*4);
-                }
-                Canvas canvas = new Canvas(bitmap);
-                p.setColor(Color.WHITE);
-                // we don't use the density of the screen, because we're stamping to the image, not drawing on the screen (we don't want the font height to depend on the device's resolution)
-                // instead we go by 1 pt == 1/72 inch height, and scale for an image height (or width if in portrait) of 4" (this means the font height is also independent of the photo resolution)
-                int smallest_size = Math.min(width, height);
-                float scale = ((float)smallest_size) / (72.0f*4.0f);
-                int font_size_pixel = (int)(font_size * scale + 0.5f); // convert pt to pixels
-                if( MyDebug.LOG ) {
-                    Log.d(TAG, "scale: " + scale);
-                    Log.d(TAG, "font_size: " + font_size);
-                    Log.d(TAG, "font_size_pixel: " + font_size_pixel);
-                }
-                p.setTextSize(font_size_pixel);
-                int offset_x = (int)(8 * scale + 0.5f); // convert pt to pixels
-                int offset_y = (int)(8 * scale + 0.5f); // convert pt to pixels
-                int diff_y = (int)((font_size+4) * scale + 0.5f); // convert pt to pixels
-                int ypos = height - offset_y;
-                p.setTextAlign(Align.RIGHT);
-                MyApplicationInterface.Shadow draw_shadowed = MyApplicationInterface.Shadow.SHADOW_NONE;
-                switch( pref_style ) {
-                    case "preference_stamp_style_shadowed":
-                        draw_shadowed = MyApplicationInterface.Shadow.SHADOW_OUTLINE;
-                        break;
-                    case "preference_stamp_style_plain":
-                        draw_shadowed = MyApplicationInterface.Shadow.SHADOW_NONE;
-                        break;
-                    case "preference_stamp_style_background":
-                        draw_shadowed = MyApplicationInterface.Shadow.SHADOW_BACKGROUND;
-                        break;
-                }
-                if( MyDebug.LOG )
-                    Log.d(TAG, "draw_shadowed: " + draw_shadowed);
-                if( dategeo_stamp ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "stamp date");
-                    // doesn't respect user preferences such as 12/24 hour - see note about in draw() about DateFormat.getTimeInstance()
-                    String date_stamp = TextFormatter.getDateString(preference_stamp_dateformat, request.current_date);
-                    String time_stamp = TextFormatter.getTimeString(preference_stamp_timeformat, request.current_date);
-                    if( MyDebug.LOG ) {
-                        Log.d(TAG, "date_stamp: " + date_stamp);
-                        Log.d(TAG, "time_stamp: " + time_stamp);
-                    }
-                    if( date_stamp.length() > 0 || time_stamp.length() > 0 ) {
-                        String datetime_stamp = "";
-                        if( date_stamp.length() > 0 )
-                            datetime_stamp += date_stamp;
-                        if( time_stamp.length() > 0 ) {
-                            if( datetime_stamp.length() > 0 )
-                                datetime_stamp += " ";
-                            datetime_stamp += time_stamp;
-                        }
-                        applicationInterface.drawTextWithBackground(canvas, p, datetime_stamp, color, Color.BLACK, width - offset_x, ypos, MyApplicationInterface.Alignment.ALIGNMENT_BOTTOM, null, draw_shadowed);
-                    }
-                    ypos -= diff_y;
-                    String gps_stamp = main_activity.getTextFormatter().getGPSString(preference_stamp_gpsformat, request.preference_units_distance, request.store_location, request.location, request.store_geo_direction, request.geo_direction);
-                    if( gps_stamp.length() > 0 ) {
-                        // don't log gps_stamp, in case of privacy!
-
-                        Address address = null;
-                        if( request.store_location && !request.preference_stamp_geo_address.equals("preference_stamp_geo_address_no") ) {
-                            // try to find an address
-                            // n.b., if we update the class being used, consider whether the info on Geocoder in preference_stamp_geo_address_summary needs updating
-                            if( Geocoder.isPresent() ) {
-                                if( MyDebug.LOG )
-                                    Log.d(TAG, "geocoder is present");
-                                Geocoder geocoder = new Geocoder(main_activity, Locale.getDefault());
-                                try {
-                                    List<Address> addresses = geocoder.getFromLocation(request.location.getLatitude(), request.location.getLongitude(), 1);
-                                    if( addresses != null && addresses.size() > 0 ) {
-                                        address = addresses.get(0);
-                                        // don't log address, in case of privacy!
-                                        if( MyDebug.LOG ) {
-                                            Log.d(TAG, "max line index: " + address.getMaxAddressLineIndex());
-                                        }
-                                    }
-                                }
-                                catch(Exception e) {
-                                    Log.e(TAG, "failed to read from geocoder");
-                                    e.printStackTrace();
-                                }
-                            }
-                            else {
-                                if( MyDebug.LOG )
-                                    Log.d(TAG, "geocoder not present");
-                            }
-                        }
-
-                        if( address == null || request.preference_stamp_geo_address.equals("preference_stamp_geo_address_both") ) {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "display gps coords");
-                            // want GPS coords (either in addition to the address, or we don't have an address)
-                            // we'll also enter here if store_location is false, but we have geo direction to display
-                            applicationInterface.drawTextWithBackground(canvas, p, gps_stamp, color, Color.BLACK, width - offset_x, ypos, MyApplicationInterface.Alignment.ALIGNMENT_BOTTOM, null, draw_shadowed);
-                            ypos -= diff_y;
-                        }
-                        else if( request.store_geo_direction ) {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "not displaying gps coords, but need to display geo direction");
-                            // we are displaying an address instead of GPS coords, but we still need to display the geo direction
-                            gps_stamp = main_activity.getTextFormatter().getGPSString(preference_stamp_gpsformat, request.preference_units_distance, false, null, request.store_geo_direction, request.geo_direction);
-                            if( gps_stamp.length() > 0 ) {
-                                // don't log gps_stamp, in case of privacy!
-                                applicationInterface.drawTextWithBackground(canvas, p, gps_stamp, color, Color.BLACK, width - offset_x, ypos, MyApplicationInterface.Alignment.ALIGNMENT_BOTTOM, null, draw_shadowed);
-                                ypos -= diff_y;
-                            }
-                        }
-
-                        if( address != null ) {
-                            for(int i=0;i<=address.getMaxAddressLineIndex();i++) {
-                                // write in reverse order
-                                String addressLine = address.getAddressLine(address.getMaxAddressLineIndex()-i);
-                                applicationInterface.drawTextWithBackground(canvas, p, addressLine, color, Color.BLACK, width - offset_x, ypos, MyApplicationInterface.Alignment.ALIGNMENT_BOTTOM, null, draw_shadowed);
-                                ypos -= diff_y;
-                            }
-                        }
-                    }
-                }
-                if( text_stamp ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "stamp text");
-                    applicationInterface.drawTextWithBackground(canvas, p, request.preference_textstamp, color, Color.BLACK, width - offset_x, ypos, MyApplicationInterface.Alignment.ALIGNMENT_BOTTOM, null, draw_shadowed);
-                    //noinspection UnusedAssignment
-                    ypos -= diff_y;
-                }
-            }
-        }
-        return bitmap;
-    }
-
     private static class PostProcessBitmapResult {
         final Bitmap bitmap;
 
@@ -1639,7 +1266,6 @@ public class ImageSaver extends Thread {
                 throw new IOException();
             }
         }
-        bitmap = stampImage(request, data, bitmap);
         if( MyDebug.LOG ) {
             Log.d(TAG, "Save single image performance: time after photostamp: " + (System.currentTimeMillis() - time_s));
         }
@@ -1680,24 +1306,8 @@ public class ImageSaver extends Thread {
 
         boolean success = false;
         final MyApplicationInterface applicationInterface = main_activity.getApplicationInterface();
-        boolean raw_only = !ignore_raw_only && applicationInterface.isRawOnly();
-        if( MyDebug.LOG )
-            Log.d(TAG, "raw_only: " + raw_only);
 
-        String extension;
-        switch( request.image_format ) {
-            case WEBP:
-                extension = "webp";
-                break;
-            case PNG:
-                extension = "png";
-                break;
-            default:
-                extension = "jpg";
-                break;
-        }
-        if( MyDebug.LOG )
-            Log.d(TAG, "extension: " + extension);
+        String extension = "jpg";
 
         main_activity.savingImage(true);
 
@@ -1707,16 +1317,10 @@ public class ImageSaver extends Thread {
         final File picFile =new File(main_activity.getFilesDir() + "/" + System.currentTimeMillis() + "." + extension);
         Uri saveUri = null;
         try {
-            if( !raw_only ) {
                 PostProcessBitmapResult postProcessBitmapResult = postProcessBitmap(request, data, bitmap, ignore_exif_orientation);
                 bitmap = postProcessBitmapResult.bitmap;
-            }
 
-            if( raw_only ) {
-                // don't save the JPEG
-                success = true;
-            }
-            else if( request.image_capture_intent ) {
+             if( request.image_capture_intent ) {
                 if( MyDebug.LOG )
                     Log.d(TAG, "image_capture_intent");
                 if( request.image_capture_intent_uri != null )
@@ -1786,20 +1390,9 @@ public class ImageSaver extends Thread {
                     outputStream = main_activity.getContentResolver().openOutputStream(saveUri);
                 try {
                     if( bitmap != null ) {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "compress bitmap, quality " + request.image_quality);
-                        Bitmap.CompressFormat compress_format;
-                        switch( request.image_format ) {
-                            case WEBP:
-                                compress_format = Bitmap.CompressFormat.WEBP;
-                                break;
-                            case PNG:
-                                compress_format = Bitmap.CompressFormat.PNG;
-                                break;
-                            default:
-                                compress_format = Bitmap.CompressFormat.JPEG;
-                                break;
-                        }
+
+                        Bitmap.CompressFormat compress_format = Bitmap.CompressFormat.JPEG;
+
                         bitmap.compress(compress_format, request.image_quality, outputStream);
                     }
                     else {
@@ -1881,12 +1474,6 @@ public class ImageSaver extends Thread {
             main_activity.getPreview().showToast(null, R.string.failed_to_save_photo);
         }
 
-        if( raw_only ) {
-            // no saved image to record
-        }
-        else if( success ) {
-//            applicationInterface.addLastImage(picFile, share_image);
-        }
 
         // I have received crashes where camera_controller was null - could perhaps happen if this thread was running just as the camera is closing?
         if( success && main_activity.getPreview().getCameraController() != null && update_thumbnail ) {
@@ -2322,7 +1909,7 @@ public class ImageSaver extends Thread {
                 exif_new.setAttribute(ExifInterface.TAG_USER_COMMENT, exif_user_comment);
         }
 
-        modifyExif(exif_new, request.type == Request.Type.JPEG, request.using_camera2, request.current_date, request.store_location, request.store_geo_direction, request.geo_direction, request.custom_tag_artist, request.custom_tag_copyright, request.level_angle, request.pitch_angle, request.store_ypr);
+//        modifyExif(exif_new, request.type == Request.Type.JPEG, request.using_camera2, request.current_date, request.store_location, request.store_geo_direction, request.geo_direction, request.custom_tag_artist, request.custom_tag_copyright, request.level_angle, request.pitch_angle, request.store_ypr);
         setDateTimeExif(exif_new);
         exif_new.saveAttributes();
     }
@@ -2489,51 +2076,7 @@ public class ImageSaver extends Thread {
      *  or later), and will be used instead to write the exif tags too.
      */
     private void updateExif(Request request, File picFile, Uri saveUri) throws IOException {
-        if( MyDebug.LOG )
-            Log.d(TAG, "updateExif: " + picFile);
-        if( request.store_geo_direction || request.store_ypr || hasCustomExif(request.custom_tag_artist, request.custom_tag_copyright) ) {
-            long time_s = System.currentTimeMillis();
-            if( MyDebug.LOG )
-                Log.d(TAG, "add additional exif info");
-            try {
-                ExifInterfaceHolder exif_holder = createExifInterface(picFile, saveUri);
-                ExifInterface exif = exif_holder.getExif();
-                if( exif != null ) {
-                    modifyExif(exif, request.type == Request.Type.JPEG, request.using_camera2, request.current_date, request.store_location, request.store_geo_direction, request.geo_direction, request.custom_tag_artist, request.custom_tag_copyright, request.level_angle, request.pitch_angle, request.store_ypr);
-                    exif.saveAttributes();
-                }
-            }
-            catch(NoClassDefFoundError exception) {
-                // have had Google Play crashes from new ExifInterface() elsewhere for Galaxy Ace4 (vivalto3g), Galaxy S Duos3 (vivalto3gvn), so also catch here just in case
-                if( MyDebug.LOG )
-                    Log.e(TAG, "exif orientation NoClassDefFoundError");
-                exception.printStackTrace();
-            }
-            if( MyDebug.LOG )
-                Log.d(TAG, "*** time to add additional exif info: " + (System.currentTimeMillis() - time_s));
-        }
-        else if( needGPSTimestampHack(request.type == Request.Type.JPEG, request.using_camera2, request.store_location) ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "remove GPS timestamp hack");
-            try {
-                ExifInterfaceHolder exif_holder = createExifInterface(picFile, saveUri);
-                ExifInterface exif = exif_holder.getExif();
-                if( exif != null ) {
-                    fixGPSTimestamp(exif, request.current_date);
-                    exif.saveAttributes();
-                }
-            }
-            catch(NoClassDefFoundError exception) {
-                // have had Google Play crashes from new ExifInterface() elsewhere for Galaxy Ace4 (vivalto3g), Galaxy S Duos3 (vivalto3gvn), so also catch here just in case
-                if( MyDebug.LOG )
-                    Log.e(TAG, "exif orientation NoClassDefFoundError");
-                exception.printStackTrace();
-            }
-        }
-        else {
-            if( MyDebug.LOG )
-                Log.d(TAG, "no exif data to update for: " + picFile);
-        }
+
     }
 
     /** Makes various modifications to the exif data, if necessary.

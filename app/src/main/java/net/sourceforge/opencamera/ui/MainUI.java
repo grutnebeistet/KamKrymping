@@ -1,12 +1,9 @@
 package net.sourceforge.opencamera.ui;
 
-import net.sourceforge.opencamera.MyApplicationInterface;
 import net.sourceforge.opencamera.cameracontroller.CameraController;
 import net.sourceforge.opencamera.MainActivity;
 import net.sourceforge.opencamera.MyDebug;
-import net.sourceforge.opencamera.PreferenceKeys;
 import net.sourceforge.opencamera.preview.ApplicationInterface;
-import net.sourceforge.opencamera.preview.Preview;
 import net.sourceforge.opencamera.R;
 
 import android.app.AlertDialog;
@@ -19,7 +16,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Build;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,17 +25,13 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.ZoomControls;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -157,16 +149,17 @@ public class MainUI {
     }
 
     private UIPlacement computeUIPlacement() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        String ui_placement_string = sharedPreferences.getString(PreferenceKeys.UIPlacementPreferenceKey, "ui_top");
-        switch( ui_placement_string ) {
-            case "ui_left":
-                return UIPlacement.UIPLACEMENT_LEFT;
-            case "ui_top":
-                return UIPlacement.UIPLACEMENT_TOP;
-            default:
-                return UIPlacement.UIPLACEMENT_RIGHT;
-        }
+        return UIPlacement.UIPLACEMENT_LEFT;
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
+//        String ui_placement_string = sharedPreferences.getString(PreferenceKeys.UIPlacementPreferenceKey, "ui_top");
+//        switch( ui_placement_string ) {
+//            case "ui_left":
+//                return UIPlacement.UIPLACEMENT_LEFT;
+//            case "ui_top":
+//                return UIPlacement.UIPLACEMENT_TOP;
+//            default:
+//                return UIPlacement.UIPLACEMENT_RIGHT;
+//        }
     }
 
     private void layoutUI(boolean popup_container_only) {
@@ -500,7 +493,7 @@ public class MainUI {
             view = main_activity.findViewById(R.id.zoom_seekbar);
             layoutParams = (RelativeLayout.LayoutParams)view.getLayoutParams();
             // if we are showing the zoom control, the align next to that; otherwise have it aligned close to the edge of screen
-            if( sharedPreferences.getBoolean(PreferenceKeys.ShowZoomControlsPreferenceKey, false) ) {
+
                 layoutParams.addRule(align_left, 0);
                 layoutParams.addRule(align_right, R.id.zoom);
                 layoutParams.addRule(above, R.id.zoom);
@@ -511,19 +504,7 @@ public class MainUI {
                 layoutParams.addRule(align_parent_top, 0);
                 layoutParams.addRule(align_parent_bottom, 0);
                 layoutParams.setMargins(0, 0, 0, 0);
-            }
-            else {
-                layoutParams.addRule(align_parent_left, 0);
-                layoutParams.addRule(align_parent_right, RelativeLayout.TRUE);
-                layoutParams.addRule(align_parent_top, 0);
-                layoutParams.addRule(align_parent_bottom, RelativeLayout.TRUE);
-                layoutParams.setMargins(0, 0, navigation_gap, 0);
-                // need to clear the others, in case we turn zoom controls on/off
-                layoutParams.addRule(align_left, 0);
-                layoutParams.addRule(align_right, 0);
-                layoutParams.addRule(above, 0);
-                layoutParams.addRule(below, 0);
-            }
+
             view.setLayoutParams(layoutParams);
 
             view = main_activity.findViewById(R.id.focus_seekbar);
@@ -718,34 +699,6 @@ public class MainUI {
         }
     }
 
-    /** Set content description for switch camera button.
-     */
-    public void setSwitchCameraContentDescription() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setSwitchCameraContentDescription()");
-        if( main_activity.getPreview() != null && main_activity.getPreview().canSwitchCamera() ) {
-            ImageButton view = main_activity.findViewById(R.id.switch_camera);
-            int content_description;
-            int cameraId = main_activity.getNextCameraId();
-            switch( main_activity.getPreview().getCameraControllerManager().getFacing( cameraId  ) ) {
-                case FACING_FRONT:
-                    content_description = R.string.switch_to_front_camera;
-                    break;
-                case FACING_BACK:
-                    content_description = R.string.switch_to_back_camera;
-                    break;
-                case FACING_EXTERNAL:
-                    content_description = R.string.switch_to_external_camera;
-                    break;
-                default:
-                    content_description = R.string.switch_to_unknown_camera;
-                    break;
-            }
-            if( MyDebug.LOG )
-                Log.d(TAG, "content_description: " + main_activity.getResources().getString(content_description));
-            view.setContentDescription( main_activity.getResources().getString(content_description) );
-        }
-    }
 
     /** Set content description for pause video button.
      */
@@ -794,151 +747,8 @@ public class MainUI {
         }
     }
 
-    public boolean showExposureLockIcon() {
-        if( !main_activity.getPreview().supportsExposureLock() )
-            return false;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowExposureLockPreferenceKey, true);
-    }
 
-    public boolean showWhiteBalanceLockIcon() {
-        if( !main_activity.getPreview().supportsWhiteBalanceLock() )
-            return false;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowWhiteBalanceLockPreferenceKey, false);
-    }
 
-    public boolean showCycleRawIcon() {
-        if( !main_activity.getApplicationInterface().isRawAllowed(main_activity.getApplicationInterface().getPhotoMode()) )
-            return false;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowCycleRawPreferenceKey, false);
-    }
-
-    public boolean showStoreLocationIcon() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowStoreLocationPreferenceKey, false);
-    }
-
-    public boolean showTextStampIcon() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowTextStampPreferenceKey, false);
-    }
-
-    public boolean showStampIcon() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowStampPreferenceKey, false);
-    }
-
-    public boolean showAutoLevelIcon() {
-        if( !main_activity.supportsAutoStabilise() )
-            return false;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowAutoLevelPreferenceKey, false);
-    }
-
-    public boolean showCycleFlashIcon() {
-        if( !main_activity.getPreview().supportsFlash() )
-            return false;
-        if( main_activity.getPreview().isVideo() )
-            return false; // no point showing flash icon in video mode, as we only allow flash auto and flash torch, and we don't support torch on the on-screen cycle flash icon
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        return sharedPreferences.getBoolean(PreferenceKeys.ShowCycleFlashPreferenceKey, false);
-    }
-
-    public void setImmersiveMode(final boolean immersive_mode) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setImmersiveMode: " + immersive_mode);
-        this.immersive_mode = immersive_mode;
-        main_activity.runOnUiThread(new Runnable() {
-            public void run() {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                // if going into immersive mode, the we should set GONE the ones that are set GONE in showGUI(false)
-                //final int visibility_gone = immersive_mode ? View.GONE : View.VISIBLE;
-                final int visibility = immersive_mode ? View.GONE : View.VISIBLE;
-                if( MyDebug.LOG )
-                    Log.d(TAG, "setImmersiveMode: set visibility: " + visibility);
-                // n.b., don't hide share and trash buttons, as they require immediate user input for us to continue
-                View switchCameraButton = main_activity.findViewById(R.id.switch_camera);
-                View switchMultiCameraButton = main_activity.findViewById(R.id.switch_multi_camera);
-                View switchVideoButton = main_activity.findViewById(R.id.switch_video);
-                View exposureButton = main_activity.findViewById(R.id.exposure);
-                View exposureLockButton = main_activity.findViewById(R.id.exposure_lock);
-                View whiteBalanceLockButton = main_activity.findViewById(R.id.white_balance_lock);
-                View cycleRawButton = main_activity.findViewById(R.id.cycle_raw);
-                View storeLocationButton = main_activity.findViewById(R.id.store_location);
-                View textStampButton = main_activity.findViewById(R.id.text_stamp);
-                View stampButton = main_activity.findViewById(R.id.stamp);
-                View autoLevelButton = main_activity.findViewById(R.id.auto_level);
-                View cycleFlashButton = main_activity.findViewById(R.id.cycle_flash);
-                View faceDetectionButton = main_activity.findViewById(R.id.face_detection);
-                View audioControlButton = main_activity.findViewById(R.id.audio_control);
-                View popupButton = main_activity.findViewById(R.id.popup);
-                View galleryButton = main_activity.findViewById(R.id.gallery);
-                View settingsButton = main_activity.findViewById(R.id.settings);
-                View zoomControls = main_activity.findViewById(R.id.zoom);
-                View zoomSeekBar = main_activity.findViewById(R.id.zoom_seekbar);
-                View focusSeekBar = main_activity.findViewById(R.id.focus_seekbar);
-                View focusBracketingTargetSeekBar = main_activity.findViewById(R.id.focus_bracketing_target_seekbar);
-                if( main_activity.getPreview().getCameraControllerManager().getNumberOfCameras() > 1 )
-                    switchCameraButton.setVisibility(visibility);
-                if( main_activity.showSwitchMultiCamIcon() )
-                    switchMultiCameraButton.setVisibility(visibility);
-                switchVideoButton.setVisibility(visibility);
-                if( main_activity.supportsExposureButton() )
-                    exposureButton.setVisibility(visibility);
-                if( showExposureLockIcon() )
-                    exposureLockButton.setVisibility(visibility);
-                if( showWhiteBalanceLockIcon() )
-                    whiteBalanceLockButton.setVisibility(visibility);
-                if( showCycleRawIcon() )
-                    cycleRawButton.setVisibility(visibility);
-                if( showStoreLocationIcon() )
-                    storeLocationButton.setVisibility(visibility);
-                if( showTextStampIcon() )
-                    textStampButton.setVisibility(visibility);
-                if( showStampIcon() )
-                    stampButton.setVisibility(visibility);
-                if( showAutoLevelIcon() )
-                    autoLevelButton.setVisibility(visibility);
-                if( showCycleFlashIcon() )
-                    cycleFlashButton.setVisibility(visibility);
-                if( main_activity.hasAudioControl() )
-                    audioControlButton.setVisibility(visibility);
-                popupButton.setVisibility(visibility);
-                galleryButton.setVisibility(visibility);
-                settingsButton.setVisibility(visibility);
-                if( MyDebug.LOG ) {
-                    Log.d(TAG, "has_zoom: " + main_activity.getPreview().supportsZoom());
-                }
-                if( main_activity.getPreview().supportsZoom() && sharedPreferences.getBoolean(PreferenceKeys.ShowZoomControlsPreferenceKey, false) ) {
-                    zoomControls.setVisibility(visibility);
-                }
-                if( main_activity.getPreview().supportsZoom() && sharedPreferences.getBoolean(PreferenceKeys.ShowZoomSliderControlsPreferenceKey, true) ) {
-                    zoomSeekBar.setVisibility(visibility);
-                }
-                String pref_immersive_mode = sharedPreferences.getString(PreferenceKeys.ImmersiveModePreferenceKey, "immersive_mode_low_profile");
-                if( pref_immersive_mode.equals("immersive_mode_everything") ) {
-                    if( sharedPreferences.getBoolean(PreferenceKeys.ShowTakePhotoPreferenceKey, true) ) {
-                        View takePhotoButton = main_activity.findViewById(R.id.take_photo);
-                        takePhotoButton.setVisibility(visibility);
-                    }
-                    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && main_activity.getPreview().isVideoRecording() ) {
-                        View pauseVideoButton = main_activity.findViewById(R.id.pause_video);
-                        pauseVideoButton.setVisibility(visibility);
-                    }
-                    if( main_activity.getPreview().supportsPhotoVideoRecording() && main_activity.getApplicationInterface().usePhotoVideoRecording() && main_activity.getPreview().isVideoRecording() ) {
-                        View takePhotoVideoButton = main_activity.findViewById(R.id.take_photo_when_video_recording);
-                        takePhotoVideoButton.setVisibility(visibility);
-                    }
-                }
-                if( !immersive_mode ) {
-                    // make sure the GUI is set up as expected
-                    showGUI();
-                }
-            }
-        });
-    }
 
     public boolean inImmersiveMode() {
         return immersive_mode;
@@ -957,73 +767,69 @@ public class MainUI {
     }
 
     public void showGUI() {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "showGUI");
-            Log.d(TAG, "show_gui_photo: " + show_gui_photo);
-            Log.d(TAG, "show_gui_video: " + show_gui_video);
-        }
-        if( inImmersiveMode() )
-            return;
-        if( (show_gui_photo || show_gui_video) && main_activity.usingKitKatImmersiveMode() ) {
-            // call to reset the timer
-            main_activity.initImmersiveMode();
-        }
-        main_activity.runOnUiThread(new Runnable() {
-            public void run() {
-                final boolean is_panorama_recording = false;
-                final int visibility = is_panorama_recording ? View.GONE : (show_gui_photo && show_gui_video) ? View.VISIBLE : View.GONE; // for UI that is hidden while taking photo or video
-                final int visibility_video = is_panorama_recording ? View.GONE : show_gui_photo ? View.VISIBLE : View.GONE; // for UI that is only hidden while taking photo
-                View switchCameraButton = main_activity.findViewById(R.id.switch_camera);
-                View switchMultiCameraButton = main_activity.findViewById(R.id.switch_multi_camera);
-                View switchVideoButton = main_activity.findViewById(R.id.switch_video);
-                View exposureButton = main_activity.findViewById(R.id.exposure);
-                View exposureLockButton = main_activity.findViewById(R.id.exposure_lock);
-                View whiteBalanceLockButton = main_activity.findViewById(R.id.white_balance_lock);
-                View cycleRawButton = main_activity.findViewById(R.id.cycle_raw);
-                View storeLocationButton = main_activity.findViewById(R.id.store_location);
-                View textStampButton = main_activity.findViewById(R.id.text_stamp);
-                View stampButton = main_activity.findViewById(R.id.stamp);
-                View autoLevelButton = main_activity.findViewById(R.id.auto_level);
-                View cycleFlashButton = main_activity.findViewById(R.id.cycle_flash);
-                View faceDetectionButton = main_activity.findViewById(R.id.face_detection);
-                View audioControlButton = main_activity.findViewById(R.id.audio_control);
-                View popupButton = main_activity.findViewById(R.id.popup);
-                if( main_activity.getPreview().getCameraControllerManager().getNumberOfCameras() > 1 )
-                    switchCameraButton.setVisibility(visibility);
-                if( main_activity.showSwitchMultiCamIcon() )
-                    switchMultiCameraButton.setVisibility(visibility);
-                switchVideoButton.setVisibility(visibility);
-                if( main_activity.supportsExposureButton() )
-                    exposureButton.setVisibility(visibility_video); // still allow exposure when recording video
-                if( showExposureLockIcon() )
-                    exposureLockButton.setVisibility(visibility_video); // still allow exposure lock when recording video
-                if( showWhiteBalanceLockIcon() )
-                    whiteBalanceLockButton.setVisibility(visibility_video); // still allow white balance lock when recording video
-                if( showCycleRawIcon() )
-                    cycleRawButton.setVisibility(visibility);
-                if( showStoreLocationIcon() )
-                    storeLocationButton.setVisibility(visibility);
-                if( showTextStampIcon() )
-                    textStampButton.setVisibility(visibility);
-                if( showStampIcon() )
-                    stampButton.setVisibility(visibility);
-                if( showAutoLevelIcon() )
-                    autoLevelButton.setVisibility(visibility);
-                if( showCycleFlashIcon() )
-                    cycleFlashButton.setVisibility(visibility);
-                if( main_activity.hasAudioControl() )
-                    audioControlButton.setVisibility(visibility);
-
-                View remoteConnectedIcon = main_activity.findViewById(R.id.kraken_icon);
-                    remoteConnectedIcon.setVisibility(View.GONE);
-
-                popupButton.setVisibility(main_activity.getPreview().supportsFlash() ? visibility_video : visibility); // still allow popup in order to change flash mode when recording video
-
-                if( show_gui_photo && show_gui_video ) {
-                    layoutUI(); // needed for "top" UIPlacement, to auto-arrange the buttons
-                }
-            }
-        });
+//
+//        if( inImmersiveMode() )
+//            return;
+//        if( (show_gui_photo || show_gui_video) && main_activity.usingKitKatImmersiveMode() ) {
+//            // call to reset the timer
+//            main_activity.initImmersiveMode();
+//        }
+//        main_activity.runOnUiThread(new Runnable() {
+//            public void run() {
+//                final boolean is_panorama_recording = false;
+//                final int visibility = is_panorama_recording ? View.GONE : (show_gui_photo && show_gui_video) ? View.VISIBLE : View.GONE; // for UI that is hidden while taking photo or video
+//                final int visibility_video = is_panorama_recording ? View.GONE : show_gui_photo ? View.VISIBLE : View.GONE; // for UI that is only hidden while taking photo
+//                View switchCameraButton = main_activity.findViewById(R.id.switch_camera);
+//                View switchMultiCameraButton = main_activity.findViewById(R.id.switch_multi_camera);
+//                View switchVideoButton = main_activity.findViewById(R.id.switch_video);
+//                View exposureButton = main_activity.findViewById(R.id.exposure);
+//                View exposureLockButton = main_activity.findViewById(R.id.exposure_lock);
+//                View whiteBalanceLockButton = main_activity.findViewById(R.id.white_balance_lock);
+//                View cycleRawButton = main_activity.findViewById(R.id.cycle_raw);
+//                View storeLocationButton = main_activity.findViewById(R.id.store_location);
+//                View textStampButton = main_activity.findViewById(R.id.text_stamp);
+//                View stampButton = main_activity.findViewById(R.id.stamp);
+//                View autoLevelButton = main_activity.findViewById(R.id.auto_level);
+//                View cycleFlashButton = main_activity.findViewById(R.id.cycle_flash);
+//                View faceDetectionButton = main_activity.findViewById(R.id.face_detection);
+//                View audioControlButton = main_activity.findViewById(R.id.audio_control);
+//                View popupButton = main_activity.findViewById(R.id.popup);
+//                if( main_activity.getPreview().getCameraControllerManager().getNumberOfCameras() > 1 )
+//                    switchCameraButton.setVisibility(visibility);
+//                if( main_activity.showSwitchMultiCamIcon() )
+//                    switchMultiCameraButton.setVisibility(visibility);
+//                switchVideoButton.setVisibility(visibility);
+//                if( main_activity.supportsExposureButton() )
+//                    exposureButton.setVisibility(visibility_video); // still allow exposure when recording video
+//                if( showExposureLockIcon() )
+//                    exposureLockButton.setVisibility(visibility_video); // still allow exposure lock when recording video
+//                if( showWhiteBalanceLockIcon() )
+//                    whiteBalanceLockButton.setVisibility(visibility_video); // still allow white balance lock when recording video
+//                if( showCycleRawIcon() )
+//                    cycleRawButton.setVisibility(visibility);
+//                if( showStoreLocationIcon() )
+//                    storeLocationButton.setVisibility(visibility);
+//                if( showTextStampIcon() )
+//                    textStampButton.setVisibility(visibility);
+//                if( showStampIcon() )
+//                    stampButton.setVisibility(visibility);
+//                if( showAutoLevelIcon() )
+//                    autoLevelButton.setVisibility(visibility);
+//                if( showCycleFlashIcon() )
+//                    cycleFlashButton.setVisibility(visibility);
+//                if( main_activity.hasAudioControl() )
+//                    audioControlButton.setVisibility(visibility);
+//
+//                View remoteConnectedIcon = main_activity.findViewById(R.id.kraken_icon);
+//                    remoteConnectedIcon.setVisibility(View.GONE);
+//
+//                popupButton.setVisibility(main_activity.getPreview().supportsFlash() ? visibility_video : visibility); // still allow popup in order to change flash mode when recording video
+//
+//                if( show_gui_photo && show_gui_video ) {
+//                    layoutUI(); // needed for "top" UIPlacement, to auto-arrange the buttons
+//                }
+//            }
+//        });
     }
 
     public void updateExposureLockIcon() {
@@ -1053,25 +859,7 @@ public class MainUI {
         view.setContentDescription( main_activity.getResources().getString(enabled ? R.string.preference_location_disable : R.string.preference_location_enable) );
     }
 
-    public void updateTextStampIcon() {
-        ImageButton view = main_activity.findViewById(R.id.text_stamp);
-        boolean enabled = !main_activity.getApplicationInterface().getTextStampPref().isEmpty();
-        view.setImageResource(enabled ? R.drawable.baseline_text_fields_red_48 : R.drawable.baseline_text_fields_white_48);
-    }
 
-    public void updateStampIcon() {
-        ImageButton view = main_activity.findViewById(R.id.stamp);
-        boolean enabled = main_activity.getApplicationInterface().getStampPref().equals("preference_stamp_yes");
-        view.setImageResource(enabled ? R.drawable.ic_text_format_red_48dp : R.drawable.ic_text_format_white_48dp);
-        view.setContentDescription( main_activity.getResources().getString(enabled ? R.string.stamp_disable : R.string.stamp_enable) );
-    }
-
-    public void updateAutoLevelIcon() {
-        ImageButton view = main_activity.findViewById(R.id.auto_level);
-        boolean enabled = main_activity.getApplicationInterface().getAutoStabilisePref();
-        view.setImageResource(enabled ? R.drawable.auto_stabilise_icon_red : R.drawable.auto_stabilise_icon);
-        view.setContentDescription( main_activity.getResources().getString(enabled ? R.string.auto_level_disable : R.string.auto_level_enable) );
-    }
 
     public void updateCycleFlashIcon() {
         // n.b., read from preview rather than saved application preference - so the icon updates correctly when in flash
@@ -1125,9 +913,9 @@ public class MainUI {
         this.updateWhiteBalanceLockIcon();
         this.updateCycleRawIcon();
         this.updateStoreLocationIcon();
-        this.updateTextStampIcon();
-        this.updateStampIcon();
-        this.updateAutoLevelIcon();
+//        this.updateTextStampIcon();
+//        this.updateStampIcon();
+//        this.updateAutoLevelIcon();
         this.updateCycleFlashIcon();
         this.updateFaceDetectionIcon();
     }
@@ -1323,7 +1111,7 @@ public class MainUI {
             Log.d(TAG, "nextIsoItem: " + previous);
         // Find current ISO
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-        String current_iso = sharedPreferences.getString(PreferenceKeys.ISOPreferenceKey, CameraController.ISO_DEFAULT);
+        String current_iso =  CameraController.ISO_DEFAULT;
         int count = iso_buttons.size();
         int step = previous ? -1 : 1;
         boolean found = false;
@@ -1482,10 +1270,8 @@ if (isExposureUIOpen()) {
         String flash_value = main_activity.getPreview().getCurrentFlashValue();
         if( MyDebug.LOG )
             Log.d(TAG, "flash_value: " + flash_value);
-        if( main_activity.getMainUI().showCycleFlashIcon() ) {
-            popup.setImageResource(R.drawable.popup);
-        }
-        else if( flash_value != null && flash_value.equals("flash_off") ) {
+
+         if( flash_value != null && flash_value.equals("flash_off") ) {
             popup.setImageResource(R.drawable.popup_flash_off);
         }
         else if( flash_value != null && ( flash_value.equals("flash_torch") || flash_value.equals("flash_frontscreen_torch") ) ) {
@@ -1590,198 +1376,6 @@ if (isExposureUIOpen()) {
         mSelectingLines = false;
         mHighlightedIcon= null;
         mHighlightedLine = null;
-    }
-
-
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "onKeyDown: " + keyCode);
-        switch( keyCode ) {
-            case KeyEvent.KEYCODE_VOLUME_UP:
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_MEDIA_PREVIOUS: // media codes are for "selfie sticks" buttons
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-            case KeyEvent.KEYCODE_MEDIA_STOP:
-            {
-                if( keyCode == KeyEvent.KEYCODE_VOLUME_UP )
-                    keydown_volume_up = true;
-                else if( keyCode == KeyEvent.KEYCODE_VOLUME_DOWN )
-                    keydown_volume_down = true;
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(main_activity);
-                String volume_keys = sharedPreferences.getString(PreferenceKeys.VolumeKeysPreferenceKey, "volume_take_photo");
-
-                if((keyCode==KeyEvent.KEYCODE_MEDIA_PREVIOUS
-                        ||keyCode==KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
-                        ||keyCode==KeyEvent.KEYCODE_MEDIA_STOP)
-                        &&!(volume_keys.equals("volume_take_photo"))) {
-                    AudioManager audioManager = (AudioManager) main_activity.getSystemService(Context.AUDIO_SERVICE);
-                    if(audioManager==null) break;
-                    if(!audioManager.isWiredHeadsetOn()) break; // isWiredHeadsetOn() is deprecated, but comment says "Use only to check is a headset is connected or not."
-                }
-
-                switch(volume_keys) {
-                    case "volume_take_photo":
-                        main_activity.takePicture(false);
-                        return true;
-                    case "volume_focus":
-                        if(keydown_volume_up && keydown_volume_down) {
-                            if (MyDebug.LOG)
-                                Log.d(TAG, "take photo rather than focus, as both volume keys are down");
-                            main_activity.takePicture(false);
-                        }
-                        else if (main_activity.getPreview().getCurrentFocusValue() != null && main_activity.getPreview().getCurrentFocusValue().equals("focus_mode_manual2")) {
-                            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-                                main_activity.changeFocusDistance(-1, false);
-                            else
-                                main_activity.changeFocusDistance(1, false);
-                        }
-                        else {
-                            // important not to repeatedly request focus, even though main_activity.getPreview().requestAutoFocus() will cancel, as causes problem if key is held down (e.g., flash gets stuck on)
-                            // also check DownTime vs EventTime to prevent repeated focusing whilst the key is held down
-                            if(event.getDownTime() == event.getEventTime() && !main_activity.getPreview().isFocusWaiting()) {
-                                if(MyDebug.LOG)
-                                    Log.d(TAG, "request focus due to volume key");
-                                main_activity.getPreview().requestAutoFocus();
-                            }
-                        }
-                        return true;
-                    case "volume_zoom":
-                        if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-                            main_activity.zoomIn();
-                        else
-                            main_activity.zoomOut();
-                        return true;
-                    case "volume_exposure":
-                        if(main_activity.getPreview().getCameraController() != null) {
-                            String value = sharedPreferences.getString(PreferenceKeys.ISOPreferenceKey, CameraController.ISO_DEFAULT);
-                            boolean manual_iso = !value.equals(CameraController.ISO_DEFAULT);
-                            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-                                if(manual_iso) {
-                                    if(main_activity.getPreview().supportsISORange())
-                                        main_activity.changeISO(1);
-                                }
-                                else
-                                    main_activity.changeExposure(1);
-                            }
-                            else {
-                                if(manual_iso) {
-                                    if(main_activity.getPreview().supportsISORange())
-                                        main_activity.changeISO(-1);
-                                }
-                                else
-                                    main_activity.changeExposure(-1);
-                            }
-                        }
-                        return true;
-                    case "volume_auto_stabilise":
-                        if( main_activity.supportsAutoStabilise() ) {
-                            boolean auto_stabilise = sharedPreferences.getBoolean(PreferenceKeys.AutoStabilisePreferenceKey, false);
-                            auto_stabilise = !auto_stabilise;
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(PreferenceKeys.AutoStabilisePreferenceKey, auto_stabilise);
-                            editor.apply();
-                            String message = main_activity.getResources().getString(R.string.preference_auto_stabilise) + ": " + main_activity.getResources().getString(auto_stabilise ? R.string.on : R.string.off);
-                            main_activity.getPreview().showToast(main_activity.getChangedAutoStabiliseToastBoxer(), message);
-                        }
-                        else {
-                            main_activity.getPreview().showToast(main_activity.getChangedAutoStabiliseToastBoxer(), R.string.auto_stabilise_not_supported);
-                        }
-                        return true;
-                    case "volume_really_nothing":
-                        // do nothing, but still return true so we don't change volume either
-                        return true;
-                }
-                // else do nothing here, but still allow changing of volume (i.e., the default behaviour)
-                break;
-            }
-            case KeyEvent.KEYCODE_MENU:
-            {
-                // needed to support hardware menu button
-                // tested successfully on Samsung S3 (via RTL)
-                // see http://stackoverflow.com/questions/8264611/how-to-detect-when-user-presses-menu-key-on-their-android-device
-                return true;
-            }
-            case KeyEvent.KEYCODE_CAMERA:
-            {
-                if( event.getRepeatCount() == 0 ) {
-                    main_activity.takePicture(false);
-                    return true;
-                }
-            }
-            case KeyEvent.KEYCODE_FOCUS:
-            {
-                // important not to repeatedly request focus, even though main_activity.getPreview().requestAutoFocus() will cancel - causes problem with hardware camera key where a half-press means to focus
-                // also check DownTime vs EventTime to prevent repeated focusing whilst the key is held down - see https://sourceforge.net/p/opencamera/tickets/174/ ,
-                // or same issue above for volume key focus
-                if( event.getDownTime() == event.getEventTime() && !main_activity.getPreview().isFocusWaiting() ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "request focus due to focus key");
-                    main_activity.getPreview().requestAutoFocus();
-                }
-                return true;
-            }
-            case KeyEvent.KEYCODE_ZOOM_IN:
-            case KeyEvent.KEYCODE_PLUS:
-            case KeyEvent.KEYCODE_NUMPAD_ADD:
-            {
-                main_activity.zoomIn();
-                return true;
-            }
-            case KeyEvent.KEYCODE_ZOOM_OUT:
-            case KeyEvent.KEYCODE_MINUS:
-            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
-            {
-                main_activity.zoomOut();
-                return true;
-            }
-            case KeyEvent.KEYCODE_SPACE:
-            case KeyEvent.KEYCODE_NUMPAD_5:
-            {
-                if( isExposureUIOpen() && remote_control_mode ) {
-                    commandMenuExposure();
-                    return true;
-                }
-                else if( event.getRepeatCount() == 0 ) {
-                    main_activity.takePicture(false);
-                    return true;
-                }
-                break;
-            }
-            case KeyEvent.KEYCODE_DPAD_UP:
-            case KeyEvent.KEYCODE_NUMPAD_8:
-                //case KeyEvent.KEYCODE_VOLUME_UP: // test
-                if( !remote_control_mode ) {
-                }
-                else if( processRemoteUpButton() )
-                    return true;
-                break;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-            case KeyEvent.KEYCODE_NUMPAD_2:
-                //case KeyEvent.KEYCODE_VOLUME_DOWN: // test
-                if( !remote_control_mode ) {
-                }
-                else if( processRemoteDownButton() )
-                    return true;
-                break;
-            case KeyEvent.KEYCODE_FUNCTION:
-            case KeyEvent.KEYCODE_NUMPAD_MULTIPLY:
-                break;
-            case KeyEvent.KEYCODE_SLASH:
-            case KeyEvent.KEYCODE_NUMPAD_DIVIDE:
-                toggleExposureUI();
-                break;
-        }
-        return false;
-    }
-
-    public void onKeyUp(int keyCode, KeyEvent event) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "onKeyUp: " + keyCode);
-        if( keyCode == KeyEvent.KEYCODE_VOLUME_UP )
-            keydown_volume_up = false;
-        else if( keyCode == KeyEvent.KEYCODE_VOLUME_DOWN )
-            keydown_volume_down = false;
     }
 
     /** If the exposure menu is open, selects a current line or option. Else does nothing.
