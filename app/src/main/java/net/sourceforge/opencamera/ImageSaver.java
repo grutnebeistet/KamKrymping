@@ -1234,9 +1234,8 @@ public class ImageSaver extends Thread {
             Log.d(TAG, "postProcessBitmap");
         long time_s = System.currentTimeMillis();
 
-        boolean dategeo_stamp = request.preference_stamp.equals("preference_stamp_yes");
-        boolean text_stamp = request.preference_textstamp.length() > 0;
-        if( bitmap != null || request.image_format != Request.ImageFormat.STD || request.do_auto_stabilise || request.mirror || dategeo_stamp || text_stamp ) {
+
+        if( bitmap != null || request.image_format != Request.ImageFormat.STD || request.do_auto_stabilise || request.mirror  ) {
             // either we have a bitmap, or will need to decode the bitmap to do post-processing
             if( !ignore_exif_orientation ) {
                 if( bitmap != null ) {

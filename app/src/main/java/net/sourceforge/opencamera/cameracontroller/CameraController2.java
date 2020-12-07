@@ -66,14 +66,11 @@ public class CameraController2 extends CameraController {
     private final boolean is_samsung_s7; // Galaxy S7 or Galaxy S7 Edge
 
     private CameraCharacteristics characteristics;
-    // cached characteristics (use this for values that need to be frequently accessed, e.g., per frame, to improve performance);
     private int characteristics_sensor_orientation;
     private Facing characteristics_facing;
 
     private List<Integer> zoom_ratios;
     private int current_zoom_value;
-    private boolean supports_face_detect_mode_simple;
-    private boolean supports_face_detect_mode_full;
     private boolean supports_optical_stabilization;
     private boolean supports_photo_video_recording;
 
@@ -156,24 +153,6 @@ public class CameraController2 extends CameraController {
     private ImageReader imageReader;
 
     private BurstType burst_type = BurstType.BURSTTYPE_NONE;
-    // for BURSTTYPE_EXPO:
-    private final static int max_expo_bracketing_n_images = 5; // could be more, but limit to 5 for now
-    private int expo_bracketing_n_images = 3;
-    private double expo_bracketing_stops = 2.0;
-    private boolean use_expo_fast_burst = true;
-    // for BURSTTYPE_FOCUS:
-    private boolean focus_bracketing_in_progress; // whether focus bracketing in progress; set back to false to cancel
-    private int focus_bracketing_n_images = 3;
-    private float focus_bracketing_source_distance = 0.0f;
-    private float focus_bracketing_target_distance = 0.0f;
-    private boolean focus_bracketing_add_infinity = false;
-    // for BURSTTYPE_NORMAL:
-    private boolean burst_for_noise_reduction; // chooses number of burst images and other settings for Open Camera's noise reduction (NR) photo mode
-    private boolean noise_reduction_low_light; // if burst_for_noise_reduction==true, whether to optimise for low light scenes
-    private int burst_requested_n_images; // if burst_for_noise_reduction==false, this gives the number of images for the burst
-    //for BURSTTYPE_CONTINUOUS:
-    private boolean continuous_burst_in_progress; // whether we're currently taking a continuous burst
-    private boolean continuous_burst_requested_last_capture; // whether we've requested the last capture
 
     private boolean optimise_ae_for_dro = false;
     private boolean want_raw;
@@ -743,24 +722,8 @@ public class CameraController2 extends CameraController {
         }
 
         private float getLogProfile(float in) {
-            //final float black_level = 4.0f/255.0f;
-            //final float power = 1.0f/2.2f;
             final float log_A = log_profile_strength;
-            /*float out;
-            if( in <= black_level ) {
-                out = in;
-            }
-            else {
-                float in_m = (in - black_level) / (1.0f - black_level);
-                out = (float) (Math.log1p(log_A * in_m) / Math.log1p(log_A));
-                out = black_level + (1.0f - black_level)*out;
-            }*/
             float out = (float) (Math.log1p(log_A * in) / Math.log1p(log_A));
-
-            // apply gamma
-            // update: no longer need to do this with improvements made in 1.48 onwards
-            //out = (float)Math.pow(out, power);
-            //out = Math.max(out, 0.5f);
 
             return out;
         }
@@ -782,12 +745,6 @@ public class CameraController2 extends CameraController {
                 have_tonemap_profile = false;
             else if( tonemap_profile == TonemapProfile.TONEMAPPROFILE_GAMMA && gamma_profile == 0.0f )
                 have_tonemap_profile = false;
-
-            // to use test_new, also need to uncomment the test code in setFocusValue() to call setTonemapProfile()
-            //boolean test_new = this.af_mode == CaptureRequest.CONTROL_AF_MODE_AUTO; // testing
-
-            //if( test_new )
-            //    have_tonemap_profile = false;
 
             if( have_tonemap_profile ) {
                 if( default_tonemap_mode == null ) {
@@ -877,75 +834,7 @@ public class CameraController2 extends CameraController {
                             }
                         }
 
-                        /*if( test_new ) {
-                            // if changing this, make sure we don't exceed tonemap_log_max_curve_points_c
-                            // we want:
-                            // 0-15: step 1 (16 values)
-                            // 16-47: step 2 (16 values)
-                            // 48-111: step 4 (16 values)
-                            // 112-231 : step 8 (15 values)
-                            // 232-255: step 24 (1 value)
-                            int step = 1, c = 0;
-                            //int step = 4, c = 0;
-                            //int step = test_new ? 4 : 1, c = 0;
-                            values = new float[2*tonemap_log_max_curve_points_c];
-                            for(int i=0;i<232;i+=step) {
-                                float in = ((float)i) / 255.0f;
-                                float out = (tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG) ? getLogProfile(in) : getGammaProfile(in);
-                                if( tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG )
-                                    out = (float)Math.pow(out, 1.0f/2.2f);
-                                values[c++] = in;
-                                values[c++] = out;
-                                if( (c/2) % 16 == 0 ) {
-                                    step *= 2;
-                                }
-                            }
-                            values[c++] = 1.0f;
-                            float last_out = (tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG) ? getLogProfile(1.0f) : getGammaProfile(1.0f);
-                            if( tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG )
-                                last_out = (float)Math.pow(last_out, 1.0f/2.2f);
-                            values[c++] = last_out;
-                            values = Arrays.copyOfRange(values,0,c);
-                        }*/
-                        /*if( test_new )
-                        {
-                            // x values are ranged 0 to 255
-                            float [] x_values = new float[] {
-                                    0.0f, 4.0f, 8.0f, 12.0f, 16.0f, 20.0f, 24.0f, 28.0f,
-                                    //0.0f, 8.0f, 16.0f, 24.0f,
-                                    32.0f, 40.0f, 48.0f, 56.0f,
-                                    64.0f, 72.0f, 80.0f, 88.0f,
-                                    96.0f, 104.0f, 112.0f, 120.0f,
-                                    128.0f, 136.0f, 144.0f, 152.0f,
-                                    160.0f, 168.0f, 176.0f, 184.0f,
-                                    192.0f, 200.0f, 208.0f, 216.0f,
-                                    224.0f, 232.0f, 240.0f, 248.0f,
-                                    255.0f
-                            };
-                            values = new float[2*x_values.length];
-                            c = 0;
-                            for(float x_value : x_values) {
-                                float in = x_value / 255.0f;
-                                float out = (tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG) ? getLogProfile(in) : getGammaProfile(in);
-                                values[c++] = in;
-                                values[c++] = out;
-                            }
-                        }*/
-                        /*if( test_new )
-                        {
-                            values = new float [2*256];
-                            step = 8;
-                            c = 0;
-                            for(int i=0;i<254;i+=step) {
-                                float in = ((float)i) / 255.0f;
-                                float out = (tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG) ? getLogProfile(in) : getGammaProfile(in);
-                                values[c++] = in;
-                                values[c++] = out;
-                            }
-                            values[c++] = 1.0f;
-                            values[c++] = (tonemap_profile==TonemapProfile.TONEMAPPROFILE_LOG) ? getLogProfile(1.0f) : getGammaProfile(1.0f);
-                            values = Arrays.copyOfRange(values,0,c);
-                        }*/
+
                         if( MyDebug.LOG ) {
                             int n_values = values.length/2;
                             for(int i=0;i<n_values;i++) {
@@ -976,38 +865,6 @@ public class CameraController2 extends CameraController {
                             break;
                     }
 
-                    // sRGB:
-                    /*values = new float []{0.0000f, 0.0000f, 0.0667f, 0.2864f, 0.1333f, 0.4007f, 0.2000f, 0.4845f,
-                            0.2667f, 0.5532f, 0.3333f, 0.6125f, 0.4000f, 0.6652f, 0.4667f, 0.7130f,
-                            0.5333f, 0.7569f, 0.6000f, 0.7977f, 0.6667f, 0.8360f, 0.7333f, 0.8721f,
-                            0.8000f, 0.9063f, 0.8667f, 0.9389f, 0.9333f, 0.9701f, 1.0000f, 1.0000f};*/
-                    /*values = new float []{0.0000f, 0.0000f, 0.05f, 0.3f, 0.1f, 0.4f, 0.2000f, 0.4845f,
-                            0.2667f, 0.5532f, 0.3333f, 0.6125f, 0.4000f, 0.6652f,
-                            0.5f, 0.78f, 1.0000f, 1.0000f};*/
-                    /*values = new float []{0.0f, 0.0f, 0.05f, 0.4f, 0.1f, 0.54f, 0.2f, 0.6f, 0.3f, 0.65f, 0.4f, 0.7f,
-                            0.5f, 0.78f, 1.0f, 1.0f};*/
-                    /*values = new float[]{0.0f, 0.0f, 0.0667f, 0.2864f, 0.1333f, 0.4007f, 0.2000f, 0.4845f,
-                            1.0f, 1.0f};*/
-                    //values = new float []{0.0f, 0.5f, 0.05f, 0.6f, 0.1f, 0.7f, 0.2f, 0.8f, 0.5f, 0.9f, 1.0f, 1.0f};
-                    /*values = new float []{0.0f, 0.0f,
-                            0.05f, 0.05f,
-                            0.1f, 0.1f,
-                            0.15f, 0.15f,
-                            0.2f, 0.2f,
-                            0.25f, 0.25f,
-                            0.3f, 0.3f,
-                            0.35f, 0.35f,
-                            0.4f, 0.4f,
-                            0.5f, 0.5f,
-                            0.6f, 0.6f,
-                            0.7f, 0.7f,
-                            0.8f, 0.8f,
-                            0.9f, 0.9f,
-                            0.95f, 0.95f,
-                            1.0f, 1.0f};*/
-                    //values = enforceMinTonemapCurvePoints(new float[]{0.0f, 0.0f, 1.0f, 1.0f});
-                    //values = enforceMinTonemapCurvePoints(values);
-
                     if( MyDebug.LOG  )
                         Log.d(TAG, "values: " + Arrays.toString(values));
                     if( values != null ) {
@@ -1025,8 +882,6 @@ public class CameraController2 extends CameraController {
                 builder.set(CaptureRequest.TONEMAP_MODE, default_tonemap_mode);
             }
         }
-        
-        // n.b., if we add more methods, remember to update setupBuilder() above!
     }
 
     /** Converts a red, green even, green odd and blue components to a white balance temperature.
@@ -1305,8 +1160,6 @@ public class CameraController2 extends CameraController {
     private final CameraSettings camera_settings = new CameraSettings();
     private boolean push_repeating_request_when_torch_off = false;
     private CaptureRequest push_repeating_request_when_torch_off_id = null;
-    /*private boolean push_set_ae_lock = false;
-    private CaptureRequest push_set_ae_lock_id = null;*/
 
     private CaptureRequest fake_precapture_turn_on_torch_id = null; // the CaptureRequest used to turn on torch when starting the "fake" precapture
 
@@ -1887,8 +1740,6 @@ public class CameraController2 extends CameraController {
 
         int [] face_modes = characteristics.get(CameraCharacteristics.STATISTICS_INFO_AVAILABLE_FACE_DETECT_MODES);
         camera_features.supports_face_detection = false;
-        supports_face_detect_mode_simple = false;
-        supports_face_detect_mode_full = false;
         for(int face_mode : face_modes) {
             if( MyDebug.LOG )
                 Log.d(TAG, "face detection mode: " + face_mode);
@@ -1898,13 +1749,11 @@ public class CameraController2 extends CameraController {
             // STATISTICS_FACE_DETECT_MODE_SIMPLE in the list, so we have check for either
             if( face_mode == CameraCharacteristics.STATISTICS_FACE_DETECT_MODE_SIMPLE ) {
                 camera_features.supports_face_detection = true;
-                supports_face_detect_mode_simple = true;
                 if( MyDebug.LOG )
                     Log.d(TAG, "supports simple face detection mode");
             }
             else if( face_mode == CameraCharacteristics.STATISTICS_FACE_DETECT_MODE_FULL ) {
                 camera_features.supports_face_detection = true;
-                supports_face_detect_mode_full = true;
                 if( MyDebug.LOG )
                     Log.d(TAG, "supports full face detection mode");
             }
@@ -1915,8 +1764,6 @@ public class CameraController2 extends CameraController {
                 if( MyDebug.LOG )
                     Log.d(TAG, "can't support face detection, as zero max face count");
                 camera_features.supports_face_detection = false;
-                supports_face_detect_mode_simple = false;
-                supports_face_detect_mode_full = false;
             }
         }
         if( camera_features.supports_face_detection ) {
@@ -1935,8 +1782,6 @@ public class CameraController2 extends CameraController {
                 if( MyDebug.LOG )
                     Log.d(TAG, "can't support face detection, as no CONTROL_SCENE_MODE_FACE_PRIORITY");
                 camera_features.supports_face_detection = false;
-                supports_face_detect_mode_simple = false;
-                supports_face_detect_mode_full = false;
             }
         }
 
@@ -1946,18 +1791,7 @@ public class CameraController2 extends CameraController {
         boolean capabilities_raw = false;
         boolean capabilities_high_speed_video = false;
         for(int capability : capabilities) {
-            /*if( capability == CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR ) {
-                // At least some Huawei devices (at least, the Huawei device model FIG-LX3, device code-name hi6250) don't
-                // have REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR, but I had a user complain that HDR mode and manual ISO
-                // had previously worked for them. Note that we still check below for SENSOR_INFO_SENSITIVITY_RANGE and
-                // SENSOR_INFO_EXPOSURE_TIME_RANGE, so not checking REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR shouldn't
-                // enable manual ISO/exposure on devices that don't support it.
-                // Also may affect Samsung Galaxy A8(2018).
-                // Instead we just block LEGACY devices (probably don't need to, again because we check
-                // SENSOR_INFO_SENSITIVITY_RANGE and SENSOR_INFO_EXPOSURE_TIME_RANGE, but just in case).
-                capabilities_manual_sensor = true;
-            }
-            else*/ if( capability == CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING ) {
+        if( capability == CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_POST_PROCESSING ) {
                 capabilities_manual_post_processing = true;
             }
             else if( capability == CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW ) {
@@ -2315,71 +2149,6 @@ public class CameraController2 extends CameraController {
 
     public boolean shouldCoverPreview() {
         return !has_received_frame;
-    }
-
-    private String convertSceneMode(int value2) {
-        String value;
-        switch( value2 ) {
-        case CameraMetadata.CONTROL_SCENE_MODE_ACTION:
-            value = "action";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_BARCODE:
-            value = "barcode";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_BEACH:
-            value = "beach";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_CANDLELIGHT:
-            value = "candlelight";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_DISABLED:
-            value = SCENE_MODE_DEFAULT;
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_FIREWORKS:
-            value = "fireworks";
-            break;
-        // "hdr" no longer available in Camera2
-        /*case CameraMetadata.CONTROL_SCENE_MODE_HIGH_SPEED_VIDEO:
-            // new for Camera2
-            value = "high-speed-video";
-            break;*/
-        case CameraMetadata.CONTROL_SCENE_MODE_LANDSCAPE:
-            value = "landscape";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_NIGHT:
-            value = "night";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_NIGHT_PORTRAIT:
-            value = "night-portrait";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_PARTY:
-            value = "party";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_PORTRAIT:
-            value = "portrait";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_SNOW:
-            value = "snow";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_SPORTS:
-            value = "sports";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_STEADYPHOTO:
-            value = "steadyphoto";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_SUNSET:
-            value = "sunset";
-            break;
-        case CameraMetadata.CONTROL_SCENE_MODE_THEATRE:
-            value = "theatre";
-            break;
-        default:
-            if( MyDebug.LOG )
-                Log.d(TAG, "unknown scene mode: " + value2);
-            value = null;
-            break;
-        }
-        return value;
     }
 
     private String convertColorEffect(int value2) {
@@ -3089,7 +2858,7 @@ public class CameraController2 extends CameraController {
 
     private void checkImagesCompleted() {
         if( MyDebug.LOG )
-            Log.d(TAG, "checkImagesCompleted");
+            Log.d(TAG, "checkImagesCompleted ==  jpeg_todo " + jpeg_todo);
         boolean completed = false;
         boolean take_pending_raw = false;
         synchronized( background_camera_lock ) {
@@ -3105,6 +2874,11 @@ public class CameraController2 extends CameraController {
             else if( !jpeg_todo && !raw_todo ) {
                 if( MyDebug.LOG )
                     Log.d(TAG, "all image callbacks now completed");
+                completed = true;
+            }
+            else if( !jpeg_todo) {
+                if( MyDebug.LOG )
+                    Log.d(TAG, "jpeg callback already done, can now call pending raw callback");
                 completed = true;
             }
 

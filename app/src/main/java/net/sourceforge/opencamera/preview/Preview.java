@@ -4354,7 +4354,7 @@ public class Preview implements SurfaceHolder.Callback, TextureView.SurfaceTextu
         else if( ( !is_video || photo_snapshot ) && this.phase == PHASE_TAKING_PHOTO ) {
             // user requested take photo while already taking photo
             if( MyDebug.LOG )
-                Log.d(TAG, "already taking a photo");
+                Log.d(TAG, "already taking a photo photo_snapshot " + photo_snapshot + "  phase " + this.phase);
             if( remaining_repeat_photos != 0 ) {
                 cancelRepeat();
                 showToast(take_photo_toast, R.string.cancelled_repeat_mode);

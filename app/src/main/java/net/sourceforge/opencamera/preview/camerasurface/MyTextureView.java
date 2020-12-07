@@ -64,11 +64,6 @@ public class MyTextureView extends TextureView implements CameraSurface {
         return preview.touchEvent(event);
     }
 
-	/*@Override
-	public void onDraw(Canvas canvas) {
-		preview.draw(canvas);
-	}*/
-
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
         if( MyDebug.LOG )
