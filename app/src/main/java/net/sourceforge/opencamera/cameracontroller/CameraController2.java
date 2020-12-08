@@ -152,29 +152,12 @@ public class CameraController2 extends CameraController {
 
     private ImageReader imageReader;
 
-    private BurstType burst_type = BurstType.BURSTTYPE_NONE;
-
-    private boolean optimise_ae_for_dro = false;
-    private boolean want_raw;
-    //private boolean want_raw = true;
-    private int max_raw_images;
-    private android.util.Size raw_size;
     private ImageReader imageReaderRaw;
     private OnRawImageAvailableListener onRawImageAvailableListener;
     private PictureCallback picture_cb;
-    private boolean jpeg_todo; // whether we are still waiting for JPEG images
-    private boolean raw_todo; // whether we are still waiting for RAW images
-    private boolean done_all_captures; // whether we've received the capture for the image (or all images if a burst)
-    //private CaptureRequest pending_request_when_ready;
-    private int n_burst; // number of expected (remaining) burst JPEG images in this capture
-    private int n_burst_taken; // number of burst JPEG images taken so far in this capture
-    private int n_burst_total; // total number of expected burst images in this capture (if known) (same for JPEG and RAW)
-    private int n_burst_raw; // number of expected (remaining) burst RAW images in this capture
-    private boolean burst_single_request; // if true then the burst images are returned in a single call to onBurstPictureTaken(), if false, then multiple calls to onPictureTaken() are made as soon as the image is available
-    private final List<byte []> pending_burst_images = new ArrayList<>(); // burst images that have been captured so far, but not yet sent to the application
 
-    private List<CaptureRequest> slow_burst_capture_requests; // the set of burst capture requests - used when not using captureBurst() (e.g., when use_expo_fast_burst==false, or for focus bracketing)
-    private long slow_burst_start_ms = 0; // time when burst started (used for measuring performance of captures when not using captureBurst())
+    private boolean done_all_captures; // whether we've received the capture for the image (or all images if a burst)
+
     private ErrorCallback take_picture_error_cb;
     private boolean want_video_high_speed;
     private boolean is_video_high_speed; // whether we're actually recording in high speed
@@ -364,8 +347,7 @@ public class CameraController2 extends CameraController {
             setAutoWhiteBalanceLock(builder);
             setAFRegions(builder);
             setAERegions(builder);
-            setFaceDetectMode(builder);
-            setRawMode(builder);
+
             setStabilization(builder);
             setTonemapProfile(builder);
 
@@ -607,9 +589,6 @@ public class CameraController2 extends CameraController {
                         break;
                     case "flash_red_eye":
                         // not supported for expo bracketing or burst
-                        if( CameraController2.this.burst_type != BurstType.BURSTTYPE_NONE )
-                            builder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON);
-                        else
                             builder.set(CaptureRequest.CONTROL_AE_MODE, CameraMetadata.CONTROL_AE_MODE_ON_AUTO_FLASH_REDEYE);
                         builder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_OFF);
                         break;
@@ -681,20 +660,6 @@ public class CameraController2 extends CameraController {
             }
         }
 
-        private void setFaceDetectMode(CaptureRequest.Builder builder) {
-            if( has_face_detect_mode )
-                builder.set(CaptureRequest.STATISTICS_FACE_DETECT_MODE, face_detect_mode);
-            else
-                builder.set(CaptureRequest.STATISTICS_FACE_DETECT_MODE, CaptureRequest.STATISTICS_FACE_DETECT_MODE_OFF);
-        }
-        
-        private void setRawMode(CaptureRequest.Builder builder) {
-            // DngCreator says "For best quality DNG files, it is strongly recommended that lens shading map output is enabled if supported"
-            // docs also say "ON is always supported on devices with the RAW capability", so we don't check for STATISTICS_LENS_SHADING_MAP_MODE_ON being available
-            if( want_raw && !previewIsVideoMode ) {
-                builder.set(CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE, CaptureRequest.STATISTICS_LENS_SHADING_MAP_MODE_ON);
-            }
-        }
         
         private void setStabilization(CaptureRequest.Builder builder) {
             if( MyDebug.LOG )
@@ -953,7 +918,7 @@ public class CameraController2 extends CameraController {
         public void onImageAvailable(ImageReader reader) {
             if( MyDebug.LOG )
                 Log.d(TAG, "new still image available");
-            if( picture_cb == null || !jpeg_todo ) {
+            if( picture_cb == null ) {
                 // in theory this shouldn't happen - but if this happens, still free the image to avoid risk of memory leak,
                 // or strange behaviour where an old image appears when the user next takes a photo
                 Log.e(TAG, "no picture callback available");
@@ -961,10 +926,6 @@ public class CameraController2 extends CameraController {
                 image.close();
                 return;
             }
-
-            List<byte []> single_burst_complete_images = null;
-            boolean call_takePhotoPartial = false;
-            boolean call_takePhotoCompleted = false;
 
             Image image = reader.acquireNextImage();
             if( MyDebug.LOG )
@@ -976,68 +937,10 @@ public class CameraController2 extends CameraController {
             buffer.get(bytes);
             image.close();
 
-            synchronized( background_camera_lock ) {
-                n_burst_taken++;
-                if( MyDebug.LOG ) {
-                    Log.d(TAG, "n_burst_taken is now: " + n_burst_taken);
-                    Log.d(TAG, "n_burst: " + n_burst);
-                    Log.d(TAG, "burst_single_request: " + burst_single_request);
-                }
-                if( burst_single_request ) {
-                    pending_burst_images.add(bytes);
-                    if( MyDebug.LOG ) {
-                        Log.d(TAG, "pending_burst_images size is now: " + pending_burst_images.size());
-                    }
-                    if( pending_burst_images.size() >= n_burst ) { // shouldn't ever be greater, but just in case
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "all burst images available");
-                        if( pending_burst_images.size() > n_burst ) {
-                            Log.e(TAG, "pending_burst_images size " + pending_burst_images.size() + " is greater than n_burst " + n_burst);
-                        }
-                        // take a copy, so that we can clear pending_burst_images
-                        single_burst_complete_images = new ArrayList<>(pending_burst_images);
-                        // continued below after lock...
-                    }
-                    else {
-                        if( MyDebug.LOG )
-                            Log.d(TAG, "number of burst images is now: " + pending_burst_images.size());
-                        call_takePhotoPartial = true;
-                    }
-                }
-                // case for burst_single_request==false handled below
-            }
 
-            // need to call without a lock
 
-             if( !burst_single_request ) {
-                picture_cb.onPictureTaken(bytes);
-            }
-
-            synchronized( background_camera_lock ) {
-                if( single_burst_complete_images != null ) {
-                    pending_burst_images.clear();
-
-                    call_takePhotoCompleted = true;
-                }
-                else if( !burst_single_request ) {
-                    n_burst--;
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "n_burst is now " + n_burst);
-                    else if( n_burst == 0 ) {
-                        call_takePhotoCompleted = true;
-                    }
-                    else {
-                        call_takePhotoPartial = true;
-                    }
-                }
-            }
-
-             if( call_takePhotoCompleted ) {
+            picture_cb.onPictureTaken(bytes);
                 takePhotoCompleted();
-            }
-
-            if( MyDebug.LOG )
-                Log.d(TAG, "done onImageAvailable");
         }
 
 
@@ -1045,12 +948,6 @@ public class CameraController2 extends CameraController {
          *  but all images have been received.
          */
         private void takePhotoCompleted() {
-            if( MyDebug.LOG )
-                Log.d(TAG, "takePhotoCompleted");
-            // need to set jpeg_todo to false before calling onCompleted, as that may reenter CameraController to take another photo (if in auto-repeat burst mode) - see testTakePhotoRepeat()
-            synchronized( background_camera_lock ) {
-                jpeg_todo = false;
-            }
             checkImagesCompleted();
         }
     }
@@ -1138,7 +1035,7 @@ public class CameraController2 extends CameraController {
         public void onImageAvailable(ImageReader reader) {
             if( MyDebug.LOG )
                 Log.d(TAG, "new still raw image available");
-            if( picture_cb == null || !raw_todo ) {
+            if( picture_cb == null ) {
                 // in theory this shouldn't happen - but if this happens, still free the image to avoid risk of memory leak,
                 // or strange behaviour where an old image appears when the user next takes a photo
                 Log.e(TAG, "no picture callback available");
@@ -1880,33 +1777,6 @@ public class CameraController2 extends CameraController {
         Collections.sort(camera_features.picture_sizes, new CameraController.SizeSorter());
         // test high resolution modes not supporting burst:
         //camera_features.picture_sizes.get(0).supports_burst = false;
-
-        raw_size = null;
-        if( capabilities_raw ) {
-            android.util.Size [] raw_camera_picture_sizes = configs.getOutputSizes(ImageFormat.RAW_SENSOR);
-            if( raw_camera_picture_sizes == null ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "RAW not supported, failed to get RAW_SENSOR sizes");
-                want_raw = false; // just in case it got set to true somehow
-            }
-            else {
-                for(android.util.Size size : raw_camera_picture_sizes) {
-                    if( raw_size == null || size.getWidth()*size.getHeight() > raw_size.getWidth()*raw_size.getHeight() ) {
-                        raw_size = size;
-                    }
-                }
-                if( raw_size == null ) {
-                    if( MyDebug.LOG )
-                        Log.d(TAG, "RAW not supported, failed to find a raw size");
-                    want_raw = false; // just in case it got set to true somehow
-                }
-            }
-        }
-        else {
-            if( MyDebug.LOG )
-                Log.d(TAG, "RAW capability not supported");
-            want_raw = false; // just in case it got set to true somehow
-        }
 
         ae_fps_ranges = new ArrayList<>();
         for (Range<Integer> r : characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)) {
@@ -2826,41 +2696,20 @@ public class CameraController2 extends CameraController {
         // If ever we want to change this on future, we should ensure that all image available listeners (JPEG+RAW) are
         // using the same handler/thread.
         imageReader.setOnImageAvailableListener(new OnImageAvailableListener(), null);
-        if( want_raw && raw_size != null&& !previewIsVideoMode  ) {
-            // unlike the JPEG imageReader, we can't read the data and close the image straight away, so we need to allow a larger
-            // value for maxImages
-            imageReaderRaw = ImageReader.newInstance(raw_size.getWidth(), raw_size.getHeight(), ImageFormat.RAW_SENSOR, max_raw_images);
-            if( MyDebug.LOG ) {
-                Log.d(TAG, "created new imageReaderRaw: " + imageReaderRaw.toString());
-                Log.d(TAG, "imageReaderRaw surface: " + imageReaderRaw.getSurface().toString());
-            }
-            // see note above for imageReader.setOnImageAvailableListener for why we use a null handler
-            imageReaderRaw.setOnImageAvailableListener(onRawImageAvailableListener = new OnRawImageAvailableListener(), null);
-        }
     }
     
     private void clearPending() {
-        if( MyDebug.LOG )
+        if (MyDebug.LOG)
             Log.d(TAG, "clearPending");
 
-        if( onRawImageAvailableListener != null ) {
+        if (onRawImageAvailableListener != null) {
             onRawImageAvailableListener.clear();
         }
-        slow_burst_capture_requests = null;
-        n_burst = 0;
-        n_burst_taken = 0;
-        n_burst_total = 0;
-        n_burst_raw = 0;
-        burst_single_request = false;
-        slow_burst_start_ms = 0;
     }
 
 
     private void checkImagesCompleted() {
-        if( MyDebug.LOG )
-            Log.d(TAG, "checkImagesCompleted ==  jpeg_todo " + jpeg_todo);
         boolean completed = false;
-        boolean take_pending_raw = false;
         synchronized( background_camera_lock ) {
             if( !done_all_captures  ) {
                 if( MyDebug.LOG )
@@ -2870,22 +2719,17 @@ public class CameraController2 extends CameraController {
                 // just in case?
                 if( MyDebug.LOG )
                     Log.d(TAG, "no picture_cb");
-            }
-            else if( !jpeg_todo && !raw_todo ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "all image callbacks now completed");
-                completed = true;
-            }
-            else if( !jpeg_todo) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "jpeg callback already done, can now call pending raw callback");
-                completed = true;
-            }
-
-            else {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "need to wait for jpeg and/or raw callback");
-            }
+            } else completed = true ;
+//            else if( !jpeg_todo ) {
+//                if( MyDebug.LOG )
+//                    Log.d(TAG, "all image callbacks now completed");
+//                completed = true;
+//            }
+//
+//            else {
+//                if( MyDebug.LOG )
+//                    Log.d(TAG, "need to wait for jpeg and/or raw callback");
+//            }
         }
 
         // need to call callbacks without a lock
@@ -3269,8 +3113,6 @@ public class CameraController2 extends CameraController {
         if( frontscreen_flash ) {
             use_fake_precapture_mode = true;
         }
-        else if( burst_type != BurstType.BURSTTYPE_NONE )
-            use_fake_precapture_mode = true;
         else if( camera_settings.has_iso )
             use_fake_precapture_mode = true;
         else {
@@ -4158,7 +4000,6 @@ public class CameraController2 extends CameraController {
                 if( MyDebug.LOG )
                     Log.d(TAG, "cancel face detection");
                 camera_settings.has_face_detect_mode = false;
-                camera_settings.setFaceDetectMode(previewBuilder);
                 // no need to call setRepeatingRequest(), we're just setting the camera_settings for when we restart the preview
             }
         }
@@ -4460,7 +4301,7 @@ public class CameraController2 extends CameraController {
                     stillBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH);
                     test_fake_flash_photo++;
                 }
-                if( !camera_settings.has_iso && this.optimise_ae_for_dro && capture_result_has_exposure_time && (camera_settings.flash_value.equals("flash_off") || camera_settings.flash_value.equals("flash_auto") || camera_settings.flash_value.equals("flash_frontscreen_auto") ) ) {
+                if( !camera_settings.has_iso  && capture_result_has_exposure_time && (camera_settings.flash_value.equals("flash_off") || camera_settings.flash_value.equals("flash_auto") || camera_settings.flash_value.equals("flash_frontscreen_auto") ) ) {
                     final double full_exposure_time_scale = Math.pow(2.0, -0.5);
                     final long fixed_exposure_time = 1000000000L/60; // we only scale the exposure time at all if it's less than this value
                     final long scaled_exposure_time = 1000000000L/120; // we only scale the exposure time by the full_exposure_time_scale if the exposure time is less than this value
@@ -4493,11 +4334,7 @@ public class CameraController2 extends CameraController {
                 if( imageReaderRaw != null )
                     stillBuilder.addTarget(imageReaderRaw.getSurface());
 
-                n_burst = 1;
-                n_burst_taken = 0;
-                n_burst_total = n_burst;
-                n_burst_raw = raw_todo ? n_burst : 0;
-                burst_single_request = false;
+
                 if( !previewIsVideoMode ) {
                     // need to stop preview before capture (as done in Camera2Basic; otherwise we get bugs such as flash remaining on after taking a photo with flash)
                     // but don't do this in video mode - if we're taking photo snapshots while video recording, we don't want to pause video!
@@ -4513,8 +4350,8 @@ public class CameraController2 extends CameraController {
                 }
                 e.printStackTrace();
                 ok = false;
-                jpeg_todo = false;
-                raw_todo = false;
+
+
                 picture_cb = null;
                 push_take_picture_error_cb = take_picture_error_cb;
                 take_picture_error_cb = null;
@@ -4524,8 +4361,8 @@ public class CameraController2 extends CameraController {
                     Log.d(TAG, "captureSession already closed!");
                 e.printStackTrace();
                 ok = false;
-                jpeg_todo = false;
-                raw_todo = false;
+
+
                 picture_cb = null;
                 // don't report error, as camera is closed or closing
             }
@@ -4580,8 +4417,8 @@ public class CameraController2 extends CameraController {
                     e.printStackTrace();
                     //noinspection UnusedAssignment
                     ok = false;
-                    jpeg_todo = false;
-                    raw_todo = false;
+
+
                     picture_cb = null;
                     push_take_picture_error_cb = take_picture_error_cb;
                 }
@@ -4591,8 +4428,8 @@ public class CameraController2 extends CameraController {
                     e.printStackTrace();
                     //noinspection UnusedAssignment
                     ok = false;
-                    jpeg_todo = false;
-                    raw_todo = false;
+
+
                     picture_cb = null;
                     // don't report error, as camera is closed or closing
                 }
@@ -4682,8 +4519,6 @@ public class CameraController2 extends CameraController {
             if( MyDebug.LOG ) {
                 if( use_fake_precapture_mode )
                     Log.e(TAG, "shouldn't be doing standard precapture when use_fake_precapture_mode is true!");
-                else if( burst_type != BurstType.BURSTTYPE_NONE )
-                    Log.e(TAG, "shouldn't be doing precapture for burst - should be using fake precapture!");
             }
             try {
                 // use a separate builder for precapture - otherwise have problem that if we take photo with flash auto/on of dark scene, then point to a bright scene, the autoexposure isn't running until we autofocus again
@@ -4716,8 +4551,6 @@ public class CameraController2 extends CameraController {
                     Log.e(TAG, "message: " + e.getMessage());
                 }
                 e.printStackTrace();
-                jpeg_todo = false;
-                raw_todo = false;
                 picture_cb = null;
                 push_take_picture_error_cb = take_picture_error_cb;
             }
@@ -4802,8 +4635,7 @@ public class CameraController2 extends CameraController {
                     Log.e(TAG, "message: " + e.getMessage());
                 }
                 e.printStackTrace();
-                jpeg_todo = false;
-                raw_todo = false;
+
                 picture_cb = null;
                 push_take_picture_error_cb = take_picture_error_cb;
             }
@@ -4895,8 +4727,6 @@ public class CameraController2 extends CameraController {
                 return;
             }
             this.picture_cb = picture;
-            this.jpeg_todo = true;
-            this.raw_todo = imageReaderRaw != null;
             this.done_all_captures = false;
             this.take_picture_error_cb = error;
             this.fake_precapture_torch_performed = false; // just in case still on?

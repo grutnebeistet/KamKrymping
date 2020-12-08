@@ -332,37 +332,8 @@ public class MyApplicationInterface extends BasicApplicationInterface {
         if( MyDebug.LOG )
             Log.d(TAG, "canTakeNewPhoto");
 
-        int  n_jpegs;
-        // default
-        n_jpegs = 1;
-
-        int photo_cost = imageSaver.computePhotoCost(0, n_jpegs);
-        if( imageSaver.queueWouldBlock(photo_cost) ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "canTakeNewPhoto: no, as queue would block");
-            return false;
-        }
-
         // even if the queue isn't full, we may apply additional limits
         int n_images_to_save = imageSaver.getNImagesToSave();
-
-        if( n_jpegs > 1 ) {
-            // if in any other kind of burst mode (e.g., expo burst, HDR), allow a max of 3 photos in memory
-            if( n_images_to_save >= 3*photo_cost ) {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "canTakeNewPhoto: no, as too many for burst");
-                return false;
-            }
-        }
-
-        // otherwise, still have a max limit of 5 photos
-        if( n_images_to_save >= 5*photo_cost ) {
-            {
-                if( MyDebug.LOG )
-                    Log.d(TAG, "canTakeNewPhoto: no, as too many for regular");
-                return false;
-            }
-        }
 
         return true;
     }

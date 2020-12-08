@@ -1509,7 +1509,7 @@ public class MainActivity extends Activity {
             Log.d(TAG, "takePicturePressed");
 
         this.last_continuous_fast_burst = continuous_fast_burst;
-        this.preview.takePicturePressed(photo_snapshot, continuous_fast_burst);
+        this.preview.takePicturePressed(photo_snapshot);
     }
 
     /** Lock the screen - this is Open Camera's own lock to guard against accidental presses,

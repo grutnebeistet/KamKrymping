@@ -60,27 +60,12 @@ public class ImageSaver extends Thread {
 
     private final MainActivity main_activity;
 
-    /* We use a separate count n_images_to_save, rather than just relying on the queue size, so we can take() an image from queue,
-     * but only decrement the count when we've finished saving the image.
-     * In general, n_images_to_save represents the number of images still to process, including ones currently being processed.
-     * Therefore we should always have n_images_to_save >= queue.size().
-     * Also note, main_activity.imageQueueChanged() should be called on UI thread after n_images_to_save increases or
-     * decreases.
-     * Access to n_images_to_save should always be synchronized to this (i.e., the ImageSaver class).
-     * n_real_images_to_save excludes "Dummy" requests, and should also be synchronized, and modified
-     * at the same time as n_images_to_save.
-     */
     private int n_images_to_save = 0;
     private int n_real_images_to_save = 0;
     private final int queue_capacity;
     private final BlockingQueue<Request> queue;
     private final static int queue_cost_jpeg_c = 1; // also covers WEBP
     private final static int queue_cost_dng_c = 6;
-    //private final static int queue_cost_dng_c = 1;
-
-    // for testing; must be volatile for test project reading the state
-    // n.b., avoid using static, as static variables are shared between different instances of an application,
-    // and won't be reset in subsequent tests in a suite!
     public static volatile boolean test_small_queue_size; // needs to be static, as it needs to be set before activity is created to take effect
     public volatile boolean test_slow_saving;
     public volatile boolean test_queue_blocked;
@@ -99,8 +84,7 @@ public class ImageSaver extends Thread {
         enum SaveBase {
             SAVEBASE_NONE,
             SAVEBASE_FIRST,
-            SAVEBASE_ALL,
-            SAVEBASE_ALL_PLUS_DEBUG // for PANORAMA
+            SAVEBASE_ALL
         }
         final SaveBase save_base; // whether to save the base images, for process_type HDR, AVERAGE or PANORAMA
         /* jpeg_images: for jpeg (may be null otherwise).
@@ -122,9 +106,6 @@ public class ImageSaver extends Thread {
         boolean do_auto_stabilise;
         final double level_angle; // in degrees
         final List<float []> gyro_rotation_matrix; // used for panorama (one 3x3 matrix per jpeg_images entry), otherwise can be null
-        boolean panorama_dir_left_to_right; // used for panorama
-        float camera_view_angle_x; // used for panorama
-        float camera_view_angle_y; // used for panorama
         final boolean is_front_facing;
         boolean mirror;
         final Date current_date;
@@ -1431,12 +1412,6 @@ public class ImageSaver extends Thread {
                             }
                         }
                     }
-                    else {
-                        updateExif(request, picFile, saveUri);
-                        if( MyDebug.LOG ) {
-                            Log.d(TAG, "Save single image performance: time after updateExif: " + (System.currentTimeMillis() - time_s));
-                        }
-                    }
                 }
 
                 if( picFile != null  ) {
@@ -2016,136 +1991,6 @@ public class ImageSaver extends Thread {
         return bitmap;
     }
 
-    /* In some cases we may create an ExifInterface with a FileDescriptor obtained from a
-     * ParcelFileDescriptor (via getFileDescriptor()). It's important to keep a reference to the
-     * ParcelFileDescriptor object for as long as the exif interface, otherwise there's a risk of
-     * the ParcelFileDescriptor being garbage collected, invalidating the file descriptor still
-     * being used by the ExifInterace!
-     * This didn't cause any known bugs, but good practice to fix, similar to the issue reported in
-     * https://sourceforge.net/p/opencamera/tickets/417/ .
-     */
-    private static class ExifInterfaceHolder {
-        // suppress warning - no it can't be local or removed, see documentation above about the garbage collector!
-        @SuppressWarnings({"FieldCanBeLocal", "unused"})
-        private final ParcelFileDescriptor pfd;
-        private final ExifInterface exif;
-
-        ExifInterfaceHolder(ParcelFileDescriptor pfd, ExifInterface exif) {
-            this.pfd = pfd;
-            this.exif = exif;
-        }
-
-        ExifInterface getExif() {
-            return this.exif;
-        }
-    }
-
-    /** Creates a new exif interface for reading and writing.
-     *  If picFile==null, then saveUri must be non-null, and will be used instead to write the exif
-     *  tags too.
-     *  The returned ExifInterfaceHolder will always be non-null, but the contained getExif() may
-     *  return null if this method was unable to create the exif interface.
-     */
-    private ExifInterfaceHolder createExifInterface(File picFile, Uri saveUri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor = null;
-        ExifInterface exif = null;
-        if( picFile != null ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "write to picFile: " + picFile);
-            exif = new ExifInterface(picFile.getAbsolutePath());
-        }
-        else {
-            if( MyDebug.LOG )
-                Log.d(TAG, "write direct to saveUri: " + saveUri);
-            parcelFileDescriptor = main_activity.getContentResolver().openFileDescriptor(saveUri, "rw");
-            if( parcelFileDescriptor != null ) {
-                FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                exif = new ExifInterface(fileDescriptor);
-            }
-            else {
-                Log.e(TAG, "failed to create ParcelFileDescriptor for saveUri: " + saveUri);
-            }
-        }
-        return new ExifInterfaceHolder(parcelFileDescriptor, exif);
-    }
-
-    /** Makes various modifications to the saved image file, according to the preferences in request.
-     *  This method is used when saving directly from the JPEG data rather than a bitmap.
-     *  If picFile==null, then saveUri must be non-null (and the Android version must be Android 7
-     *  or later), and will be used instead to write the exif tags too.
-     */
-    private void updateExif(Request request, File picFile, Uri saveUri) throws IOException {
-
-    }
-
-    /** Makes various modifications to the exif data, if necessary.
-     */
-    private void modifyExif(ExifInterface exif, boolean is_jpeg, boolean using_camera2, Date current_date, boolean store_location, boolean store_geo_direction, double geo_direction, String custom_tag_artist, String custom_tag_copyright, double level_angle, double pitch_angle, boolean store_ypr) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "modifyExif");
-        setGPSDirectionExif(exif, store_geo_direction, geo_direction);
-        if( store_ypr ){
-            float geo_angle = (float)Math.toDegrees(geo_direction);
-            if( geo_angle < 0.0f ) {
-                geo_angle += 360.0f;
-            }
-            String encoding = "ASCII\0\0\0";
-            //exif.setAttribute(ExifInterface.TAG_USER_COMMENT,"Yaw:" + geo_angle + ",Pitch:" + pitch_angle + ",Roll:" + level_angle);
-            exif.setAttribute(ExifInterface.TAG_USER_COMMENT,encoding + "Yaw:" + geo_angle + ",Pitch:" + pitch_angle + ",Roll:" + level_angle);
-            if( MyDebug.LOG )
-                Log.d(TAG, "UserComment: " + exif.getAttribute(ExifInterface.TAG_USER_COMMENT));
-        }
-        setCustomExif(exif, custom_tag_artist, custom_tag_copyright);
-        if( needGPSTimestampHack(is_jpeg, using_camera2, store_location) ) {
-            fixGPSTimestamp(exif, current_date);
-        }
-    }
-
-    private void setGPSDirectionExif(ExifInterface exif, boolean store_geo_direction, double geo_direction) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setGPSDirectionExif");
-        if( store_geo_direction ) {
-            float geo_angle = (float)Math.toDegrees(geo_direction);
-            if( geo_angle < 0.0f ) {
-                geo_angle += 360.0f;
-            }
-            if( MyDebug.LOG )
-                Log.d(TAG, "save geo_angle: " + geo_angle);
-            // see http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/GPS.html
-            String GPSImgDirection_string = Math.round(geo_angle*100) + "/100";
-            if( MyDebug.LOG )
-                Log.d(TAG, "GPSImgDirection_string: " + GPSImgDirection_string);
-            exif.setAttribute(ExifInterface.TAG_GPS_IMG_DIRECTION, GPSImgDirection_string);
-            exif.setAttribute(ExifInterface.TAG_GPS_IMG_DIRECTION_REF, "M");
-        }
-    }
-
-    /** Whether custom exif tags need to be applied to the image file.
-     */
-    private boolean hasCustomExif(String custom_tag_artist, String custom_tag_copyright) {
-        if( custom_tag_artist != null && custom_tag_artist.length() > 0 )
-            return true;
-        if( custom_tag_copyright != null && custom_tag_copyright.length() > 0 )
-            return true;
-        return false;
-    }
-
-    /** Applies the custom exif tags to the ExifInterface.
-     */
-    private void setCustomExif(ExifInterface exif, String custom_tag_artist, String custom_tag_copyright) {
-        if( MyDebug.LOG )
-            Log.d(TAG, "setCustomExif");
-        if( custom_tag_artist != null && custom_tag_artist.length() > 0 ) {
-            if( MyDebug.LOG )
-                Log.d(TAG, "apply TAG_ARTIST: " + custom_tag_artist);
-            exif.setAttribute(ExifInterface.TAG_ARTIST, custom_tag_artist);
-        }
-        if( custom_tag_copyright != null && custom_tag_copyright.length() > 0 ) {
-            exif.setAttribute(ExifInterface.TAG_COPYRIGHT, custom_tag_copyright);
-            if( MyDebug.LOG )
-                Log.d(TAG, "apply TAG_COPYRIGHT: " + custom_tag_copyright);
-        }
-    }
 
     /** This fixes a problem when we save from a bitmap - we need to set extra exiftags.
      *  Exiftool shows these tags as "Date/Time Original" and "Create Date".
@@ -2163,78 +2008,6 @@ public class ImageSaver extends Thread {
                 Log.d(TAG, "write datetime tags: " + exif_datetime);
             exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, exif_datetime);
             exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, exif_datetime);
-        }
-    }
-
-    private void fixGPSTimestamp(ExifInterface exif, Date current_date) {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "fixGPSTimestamp");
-            Log.d(TAG, "current datestamp: " + exif.getAttribute(ExifInterface.TAG_GPS_DATESTAMP));
-            Log.d(TAG, "current timestamp: " + exif.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP));
-            Log.d(TAG, "current datetime: " + exif.getAttribute(ExifInterface.TAG_DATETIME));
-        }
-        // Hack: Problem on Camera2 API (at least on Nexus 6) that if geotagging is enabled, then the resultant image has incorrect Exif TAG_GPS_DATESTAMP and TAG_GPS_TIMESTAMP (GPSDateStamp) set (date tends to be around 2038 - possibly a driver bug of casting long to int?).
-        // This causes problems when viewing with Gallery apps (e.g., Gallery ICS; Google Photos seems fine however), as they show this incorrect date.
-        // Update: Before v1.34 this was "fixed" by calling: exif.setAttribute(ExifInterface.TAG_GPS_TIMESTAMP, Long.toString(System.currentTimeMillis()));
-        // However this stopped working on or before 20161006. This wasn't a change in Open Camera (whilst this was working fine in
-        // 1.33 when I released it, the bug had come back when I retested that version) and I'm not sure how this ever worked, since
-        // TAG_GPS_TIMESTAMP is meant to be a string such "21:45:23", and not the number of ms since 1970 - possibly it wasn't really
-        // working , and was simply invalidating it such that Gallery then fell back to looking elsewhere for the datetime?
-        // So now hopefully fixed properly...
-        // Note, this problem also occurs on OnePlus 3T and Gallery ICS, if we don't have this function called
-        SimpleDateFormat date_fmt = new SimpleDateFormat("yyyy:MM:dd", Locale.US);
-        date_fmt.setTimeZone(TimeZone.getTimeZone("UTC")); // needs to be UTC time
-        String datestamp = date_fmt.format(current_date);
-
-        SimpleDateFormat time_fmt = new SimpleDateFormat("HH:mm:ss", Locale.US);
-        time_fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String timestamp = time_fmt.format(current_date);
-
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "datestamp: " + datestamp);
-            Log.d(TAG, "timestamp: " + timestamp);
-        }
-        exif.setAttribute(ExifInterface.TAG_GPS_DATESTAMP, datestamp);
-        exif.setAttribute(ExifInterface.TAG_GPS_TIMESTAMP, timestamp);
-
-        if( MyDebug.LOG )
-            Log.d(TAG, "fixGPSTimestamp exit");
-    }
-
-    private boolean needGPSTimestampHack(boolean is_jpeg, boolean using_camera2, boolean store_location) {
-        if( is_jpeg && using_camera2 ) {
-            return store_location;
-        }
-        return false;
-    }
-
-    /** Reads from picFile and writes the contents to saveUri.
-     */
-    private void copyFileToUri(Context context, Uri saveUri, File picFile) throws IOException {
-        if( MyDebug.LOG ) {
-            Log.d(TAG, "copyFileToUri");
-            Log.d(TAG, "saveUri: " + saveUri);
-            Log.d(TAG, "picFile: " + saveUri);
-        }
-        InputStream inputStream = null;
-        OutputStream realOutputStream = null;
-        try {
-            inputStream = new FileInputStream(picFile);
-            realOutputStream = context.getContentResolver().openOutputStream(saveUri);
-            // Transfer bytes from in to out
-            byte [] buffer = new byte[1024];
-            int len;
-            while( (len = inputStream.read(buffer)) > 0 ) {
-                realOutputStream.write(buffer, 0, len);
-            }
-        }
-        finally {
-            if( inputStream != null ) {
-                inputStream.close();
-            }
-            if( realOutputStream != null ) {
-                realOutputStream.close();
-            }
         }
     }
 
